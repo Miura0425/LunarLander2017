@@ -36,7 +36,7 @@ public class LandingPoint : MonoBehaviour {
 		Vector2 scale = new Vector2 (lenx, transform.localScale.y);
 		transform.localScale = scale;
 		// 座標の設定
-		Vector2 pos = new Vector2(vStart.x+lenx/2,vStart.y);
+		Vector2 pos = new Vector2(vStart.x+lenx/2,vStart.y+scale.y/2);
 		transform.position = pos;
 	}
 	/// <summary>
