@@ -247,10 +247,15 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 50000011630903098, guid: 2141d25c79c690b448442065945a9aa3,
+    - target: {fileID: 114000011431752056, guid: 2141d25c79c690b448442065945a9aa3,
         type: 2}
-      propertyPath: m_Constraints
-      value: 4
+      propertyPath: fAddRot
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000011431752056, guid: 2141d25c79c690b448442065945a9aa3,
+        type: 2}
+      propertyPath: fRocketPower
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141d25c79c690b448442065945a9aa3, type: 2}

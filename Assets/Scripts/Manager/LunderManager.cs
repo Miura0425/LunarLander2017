@@ -10,6 +10,10 @@ public class LunderManager : MonoBehaviour {
 	public bool isLanding = false;
 	public bool isDestroy = false;
 
+	[SerializeField]
+	private float fAddRot;	// 入力されている間加算される角度
+	[SerializeField]
+	private float fRocketPower;
 	/*---------------------------------------------------------------------*/
 	void Awake () {
 		_Status = this.GetComponent<LunderStatus> ();
@@ -21,7 +25,8 @@ public class LunderManager : MonoBehaviour {
 	
 	// 更新処理
 	void Update () {
-	
+		InputRotation ();
+		InputRocket ();
 	}
 	/*---------------------------------------------------------------------*/
 	/// <summary>
@@ -54,9 +59,40 @@ public class LunderManager : MonoBehaviour {
 		// フラグの初期化
 		isLanding = false;
 		isDestroy = false;
+
 	}
 	/*---------------------------------------------------------------------*/
+	// 入力処理
+	private void InputRotation()
+	{
+		// ←キーが押されている間　左回転
+		if (Input.GetKey (KeyCode.LeftArrow)) {
+			Quaternion rot = this.transform.rotation;
+			Vector3 angles = rot.eulerAngles;
+			rot = Quaternion.Euler (angles.x, angles.y, angles.z + fAddRot);
 
+			this.transform.rotation = rot;
+		}
+		// →キーが押されている間　右回転
+		if (Input.GetKey (KeyCode.RightArrow)) {
+			Quaternion rot = this.transform.rotation;
+			Vector3 angles = rot.eulerAngles;
+			rot = Quaternion.Euler (angles.x, angles.y, angles.z - fAddRot);
+
+			this.transform.rotation = rot;
+		}
+
+		if (Input.GetKeyDown (KeyCode.UpArrow)) {
+			this.transform.rotation = Quaternion.identity;
+		}
+	}
+	private void InputRocket()
+	{
+		if (Input.GetKey (KeyCode.DownArrow)) {
+			Debug.Log (transform.up);
+			_Rigidbody.AddForce (transform.up*fRocketPower);
+		}
+	}
 	/*---------------------------------------------------------------------*/
 	// 衝突処理
 	void OnCollisionEnter2D(Collision2D c)
