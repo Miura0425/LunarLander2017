@@ -21,12 +21,14 @@ public class LunderStatus : MonoBehaviour {
 	public Text txtALTITUDE;
 	public Text txtHORIZONTAL;
 	public Text txtVERTICAL;
+	public Text txtFUEL;
 	/*---------------------------------------------------------------------*/
 	void Update()
 	{
 		txtALTITUDE.text = ((int)status.altitude).ToString ();
 		txtHORIZONTAL.text = ((int)status.horizontal_speed).ToString ();
 		txtVERTICAL.text = ((int)status.vertical_speed).ToString ();
+		txtFUEL.text = ((int)status.fuel).ToString ();
 	}
 	/*---------------------------------------------------------------------*/
 	// ステータスのセッター・ゲッター
