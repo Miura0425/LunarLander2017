@@ -3,25 +3,31 @@ using System.Collections;
 
 public class LunderManager : MonoBehaviour {
 
-	private LunderStatus _Status;
-	private Rigidbody2D _Rigidbody;
-	private SpriteRenderer _SpriteRenderer;
-	private CircleCollider2D _Collider;
+	// コンポーネント
+	public LunderStatus _Status;			// ステータススクリプト
+	private Rigidbody2D _Rigidbody;			// Rigidbody2D
+	private SpriteRenderer _SpriteRenderer; // SpriteRenderer
+	private CircleCollider2D _Collider;		// CircleCollider2D
 
+	// ゲームオブジェクト
 	[SerializeField]
-	private GameObject _RocketFire;
+	private GameObject _RocketFire; // 推進ロケットの炎
 
-	public bool isLanding = false;
-	public bool isDestroy = false;
-	public bool isInputEnable = true;
+	// フラグ
+	public bool isLanding = false;	// 着陸フラグ
+	public bool isDestroy = false;	// 破壊フラグ
+	[SerializeField]
+	private bool isInputEnable = true; // 入力可能フラグ
 
+	// 処理用変数
 	[SerializeField]
 	private float fAddRot;	// 入力されている間加算される角度
 	[SerializeField]
-	private float fRocketPower;
+	private float fRocketPower; // 推進ロケットが加える力
 	[SerializeField]
-	private float fRocketCost;
-	private float fFuel;
+	private float fRocketCost; // 推進ロケットで使用する燃料コスト
+	private float fFuel;		// 書き込み用燃料
+	public LandingPoint _LandingPoint; // 着陸した着陸地点
 	/*---------------------------------------------------------------------*/
 	void Awake () {
 		_Status = this.GetComponent<LunderStatus> ();
@@ -60,7 +66,7 @@ public class LunderManager : MonoBehaviour {
 
 		// SpriteRendererの設定
 		_SpriteRenderer.enabled = true;
-
+		// 推進ロケットの炎を非表示にする。
 		_RocketFire.SetActive (false);
 
 		// 座標の初期化
@@ -74,7 +80,18 @@ public class LunderManager : MonoBehaviour {
 		// フラグの初期化
 		isLanding = false;
 		isDestroy = false;
+		isInputEnable =	false;
+
+		// 着陸した着陸地点をnullにする。
+		_LandingPoint = null;
+	}
+	/// <summary>
+	/// プレイ開始処理
+	/// </summary>
+	public void PlayStart()
+	{
 		isInputEnable = true;
+		_Rigidbody.isKinematic = false;
 	}
 	/*---------------------------------------------------------------------*/
 	/// <summary>
@@ -84,14 +101,14 @@ public class LunderManager : MonoBehaviour {
 	{
 		if (isLanding == false && isDestroy == false) {
 			// 速度の更新
-			_Status.SetHorizontalSpeed (_Rigidbody.velocity.x * 200);
-			_Status.SetVerticalSpeed (_Rigidbody.velocity.y * 200);
+			_Status.SetHorizontalSpeed (_Rigidbody.velocity.x * Const.LunderData.SPEED_VALUE_RATE);
+			_Status.SetVerticalSpeed (_Rigidbody.velocity.y * Const.LunderData.SPEED_VALUE_RATE);
 			// 高度の取得と更新
 			int layer = LayerMask.GetMask (new string[]{ "Moon" });
 			Ray2D ray = new Ray2D (transform.position-new Vector3(0,_Collider.radius-_Collider.offset.y,0), Vector2.down);
-			RaycastHit2D hit = Physics2D.Raycast (ray.origin,ray.direction,10.0f,layer);
+			RaycastHit2D hit = Physics2D.Raycast (ray.origin,ray.direction,float.MaxValue,layer);
 			if (hit.collider != null) {
-				_Status.SetAltitude (hit.distance*100);
+				_Status.SetAltitude (hit.distance*Const.LunderData.ALTITUDE_VALUE_RATE);
 			}
 			// 燃料の更新
 			_Status.SetFuel(fFuel);
@@ -147,7 +164,7 @@ public class LunderManager : MonoBehaviour {
 				isInputEnable = false;
 				_RocketFire.SetActive (false);
 			}
-			// ロケットの向いている方向にロケットの力を加える。
+			// ランダーの向いている方向に推進ロケットの力を加える。
 			_Rigidbody.AddForce (transform.up*fRocketPower);
 		}
 	}
@@ -156,8 +173,8 @@ public class LunderManager : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D c)
 	{
 		// 着陸地点に衝突した場合、着陸処理。
-		if (c.gameObject.tag == "LandingPoint") {
-			Landing ();
+		if (c.gameObject.tag == "LandingPoint" ) {
+			Landing (c.gameObject);
 		}
 		// 月面ラインに衝突した場合、ゲームオーバー処理。
 		if (c.gameObject.tag == "MoonLine" && isLanding==false) {
@@ -165,27 +182,63 @@ public class LunderManager : MonoBehaviour {
 		}
 	}
 	/*---------------------------------------------------------------------*/
+	/// <summary>
+	/// 着陸に成功しているかチェックする。
+	/// </summary>
+	/// <returns><c>true</c>着陸成功 <c>false</c> 着陸失敗</returns>
 	private bool CheckLanding()
 	{
 		// 速度が低速かチェックする。
-		// 自身の回転Z値が０かどうか
+		if (Mathf.Abs (_Status.GetStatus ().horizontal_speed) > Const.LunderData.LANDIGN_SUCCESS_SPEED ||
+			Mathf.Abs (_Status.GetStatus ().vertical_speed) > Const.LunderData.LANDIGN_SUCCESS_SPEED) {
+			return false;
+		}
+		// 自身の回転Z値が制限範囲内かどうか
+		if (-Const.LunderData.LANDING_SUCCESS_ROTATION_Z >= this.transform.rotation.eulerAngles.z &&
+			this.transform.rotation.eulerAngles.z <= Const.LunderData.LANDING_SUCCESS_ROTATION_Z) {
+			return false;
+		}
 
 		return true;
 	}
-	private void Landing()
+	/// <summary>
+	/// 着陸処理
+	/// </summary>
+	private void Landing(GameObject point)
 	{
+		// 推進ロケットの炎を非表示にする。
+		_RocketFire.SetActive (false);
+		// 着陸に成功しているかチェックする。
 		isLanding = CheckLanding();
+		// 入力フラグをfalseにする。
 		isInputEnable = false;
+		// RigidbodyのisKinematicをtrueにする。
 		_Rigidbody.isKinematic = true;
+		// 着陸に失敗しているならゲーム－バー処理
 		if (isLanding == false) {
 			GameOver ();
 		}
+		// 着陸に成功しているなら着陸地点を保持
+		else {
+			_LandingPoint = point.GetComponent<LandingPoint> ();
+		}
 	}
+	/// <summary>
+	/// 着陸失敗 ゲームオーバー処理
+	/// </summary>
 	private void GameOver()
 	{
+		// 推進ロケットの炎を非表示にする。
+		_RocketFire.SetActive (false);
+		// RigidbodyのisKinematicをtrueにする。
 		_Rigidbody.isKinematic = true;
+		// ランダーのスプライトを非表示にする。
 		_SpriteRenderer.enabled = false;
+		// 爆発エフェクトを表示する。
+
+		// 破壊フラグをtrueにする。
 		isDestroy = true;
+		// 入力フラグをfalseにする。
 		isInputEnable = false;
 	}
 	/*---------------------------------------------------------------------*/

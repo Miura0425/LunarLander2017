@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd301fa4da8d824394c52f7f19f6474, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _Status: {fileID: 0}
   _RocketFire: {fileID: 1000012422440776}
   isLanding: 0
   isDestroy: 0
@@ -174,6 +175,7 @@ MonoBehaviour:
   fAddRot: 1
   fRocketPower: 0.75
   fRocketCost: 1
+  _LandingPoint: {fileID: 0}
 --- !u!114 &114000012997614794
 MonoBehaviour:
   m_ObjectHideFlags: 1
