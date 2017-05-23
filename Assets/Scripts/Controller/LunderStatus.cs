@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class LunderStatus : MonoBehaviour {
 	// ステータス構造体
@@ -15,6 +16,20 @@ public class LunderStatus : MonoBehaviour {
 	// ステータス情報
 	[SerializeField]
 	private STATUS status;
+
+	// テスト用
+	public Text txtALTITUDE;
+	public Text txtHORIZONTAL;
+	public Text txtVERTICAL;
+	public Text txtFUEL;
+	/*---------------------------------------------------------------------*/
+	void Update()
+	{
+		txtALTITUDE.text = ((int)status.altitude).ToString ();
+		txtHORIZONTAL.text = ((int)status.horizontal_speed).ToString ();
+		txtVERTICAL.text = ((int)status.vertical_speed).ToString ();
+		txtFUEL.text = ((int)status.fuel).ToString ();
+	}
 	/*---------------------------------------------------------------------*/
 	// ステータスのセッター・ゲッター
 	public STATUS GetStatus()
