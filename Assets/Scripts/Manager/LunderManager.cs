@@ -6,6 +6,7 @@ public class LunderManager : MonoBehaviour {
 	private LunderStatus _Status;
 	private Rigidbody2D _Rigidbody;
 	private SpriteRenderer _SpriteRenderer;
+	private CircleCollider2D _Collider;
 
 	public bool isLanding = false;
 	public bool isDestroy = false;
@@ -19,12 +20,14 @@ public class LunderManager : MonoBehaviour {
 		_Status = this.GetComponent<LunderStatus> ();
 		_Rigidbody = this.GetComponent<Rigidbody2D> ();
 		_SpriteRenderer = this.GetComponent<SpriteRenderer> ();
+		_Collider = this.GetComponent<CircleCollider2D> ();
 
 		Init ();
 	}
 	
 	// 更新処理
 	void Update () {
+		StatusUpdate ();
 		InputRotation ();
 		InputRocket ();
 	}
@@ -62,6 +65,26 @@ public class LunderManager : MonoBehaviour {
 
 	}
 	/*---------------------------------------------------------------------*/
+	/// <summary>
+	/// ステータスの更新処理
+	/// </summary>
+	private void StatusUpdate()
+	{
+		if (isLanding == false && isDestroy == false) {
+			// 速度の更新
+			_Status.SetHorizontalSpeed (_Rigidbody.velocity.x * 200);
+			_Status.SetVerticalSpeed (_Rigidbody.velocity.y * 200);
+			// 高度の取得と更新
+			int layer = LayerMask.GetMask (new string[]{ "Moon" });
+			Ray2D ray = new Ray2D (transform.position-new Vector3(0,_Collider.radius-_Collider.offset.y,0), Vector2.down);
+			RaycastHit2D hit = Physics2D.Raycast (ray.origin,ray.direction,10.0f,layer);
+			if (hit.collider != null) {
+				_Status.SetAltitude (hit.distance*100);
+			}
+
+		}
+	}
+	/*---------------------------------------------------------------------*/
 	// 入力処理
 	private void InputRotation()
 	{
@@ -89,7 +112,6 @@ public class LunderManager : MonoBehaviour {
 	private void InputRocket()
 	{
 		if (Input.GetKey (KeyCode.DownArrow)) {
-			Debug.Log (transform.up);
 			_Rigidbody.AddForce (transform.up*fRocketPower);
 		}
 	}
