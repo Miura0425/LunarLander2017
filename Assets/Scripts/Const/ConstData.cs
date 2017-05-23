@@ -13,4 +13,12 @@
 		public const float LANDIGN_SUCCESS_SPEED = 100.0f;
 		public const float LANDING_SUCCESS_ROTATION_Z = 1.0f;
 	}
+
+	public static class CameraData{
+
+		public const float MODE_NORMAL_SIZE = 10.0f;
+		public const float MODE_ZOOM_SIZE = 4.0f;
+
+		public const float ZOOM_LUDER_ALTITUDE = 250.0f;
+	}
 }
