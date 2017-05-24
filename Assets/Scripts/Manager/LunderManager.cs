@@ -14,6 +14,8 @@ public class LunderManager : MonoBehaviour {
 	private GameObject _RocketFire; // 推進ロケットの炎
 	[SerializeField]
 	private CameraManager _MainCamera; // カメラ
+	[SerializeField]
+	private GameObject _DestroyParticle;
 
 	// フラグ
 	public bool isLanding = false;	// 着陸フラグ
@@ -264,7 +266,7 @@ public class LunderManager : MonoBehaviour {
 		// ランダーのスプライトを非表示にする。
 		_SpriteRenderer.enabled = false;
 		// 爆発エフェクトを表示する。
-
+		GameObject.Instantiate(_DestroyParticle,this.transform.position,Quaternion.identity);
 		// 破壊フラグをtrueにする。
 		isDestroy = true;
 		// 入力フラグをfalseにする。
