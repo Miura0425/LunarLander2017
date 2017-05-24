@@ -224,9 +224,11 @@ public class LunderManager : MonoBehaviour {
 			Mathf.Abs (_Status.GetStatus ().vertical_speed) > Const.LunderData.LANDIGN_SUCCESS_SPEED) {
 			return false;
 		}
+		Debug.Log (this.transform.rotation.eulerAngles.z);
+		Debug.Log (360.0f - Const.LunderData.LANDING_SUCCESS_ROTATION_Z);
 		// 自身の回転Z値が制限範囲内かどうか
-		if (-Const.LunderData.LANDING_SUCCESS_ROTATION_Z >= this.transform.rotation.eulerAngles.z &&
-			this.transform.rotation.eulerAngles.z <= Const.LunderData.LANDING_SUCCESS_ROTATION_Z) {
+		if (this.transform.rotation.eulerAngles.z > Const.LunderData.LANDING_SUCCESS_ROTATION_Z &&
+		    this.transform.rotation.eulerAngles.z < 360.0f - Const.LunderData.LANDING_SUCCESS_ROTATION_Z) {
 			return false;
 		}
 
