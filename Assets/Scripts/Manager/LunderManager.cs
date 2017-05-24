@@ -15,7 +15,7 @@ public class LunderManager : MonoBehaviour {
 	[SerializeField]
 	private CameraManager _MainCamera; // カメラ
 	[SerializeField]
-	private GameObject _DestroyParticle;
+	private GameObject _DestroyParticle; // 破壊時パーティクル
 
 	// フラグ
 	public bool isLanding = false;	// 着陸フラグ
@@ -224,8 +224,6 @@ public class LunderManager : MonoBehaviour {
 			Mathf.Abs (_Status.GetStatus ().vertical_speed) > Const.LunderData.LANDIGN_SUCCESS_SPEED) {
 			return false;
 		}
-		Debug.Log (this.transform.rotation.eulerAngles.z);
-		Debug.Log (360.0f - Const.LunderData.LANDING_SUCCESS_ROTATION_Z);
 		// 自身の回転Z値が制限範囲内かどうか
 		if (this.transform.rotation.eulerAngles.z > Const.LunderData.LANDING_SUCCESS_ROTATION_Z &&
 		    this.transform.rotation.eulerAngles.z < 360.0f - Const.LunderData.LANDING_SUCCESS_ROTATION_Z) {
@@ -267,7 +265,7 @@ public class LunderManager : MonoBehaviour {
 		_Rigidbody.isKinematic = true;
 		// ランダーのスプライトを非表示にする。
 		_SpriteRenderer.enabled = false;
-		// 爆発エフェクトを表示する。
+		// 破壊エフェクトを表示する。
 		GameObject.Instantiate(_DestroyParticle,this.transform.position,Quaternion.identity);
 		// 破壊フラグをtrueにする。
 		isDestroy = true;
