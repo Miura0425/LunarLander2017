@@ -1,7 +1,7 @@
 ﻿namespace Const{
 	public static class LunderData{
 		
-		public const float INIT_FUEL = 1000.0f;		// 初期燃料
+		public const float INIT_FUEL = 91000.0f;		// 初期燃料
 
 		public const float INIT_POS_Y = 3.0f;		// 初期Y座標
 		public const int INIT_POS_X_MIN = -8;	// 初期X座標の最低値
@@ -17,8 +17,11 @@
 	public static class CameraData{
 
 		public const float MODE_NORMAL_SIZE = 10.0f;
-		public const float MODE_ZOOM_SIZE = 4.0f;
+		public const float MODE_ZOOM_SIZE = 6.0f;
 
-		public const float ZOOM_LUDER_ALTITUDE = 250.0f;
+		public const float NORMAL_LUNDER_ALTITUDE = 900.0f;
+		public const float ZOOM_LUDER_ALTITUDE = 450.0f;
+
+		public const float ZOOM_LEFTRIGHT_LINE = 2.0f;
 	}
 }
