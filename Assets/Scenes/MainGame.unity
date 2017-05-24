@@ -452,6 +452,11 @@ Prefab:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114000011431752056, guid: 2141d25c79c690b448442065945a9aa3,
+        type: 2}
+      propertyPath: _MainCamera
+      value: 
+      objectReference: {fileID: 1462127531}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141d25c79c690b448442065945a9aa3, type: 2}
   m_IsPrefabParent: 0
@@ -845,6 +850,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Lunder: {fileID: 1016170126}
   _Mode: 0
+  normalLeftTop: {x: 0, y: 0}
+  normalRightBottom: {x: 0, y: 0}
 --- !u!114 &1544307908 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114000010203118054, guid: ef6825cc2e8509348903071855035d15,

@@ -12,6 +12,8 @@ public class LunderManager : MonoBehaviour {
 	// ゲームオブジェクト
 	[SerializeField]
 	private GameObject _RocketFire; // 推進ロケットの炎
+	[SerializeField]
+	private CameraManager _MainCamera; // カメラ
 
 	// フラグ
 	public bool isLanding = false;	// 着陸フラグ
@@ -45,6 +47,7 @@ public class LunderManager : MonoBehaviour {
 			InputRotation ();
 			InputRocket ();
 		}
+		MoveLimit ();
 	}
 	/*---------------------------------------------------------------------*/
 	/// <summary>
@@ -112,6 +115,32 @@ public class LunderManager : MonoBehaviour {
 			}
 			// 燃料の更新
 			_Status.SetFuel(fFuel);
+		}
+	}
+	/// <summary>
+	/// 移動限界処理
+	/// </summary>
+	private void MoveLimit()
+	{
+		// 画面左端を超えた場合、画面内左端にランダーの座標を設定する。
+		if (this.transform.position.x - this.transform.localScale.x <= _MainCamera.normalLeftTop.x) {
+			Vector2 vec = this.transform.position;
+			vec.x = _MainCamera.normalLeftTop.x + this.transform.localScale.x;
+			this.transform.position = vec;
+			// 水平速度のリセット
+			Vector2 velocity = _Rigidbody.velocity;
+			velocity.x = 0;
+			_Rigidbody.velocity = velocity;
+		}
+		// 画面右端を超えた場合、画面内右端にランダーの座標を設定する。
+		if (this.transform.position.x + this.transform.localScale.x >= _MainCamera.normalRightBottom.x) {
+			Vector2 vec = this.transform.position;
+			vec.x = _MainCamera.normalRightBottom.x - this.transform.localScale.x;
+			this.transform.position = vec;
+			// 水平速度のリセット
+			Vector2 velocity = _Rigidbody.velocity;
+			velocity.x = 0;
+			_Rigidbody.velocity = velocity;
 		}
 	}
 	/*---------------------------------------------------------------------*/
