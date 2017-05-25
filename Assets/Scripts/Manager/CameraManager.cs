@@ -30,15 +30,18 @@ public class CameraManager : MonoBehaviour {
 	private float fTopLine;			// カメラを上方向に動かしだす座標
 	private Vector2 vLeftRightLine; // カメラを左右方向に動かしだす座標
 	private Vector3 vZoom;			// ズーム時のベース座標保存用
+
+	public bool isInit = false;
 	/*---------------------------------------------------------------------*/
 
 	void Awake () {
 		_Camera = this.GetComponent<Camera> ();
-		Init ();
 	}
 	
 	// 更新処理
 	void Update () {
+		if (isInit == false)
+			return;
 		modeupdate ();
 	}
 	/*---------------------------------------------------------------------*/
@@ -53,6 +56,7 @@ public class CameraManager : MonoBehaviour {
 		// ノーマル時の画面端座標を取得する。
 		normalLeftTop = GetScreenLeftTop ();
 		normalRightBottom = GetScreenRightBottom ();
+		isInit = true;
 	}
 	/*---------------------------------------------------------------------*/
 	/// <summary>

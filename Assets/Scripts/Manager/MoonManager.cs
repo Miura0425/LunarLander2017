@@ -8,10 +8,11 @@ public class MoonManager : MonoBehaviour {
 	[SerializeField]
 	private LandingPoint[] landingPoint = new LandingPoint[4];
 
+	public bool isInit = false; // 初期化完了フラグ
+
 	/*---------------------------------------------------------------------*/
 	void Awake()
 	{
-		Init ();
 	}
 
 	// Update is called once per frame
@@ -22,16 +23,18 @@ public class MoonManager : MonoBehaviour {
 	/// <summary>
 	/// 初期化処理 ゲーム開始前に呼び出す
 	/// </summary>
-	private void Init()
+	public void Init()
 	{
 		// 新しい月面ステージ生成
 		CreateMoonStage ();
+		// 初期化完了
+		isInit = true;
 	}
 
 	/// <summary>
 	/// 月面ステージ自動生成
 	/// </summary>
-	void CreateMoonStage()
+	private	void CreateMoonStage()
 	{
 		// 月面のライン初期化
 		moonline.Init ();

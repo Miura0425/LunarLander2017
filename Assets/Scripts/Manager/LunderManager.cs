@@ -20,6 +20,7 @@ public class LunderManager : MonoBehaviour {
 	// フラグ
 	public bool isLanding = false;	// 着陸フラグ
 	public bool isDestroy = false;	// 破壊フラグ
+	public bool isInit = false; // 初期化完了フラグ
 	[SerializeField]
 	private bool isInputEnable = true; // 入力可能フラグ
 
@@ -39,7 +40,6 @@ public class LunderManager : MonoBehaviour {
 		_SpriteRenderer = this.GetComponent<SpriteRenderer> ();
 		_Collider = this.GetComponent<CircleCollider2D> ();
 
-		Init ();
 	}
 	
 	// 更新処理
@@ -60,9 +60,7 @@ public class LunderManager : MonoBehaviour {
 	public void Init(float fuel=Const.LunderData.INIT_FUEL)
 	{
 		// ステータスの初期化
-		LunderStatus.STATUS newStatus = new LunderStatus.STATUS ();
-		newStatus.fuel = fuel; 
-		_Status.SetStatus (newStatus);
+		_Status.SetFuel(fuel);
 		fFuel = fuel;
 
 		// RigidBody2Dの設定
@@ -89,6 +87,9 @@ public class LunderManager : MonoBehaviour {
 
 		// 着陸した着陸地点をnullにする。
 		_LandingPoint = null;
+
+		// 初期化完了
+		isInit = true;
 	}
 	/// <summary>
 	/// プレイ開始処理

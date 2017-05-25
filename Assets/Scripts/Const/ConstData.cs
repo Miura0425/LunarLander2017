@@ -24,4 +24,9 @@
 
 		public const float ZOOM_LEFTRIGHT_LINE = 2.0f;
 	}
+
+	public static class MainGameData{
+		public const int BONUS_FUEL_RATE = 2;
+		public const int SCORE_CALC_BASE = 100;
+	}
 }
