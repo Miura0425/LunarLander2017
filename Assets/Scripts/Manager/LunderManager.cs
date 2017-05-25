@@ -23,6 +23,7 @@ public class LunderManager : MonoBehaviour {
 	public bool isInit = false; // 初期化完了フラグ
 	[SerializeField]
 	private bool isInputEnable = true; // 入力可能フラグ
+	private bool isRocket = false;	// 推進ロケットフラグ
 
 	// 処理用変数
 	[SerializeField]
@@ -50,6 +51,10 @@ public class LunderManager : MonoBehaviour {
 			InputRocket ();
 		}
 		MoveLimit ();
+	}
+	void FixedUpdate()
+	{
+		Rocket ();
 	}
 	/*---------------------------------------------------------------------*/
 	/// <summary>
@@ -84,6 +89,7 @@ public class LunderManager : MonoBehaviour {
 		isLanding = false;
 		isDestroy = false;
 		isInputEnable =	false;
+		isRocket = false;
 
 		// 着陸した着陸地点をnullにする。
 		_LandingPoint = null;
@@ -188,7 +194,7 @@ public class LunderManager : MonoBehaviour {
 			_RocketFire.SetActive (false);
 		}
 		// ↓キーが押されている間　推進ロケット処理を行う。
-		if (Input.GetKey (KeyCode.DownArrow)) {
+		if (isRocket = Input.GetKey (KeyCode.DownArrow) == true) {
 			// 燃料を消費
 			fFuel = Mathf.Max (0, fFuel - fRocketCost);
 			// 燃料が０になったら入力フラグをfalseにし、炎を消す。
@@ -196,6 +202,13 @@ public class LunderManager : MonoBehaviour {
 				isInputEnable = false;
 				_RocketFire.SetActive (false);
 			}
+			// ランダーの向いている方向に推進ロケットの力を加える。
+			//_Rigidbody.AddForce (transform.up*fRocketPower);
+		}
+	}
+	private void Rocket()
+	{
+		if (isRocket == true) {
 			// ランダーの向いている方向に推進ロケットの力を加える。
 			_Rigidbody.AddForce (transform.up*fRocketPower);
 		}
