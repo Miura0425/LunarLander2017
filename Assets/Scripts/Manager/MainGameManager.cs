@@ -15,6 +15,7 @@ public class MainGameManager : MonoBehaviour {
 	private LunderManager _Lunder;	// ランダー
 	private MoonManager _Moon;		// 月面
 	private CameraManager _Camera;	// カメラ
+	private InfoUIManager _UIManager; // UI
 
 	// 現在のゲームモード
 	[SerializeField]
@@ -29,14 +30,15 @@ public class MainGameManager : MonoBehaviour {
 
 	// テスト用
 	[SerializeField]
-	private Text txtGameStart;
+	private GameObject txtGameStart;
 	[SerializeField]
-	private Text txtGameOver;
+	private GameObject txtGameOver;
 	[SerializeField]
-	private Text txtGameClear;
+	private GameObject txtGameClear;
 
-	private float fScore;
-	private float fBonusFuel;
+	private int nStage=0;
+	private float fScore=0;
+	private float fBonusFuel=0;
 
 	[SerializeField]
 	private float fStartWaitTime;
@@ -49,6 +51,7 @@ public class MainGameManager : MonoBehaviour {
 		_Lunder = FindObjectOfType<LunderManager> ();
 		_Moon = FindObjectOfType<MoonManager> ();
 		_Camera = FindObjectOfType<CameraManager> ();
+		_UIManager = FindObjectOfType<InfoUIManager> ();
 
 		// 現在のゲームモード初期化
 		ChangeGameMode(MAIN_GAME_MODE.GAME_START);
@@ -117,8 +120,14 @@ public class MainGameManager : MonoBehaviour {
 
 		// クリアフラグをFalseに設定
 		isClear = false;
+		nStage++;
 		fStartTime = Time.timeSinceLevelLoad;
-		txtGameStart.enabled = true;
+
+		_UIManager.SetInfoItem (UI_INFO_ITEM.STAGE, nStage);
+		_UIManager.SetInfoItem (UI_INFO_ITEM.SCORE, (int)fScore);
+		//txtGameStart.SetActive(true);
+		_UIManager.SetMsgActive (UI_MSG_ITEM.GAME_START, true);
+		_UIManager.SetMsgItem (UI_MSG_ITEM.GAME_START, nStage);
 		// 更新処理を設定
 		modeupdate = new ModeUpdate (GameStart_Update);
 	}
@@ -132,7 +141,8 @@ public class MainGameManager : MonoBehaviour {
 		ScoreCalc(_Lunder._Status,_Lunder._LandingPoint,out score,out fBonusFuel);
 		fScore += score;
 		// GameClearUIの値設定と表示
-		txtGameClear.enabled = true;
+		//txtGameClear.SetActive(true);
+		_UIManager.SetMsgActive(UI_MSG_ITEM.GAME_CLEAR,true);
 		// クリアフラグをTrueに設定
 		isClear = true;
 		fStartTime = Time.timeSinceLevelLoad;
@@ -144,7 +154,8 @@ public class MainGameManager : MonoBehaviour {
 	/// </summary>
 	private void GameOver()
 	{
-		txtGameOver.enabled = true;
+		//txtGameOver.SetActive(true);
+		_UIManager.SetMsgActive(UI_MSG_ITEM.GAME_OVER,true);
 		fStartTime = Time.timeSinceLevelLoad;
 		// 更新処理の設定
 		modeupdate = new ModeUpdate (GameOver_Update);
@@ -157,13 +168,15 @@ public class MainGameManager : MonoBehaviour {
 	/// </summary>
 	private void GameStart_Update()
 	{
+		UIUpdate ();
 		// 各オブジェクトの初期化が完了しているならゲームを開始する。
 		if (_Lunder.isInit == true && _Moon.isInit == true && _Camera.isInit == true) {
 			float fTime = Time.timeSinceLevelLoad - fStartTime;
 			if (fTime > fStartWaitTime) {
 				// ランダーの開始処理
 				_Lunder.PlayStart ();
-				txtGameStart.enabled = false;
+				//txtGameStart.SetActive(false);
+				_UIManager.SetMsgActive(UI_MSG_ITEM.GAME_START,false);
 				// ゲームプレイモードへ変更する。
 				ChangeGameMode (MAIN_GAME_MODE.GAME_PLAYING);
 			}
@@ -174,6 +187,7 @@ public class MainGameManager : MonoBehaviour {
 	/// </summary>
 	private void GamePlaying_Update ()
 	{
+		UIUpdate ();
 		// 着陸成功ならクリアモードへ変更する。
 		if (_Lunder.isLanding == true) {
 			ChangeGameMode (MAIN_GAME_MODE.GAME_END_CLEAR);
@@ -182,6 +196,7 @@ public class MainGameManager : MonoBehaviour {
 		if (_Lunder.isDestroy == true) {
 			ChangeGameMode (MAIN_GAME_MODE.GAME_END_OVER);
 		}
+
 	}
 	/// <summary>
 	/// GAME_END_CLEARモードの更新処理
@@ -193,7 +208,8 @@ public class MainGameManager : MonoBehaviour {
 		// 待ち時間が経過した場合、次のステージへ
 		if (fTime > fResultWaitTime) {
 			// CLEARUIを非表示にする。
-			txtGameClear.enabled = false;
+			//txtGameClear.SetActive(false);
+			_UIManager.SetMsgActive(UI_MSG_ITEM.GAME_CLEAR,false);
 			// ゲームスタートモードへ変更する。
 			ChangeGameMode (MAIN_GAME_MODE.GAME_START);
 		}
@@ -210,6 +226,14 @@ public class MainGameManager : MonoBehaviour {
 		}
 	}
 	/*---------------------------------------------------------------------*/
+	private void UIUpdate()
+	{
+		_UIManager.SetInfoItem (UI_INFO_ITEM.FUEL, (int)_Lunder._Status.GetStatus ().fuel);
+		_UIManager.SetInfoItem (UI_INFO_ITEM.ALTITUDE, (int)_Lunder._Status.GetStatus ().altitude);
+		_UIManager.SetInfoItem (UI_INFO_ITEM.HORIZONTAL_SPEED, (int)_Lunder._Status.GetStatus ().horizontal_speed);
+		_UIManager.SetInfoItem (UI_INFO_ITEM.VERTICAL_SPEED, (int)_Lunder._Status.GetStatus ().vertical_speed);
+	}
+	/*---------------------------------------------------------------------*/
 	private void ScoreCalc(LunderStatus status,LandingPoint point,out float score,out float bonusfuel)
 	{
 		LunderStatus.STATUS _status = status.GetStatus ();
@@ -218,4 +242,5 @@ public class MainGameManager : MonoBehaviour {
 		score = (Const.MainGameData.SCORE_CALC_BASE-speed)*point.GetBonusRate();
 		bonusfuel = score*Const.MainGameData.BONUS_FUEL_RATE;
 	}
+	/*---------------------------------------------------------------------*/
 }
