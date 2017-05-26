@@ -27,11 +27,13 @@ public class LandingPoint : MonoBehaviour {
 	/// <param name="end">終点</param>
 	public void Init(int bonus,Vector2 start,Vector2 end)
 	{
+		// ボーナス倍率の設定
 		nBonusRate = bonus;
+		// 始点終点の設定
 		vStart = start;
 		vEnd = end;
-
-		float lenx = end.x-start.x;
+		// 長さを取得
+		float lenx = vEnd.x-vStart.x;
 		// サイズの設定
 		Vector2 scale = new Vector2 (lenx, transform.localScale.y);
 		transform.localScale = scale;

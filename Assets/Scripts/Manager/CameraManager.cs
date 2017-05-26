@@ -112,6 +112,8 @@ public class CameraManager : MonoBehaviour {
 			// 画面を左右方向に動かすX座標を設定する。
 			vLeftRightLine.x = GetScreenLeftTop ().x + Const.CameraData.ZOOM_LEFTRIGHT_LINE;
 			vLeftRightLine.y = GetScreenRightBottom ().x - Const.CameraData.ZOOM_LEFTRIGHT_LINE;
+			// 画面を上方向に動かすY座標を設定する。
+			fTopLine = GetScreenLeftTop().y - _Lunder.transform.localScale.y ;
 		}
 	}
 	/// <summary>
@@ -136,6 +138,13 @@ public class CameraManager : MonoBehaviour {
 	/// </summary>
 	private void ZoomUpdate ()
 	{
+		// ランダーのY座標が上ラインを超えた場合、カメラを動かす。
+		if(_Lunder.transform.position.y >= fTopLine )
+		{
+			Vector3 vTopPos = this.transform.position;
+			vTopPos.y = _Lunder.transform.position.y - fTopLine;
+			this.transform.position = vTopPos;
+		}
 		// ランダーのX座標が左ラインを超えた場合 かつ 画面左端がノーマル時の左端を超えていない場合
 		if (vLeftRightLine.x >= _Lunder.transform.position.x && GetScreenLeftTop ().x > normalLeftTop.x) {
 			

@@ -108,9 +108,9 @@ public class MainGameManager : MonoBehaviour {
 		} else {
 			_Lunder.Init ();
 		}
-
-		_Moon.Init ();	// 月面初期化処理
 		_Camera.Init (); // カメラ初期化処理
+		_Moon.Init ();	// 月面初期化処理
+
 
 		// クリアフラグをFalseに設定
 		isClear = false;
