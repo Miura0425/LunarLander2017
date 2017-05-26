@@ -1027,6 +1027,7 @@ GameObject:
   - 224: {fileID: 798596845}
   - 222: {fileID: 798596847}
   - 114: {fileID: 798596846}
+  - 114: {fileID: 798596848}
   m_Layer: 5
   m_Name: GameClearText
   m_TagString: Untagged
@@ -1091,6 +1092,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 798596844}
+--- !u!114 &798596848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 798596844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2920fd05b5a2631428f9f9d2dbf0d549, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  txtNumbers: {fileID: 0}
 --- !u!1 &837595825
 GameObject:
   m_ObjectHideFlags: 0
@@ -1140,6 +1153,7 @@ GameObject:
   - 224: {fileID: 847829144}
   - 222: {fileID: 847829146}
   - 114: {fileID: 847829145}
+  - 114: {fileID: 847829147}
   m_Layer: 5
   m_Name: GameOverText
   m_TagString: Untagged
@@ -1204,6 +1218,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 847829143}
+--- !u!114 &847829147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 847829143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2920fd05b5a2631428f9f9d2dbf0d549, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  txtNumbers: {fileID: 0}
 --- !u!1 &904418690
 GameObject:
   m_ObjectHideFlags: 0
@@ -1310,8 +1336,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 28.099977, y: -0.0000022649765}
-  m_SizeDelta: {x: 54, y: 26}
+  m_AnchoredPosition: {x: 28.89999, y: -0.0000022649765}
+  m_SizeDelta: {x: 59.4, y: 26}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &971343476
 MonoBehaviour:
@@ -1345,7 +1371,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 0000
+  m_Text: 00000
 --- !u!222 &971343477
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2031,8 +2057,8 @@ RectTransform:
   m_RootOrder: 2
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -256.2, y: -21}
-  m_SizeDelta: {x: 110.2, y: 26}
+  m_AnchoredPosition: {x: -252.7, y: -21}
+  m_SizeDelta: {x: 117.2, y: 26}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1308113562
 MonoBehaviour:

@@ -2,9 +2,11 @@
 using System.Collections;
 
 public class GameClearMsg : MsgItem {
+	// 情報アイテムの種類
 	public enum INFO_ITEM
 	{
-		SCORE = 0,
+		MESSAGE = 0,
+		SCORE,
 		BONUSFUEL,
 	};
 }
