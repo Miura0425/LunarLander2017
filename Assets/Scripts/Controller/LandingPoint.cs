@@ -3,7 +3,6 @@ using System.Collections;
 
 public class LandingPoint : MonoBehaviour {
 
-	
 	private int nBonusRate = 0;		// ボーナス倍率
 	private Vector2 vStart;		// 着陸地点の始点
 	private Vector2 vEnd;		// 着陸地点の終点

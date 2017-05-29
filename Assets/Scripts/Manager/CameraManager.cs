@@ -27,9 +27,9 @@ public class CameraManager : MonoBehaviour {
 	public Vector2 normalRightBottom;	// ノーマルモード時の画面右下座標
 
 	// 処理用変数
-	private float fTopLine;			// カメラを上方向に動かしだす座標
-	private Vector2 vLeftRightLine; // カメラを左右方向に動かしだす座標
-	private Vector3 vZoom;			// ズーム時のベース座標保存用
+	private Vector2 vLeftTopLine;		// カメラを左上方向に動かしだす座標
+	private Vector2 vRightBottomLine; 	// カメラを右下方向に動かしだす座標
+	private Vector3 vZoom;				// ズーム時のベース座標保存用
 
 	public bool isInit = false;
 	/*---------------------------------------------------------------------*/
@@ -82,7 +82,7 @@ public class CameraManager : MonoBehaviour {
 			this.transform.position = vNormalPos;
 
 			// 画面を上方向に動かすY座標を設定する。
-			fTopLine = GetScreenLeftTop().y - _Lunder.transform.localScale.y ;
+			vLeftTopLine.y = this.transform.position.y + Const.CameraData.NORMAL_TOP_LINE ;
 		}
 		// ズームモードの初期設定
 		if (_Mode == MODE.ZOOM) {
@@ -110,10 +110,11 @@ public class CameraManager : MonoBehaviour {
 			vZoom = vZoomPos;
 
 			// 画面を左右方向に動かすX座標を設定する。
-			vLeftRightLine.x = GetScreenLeftTop ().x + Const.CameraData.ZOOM_LEFTRIGHT_LINE;
-			vLeftRightLine.y = GetScreenRightBottom ().x - Const.CameraData.ZOOM_LEFTRIGHT_LINE;
+			vLeftTopLine.x = GetScreenLeftTop ().x + Const.CameraData.ZOOM_LEFTRIGHT_LINE;
+			vRightBottomLine.x = GetScreenRightBottom ().x - Const.CameraData.ZOOM_LEFTRIGHT_LINE;
 			// 画面を上方向に動かすY座標を設定する。
-			fTopLine = GetScreenLeftTop().y - _Lunder.transform.localScale.y ;
+			vLeftTopLine.y = vZoom.y + Const.CameraData.ZOOM_TOP_LINE ;
+			vRightBottomLine.y = vZoom.y - Const.CameraData.ZOOM_BOTTOM_LINE;
 		}
 	}
 	/// <summary>
@@ -122,10 +123,10 @@ public class CameraManager : MonoBehaviour {
 	private void NormalUpdate()
 	{
 		// ランダーのY座標が上ラインを超えた場合、カメラを動かす。
-		if(_Lunder.transform.position.y >= fTopLine )
+		if(_Lunder.transform.position.y >= vLeftTopLine.y )
 		{
 			Vector3 vTopPos = this.transform.position;
-			vTopPos.y = _Lunder.transform.position.y - fTopLine;
+			vTopPos.y = _Lunder.transform.position.y - vLeftTopLine.y;
 			this.transform.position = vTopPos;
 		}
 		// ランダーの高度が指定の高度より低くなった場合、ズームモードに変更する。
@@ -139,37 +140,43 @@ public class CameraManager : MonoBehaviour {
 	private void ZoomUpdate ()
 	{
 		// ランダーのY座標が上ラインを超えた場合、カメラを動かす。
-		if(_Lunder.transform.position.y >= fTopLine )
+		if(_Lunder.transform.position.y >= vLeftTopLine.y )
 		{
 			Vector3 vTopPos = this.transform.position;
-			vTopPos.y = _Lunder.transform.position.y - fTopLine;
+			vTopPos.y = vZoom.y + _Lunder.transform.position.y - vLeftTopLine.y;
 			this.transform.position = vTopPos;
 		}
+		else if(_Lunder.transform.position.y <= vRightBottomLine.y )
+		{
+			Vector3 vBottomPos = this.transform.position;
+			vBottomPos.y = vZoom.y + _Lunder.transform.position.y - vRightBottomLine.y;
+			this.transform.position = vBottomPos;
+		}
 		// ランダーのX座標が左ラインを超えた場合 かつ 画面左端がノーマル時の左端を超えていない場合
-		if (vLeftRightLine.x >= _Lunder.transform.position.x && GetScreenLeftTop ().x > normalLeftTop.x) {
+		if (vLeftTopLine.x >= _Lunder.transform.position.x && GetScreenLeftTop ().x > normalLeftTop.x) {
 			
 			// カメラの座標を左に動かす
 			Vector3 vLeftPos = this.transform.position;
-			vLeftPos.x = vZoom.x + _Lunder.transform.position.x - vLeftRightLine.x;
+			vLeftPos.x = vZoom.x + _Lunder.transform.position.x - vLeftTopLine.x;
 			this.transform.position = vLeftPos;
 
 			// 右ラインを更新する。
-			vLeftRightLine.y = GetScreenRightBottom ().x - Const.CameraData.ZOOM_LEFTRIGHT_LINE;
+			vRightBottomLine.x = GetScreenRightBottom ().x - Const.CameraData.ZOOM_LEFTRIGHT_LINE;
 
 		} // ランダーのX座標が右ラインを超えた場合　かつ 画面右端がノーマル時の右端を超えていない場合
-		else if (vLeftRightLine.y <= _Lunder.transform.position.x && GetScreenRightBottom().x < normalRightBottom.x) {
+		else if (vRightBottomLine.x <= _Lunder.transform.position.x && GetScreenRightBottom().x < normalRightBottom.x) {
 			
 			// カメラの座標を右に動かす
 			Vector3 vRightPos = this.transform.position;
-			vRightPos.x = vZoom.x + _Lunder.transform.position.x - vLeftRightLine.y;
+			vRightPos.x = vZoom.x + _Lunder.transform.position.x - vRightBottomLine.x;
 			this.transform.position = vRightPos;
 
 			// 左ラインを更新する。
-			vLeftRightLine.x = GetScreenLeftTop ().x + Const.CameraData.ZOOM_LEFTRIGHT_LINE;
+			vLeftTopLine.x = GetScreenLeftTop ().x + Const.CameraData.ZOOM_LEFTRIGHT_LINE;
 
 		} else {
 			// 座標の移動がない場合は、ズーム時座標を更新する。
-			vZoom = this.transform.position;
+			vZoom.x = this.transform.position.x;
 		}
 
 		// ランダーの高度が指定の高度より高くなった場合、ノーマルモードに変更する。

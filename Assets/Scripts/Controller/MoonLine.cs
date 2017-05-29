@@ -48,12 +48,10 @@ public class MoonLine : MonoBehaviour {
 
 		// Y座標範囲を分割した配列を作成。
 		float[] groupY = new float[CutNum+1];
-		groupY [0] = Min_Y;	// 先頭は最小値
-		for (int j = 1; j < groupY.Length-1; j++) {
-			groupY [j] = Min_Y + Mathf.Abs (Max_Y * j / CutNum); 
+		float groupLenY = Mathf.Abs(Max_Y - Min_Y)/CutNum;
+		for (int i = 0; i < groupY.Length; i++) {
+			groupY [i] = Min_Y + groupLenY *i;
 		}
-		groupY[groupY.Length-1] = Max_Y; // 末尾は最大値
-
 		// 分割されたY座標範囲のどの区分を使うか選択する。
 		int pick = PickGroup();
 
@@ -102,39 +100,28 @@ public class MoonLine : MonoBehaviour {
 	/// 着陸地点用の平坦なラインを作成する。
 	/// </summary>
 	/// <returns>The flat point.</returns>
-	public Vector2[] CreateFlatPoint()
+	public Vector2[] CreateFlatPoint(int pointNum,int partNum,MoonManager.BONUS_LEVEL level)
 	{
-		// 平坦なラインの始点を乱数で選択。両端の頂点と末尾から1つ前の頂点を除く
-		int vertIndex = Random.Range (1, vertices.Length - 2);
-		if (nExclusionIndex.Count != 0) {
-			bool isEqual = true;
-			while (isEqual == true) {
-				isEqual = false;
-				for (int i = 0; i < nExclusionIndex.Count; i++) {
-					if (vertIndex == nExclusionIndex [i]) {
-						isEqual = true;
-						break;
-					}
-				}
-				if (isEqual == true) {
-					vertIndex = Random.Range (1, vertices.Length - 2);
-				}
-				if (Input.GetKeyDown (KeyCode.C))
-					break;
-			}
+		// 1範囲の頂点数
+		int partVertNum = vertices.Length / pointNum;
+
+		// 範囲の最初の頂点と最後の頂点
+		int PartMin = partNum * partVertNum;
+		int partMax = pointNum==partNum+1 ? vertices.Length -1 : PartMin + partVertNum;
+
+		// ボーナスレベルを範囲減少値に使用
+		int plusVert = (int)level;
+
+		// 始点を範囲内からランダムに選択する。
+		int firstIdx = Random.Range (PartMin + 1, partMax-plusVert);
+		for (int i = 1; i <= plusVert; i++) {
+			vertices [firstIdx + i].y = vertices [firstIdx].y;
 		}
 
-		// 設定頂点除外リストに登録
-		nExclusionIndex.Add (vertIndex-1);
-		nExclusionIndex.Add (vertIndex);
-		nExclusionIndex.Add (vertIndex + 1);
-
-		// 乱数で取得した頂点の高さに右側の頂点の高さを合わせる。
-		vertices [vertIndex + 1].y = vertices [vertIndex].y;
-
+		// 返却用の配列作成
 		Vector2[] flatPoints = new Vector2[2];
-		flatPoints [0] = vertices [vertIndex];
-		flatPoints [1] = vertices [vertIndex + 1];
+		flatPoints [0] = vertices [firstIdx];			// 始点
+		flatPoints [1] = vertices [firstIdx+plusVert];	// 終点
 		return flatPoints;
 	}
 	/*---------------------------------------------------------------------*/
