@@ -142,4 +142,26 @@ public class MoonLine : MonoBehaviour {
 		collier.points= vertices2D;
 	}
 	/*---------------------------------------------------------------------*/
+	// 作成途中
+	[SerializeField]
+	Vector3[] AddVertices ;
+	public void CreateMesh()
+	{
+		// メッシュの頂点を作成
+		List<Vector3> meshVertices = new List<Vector3>();
+		for (int i = 0; i < vertices.Length; i++) {
+			meshVertices.Add(vertices [i]);
+		}
+		for (int i = 0; i < AddVertices.Length; i++) {
+			meshVertices.Add(AddVertices [i]);
+		}
+		// メッシュのインデックスを作成
+		List<Vector3> meshIndices = new List<Vector3>();
+	
+		string st = "";
+		foreach (Vector3 v in meshVertices) {
+			st += v.ToString ()+"\n";
+		}
+
+	}
 }
