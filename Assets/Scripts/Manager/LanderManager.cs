@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LunderManager : MonoBehaviour {
+public class LanderManager : MonoBehaviour {
 
 	// コンポーネント
-	public LunderStatus _Status;			// ステータススクリプト
+	public LanderStatus _Status;			// ステータススクリプト
 	private Rigidbody2D _Rigidbody;			// Rigidbody2D
 	private SpriteRenderer _SpriteRenderer; // SpriteRenderer
 	private CircleCollider2D _Collider;		// CircleCollider2D
@@ -36,7 +36,7 @@ public class LunderManager : MonoBehaviour {
 	public LandingPoint _LandingPoint; // 着陸した着陸地点
 	/*---------------------------------------------------------------------*/
 	void Awake () {
-		_Status = this.GetComponent<LunderStatus> ();
+		_Status = this.GetComponent<LanderStatus> ();
 		_Rigidbody = this.GetComponent<Rigidbody2D> ();
 		_SpriteRenderer = this.GetComponent<SpriteRenderer> ();
 		_Collider = this.GetComponent<CircleCollider2D> ();
@@ -62,7 +62,7 @@ public class LunderManager : MonoBehaviour {
 	/// 初回の場合は引数の指定無し、ステージ移動の場合は引数に値を設定すること。
 	/// </summary>
 	/// <param name="fuel">燃料の値</param>
-	public void Init(float fuel=Const.LunderData.INIT_FUEL)
+	public void Init(float fuel=Const.LanderData.INIT_FUEL)
 	{
 		// ステータスの初期化
 		_Status.SetFuel(fuel);
@@ -79,8 +79,8 @@ public class LunderManager : MonoBehaviour {
 
 		// 座標の初期化
 		Vector2 vInitPos = new Vector2();
-		vInitPos.x = Random.Range (Const.LunderData.INIT_POS_X_MIN, Const.LunderData.INIT_POS_X_MAX);
-		vInitPos.y = Const.LunderData.INIT_POS_Y;
+		vInitPos.x = Random.Range (Const.LanderData.INIT_POS_X_MIN, Const.LanderData.INIT_POS_X_MAX);
+		vInitPos.y = Const.LanderData.INIT_POS_Y;
 		this.transform.position = vInitPos;
 		// 回転値の初期化
 		this.transform.rotation = Quaternion.identity;
@@ -113,14 +113,14 @@ public class LunderManager : MonoBehaviour {
 	{
 		if (isLanding == false && isDestroy == false) {
 			// 速度の更新
-			_Status.SetHorizontalSpeed (_Rigidbody.velocity.x * Const.LunderData.SPEED_VALUE_RATE);
-			_Status.SetVerticalSpeed (_Rigidbody.velocity.y * Const.LunderData.SPEED_VALUE_RATE);
+			_Status.SetHorizontalSpeed (_Rigidbody.velocity.x * Const.LanderData.SPEED_VALUE_RATE);
+			_Status.SetVerticalSpeed (_Rigidbody.velocity.y * Const.LanderData.SPEED_VALUE_RATE);
 			// 高度の取得と更新
 			int layer = LayerMask.GetMask (new string[]{ "Moon" });
 			Ray2D ray = new Ray2D (transform.position-new Vector3(0,_Collider.radius-_Collider.offset.y,0), Vector2.down);
 			RaycastHit2D hit = Physics2D.Raycast (ray.origin,ray.direction,float.MaxValue,layer);
 			if (hit.collider != null) {
-				_Status.SetAltitude (hit.distance*Const.LunderData.ALTITUDE_VALUE_RATE);
+				_Status.SetAltitude (hit.distance*Const.LanderData.ALTITUDE_VALUE_RATE);
 			}
 			// 燃料の更新
 			_Status.SetFuel(fFuel);
@@ -234,13 +234,13 @@ public class LunderManager : MonoBehaviour {
 	private bool CheckLanding()
 	{
 		// 速度が低速かチェックする。
-		if (Mathf.Abs (_Status.GetStatus ().horizontal_speed) > Const.LunderData.LANDIGN_SUCCESS_SPEED ||
-			Mathf.Abs (_Status.GetStatus ().vertical_speed) > Const.LunderData.LANDIGN_SUCCESS_SPEED) {
+		if (Mathf.Abs (_Status.GetStatus ().horizontal_speed) > Const.LanderData.LANDIGN_SUCCESS_SPEED ||
+			Mathf.Abs (_Status.GetStatus ().vertical_speed) > Const.LanderData.LANDIGN_SUCCESS_SPEED) {
 			return false;
 		}
 		// 自身の回転Z値が制限範囲内かどうか
-		if (this.transform.rotation.eulerAngles.z > Const.LunderData.LANDING_SUCCESS_ROTATION_Z &&
-		    this.transform.rotation.eulerAngles.z < 360.0f - Const.LunderData.LANDING_SUCCESS_ROTATION_Z) {
+		if (this.transform.rotation.eulerAngles.z > Const.LanderData.LANDING_SUCCESS_ROTATION_Z &&
+		    this.transform.rotation.eulerAngles.z < 360.0f - Const.LanderData.LANDING_SUCCESS_ROTATION_Z) {
 			return false;
 		}
 

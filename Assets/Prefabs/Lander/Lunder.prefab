@@ -152,10 +152,6 @@ MonoBehaviour:
     altitude: 0
     horizontal_speed: 0
     vertical_speed: 0
-  txtALTITUDE: {fileID: 0}
-  txtHORIZONTAL: {fileID: 0}
-  txtVERTICAL: {fileID: 0}
-  txtFUEL: {fileID: 0}
 --- !u!114 &114000011431752056
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -169,8 +165,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Status: {fileID: 0}
   _RocketFire: {fileID: 1000012422440776}
+  _MainCamera: {fileID: 0}
+  _DestroyParticle: {fileID: 0}
   isLanding: 0
   isDestroy: 0
+  isInit: 0
   isInputEnable: 1
   fAddRot: 1
   fRocketPower: 0.75

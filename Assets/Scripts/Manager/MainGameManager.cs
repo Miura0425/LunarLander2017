@@ -13,7 +13,7 @@ public enum MAIN_GAME_MODE
 public class MainGameManager : MonoBehaviour {
 
 	// ゲームオブジェクト
-	private LunderManager _Lunder;	// ランダー
+	private LanderManager _Lander;	// ランダー
 	private MoonManager _Moon;		// 月面
 	private CameraManager _Camera;	// カメラ
 	private InfoUIManager _UIManager; // UI
@@ -40,7 +40,7 @@ public class MainGameManager : MonoBehaviour {
 	void Awake()
 	{
 		// ゲームオブジェクトの取得
-		_Lunder = FindObjectOfType<LunderManager> ();
+		_Lander = FindObjectOfType<LanderManager> ();
 		_Moon = FindObjectOfType<MoonManager> ();
 		_Camera = FindObjectOfType<CameraManager> ();
 		_UIManager = FindObjectOfType<InfoUIManager> ();
@@ -97,16 +97,16 @@ public class MainGameManager : MonoBehaviour {
 	private void GameStart()
 	{
 		// 初期化フラグをFalseに設定
-		_Lunder.isInit = false;
+		_Lander.isInit = false;
 		_Moon.isInit = false;
 		_Camera.isInit = false;
 
 		// クリアフラグがTrueならばステージクリア後とし、ランダーを初期化する。
 		if (isClear == true) {
 			// ボーナス燃料を加算した値を渡す。
-			_Lunder.Init (_Lunder._Status.GetStatus().fuel+fBonusFuel);
+			_Lander.Init (_Lander._Status.GetStatus().fuel+fBonusFuel);
 		} else {
-			_Lunder.Init ();
+			_Lander.Init ();
 		}
 		_Camera.Init (); // カメラ初期化処理
 		_Moon.Init ();	// 月面初期化処理
@@ -140,7 +140,7 @@ public class MainGameManager : MonoBehaviour {
 	{
 		// スコアとボーナス燃料の取得
 		float score=0;
-		ScoreCalc(_Lunder._Status,_Lunder._LandingPoint,out score,out fBonusFuel);
+		ScoreCalc(_Lander._Status,_Lander._LandingPoint,out score,out fBonusFuel);
 
 		// 総合スコアの更新
 		fScore += score;
@@ -188,11 +188,11 @@ public class MainGameManager : MonoBehaviour {
 		UIUpdate ();
 
 		// 各オブジェクトの初期化が完了しているならゲームを開始する。
-		if (_Lunder.isInit == true && _Moon.isInit == true && _Camera.isInit == true) {
+		if (_Lander.isInit == true && _Moon.isInit == true && _Camera.isInit == true) {
 			float fTime = Time.timeSinceLevelLoad - fStartTime;
 			if (fTime > fStartWaitTime) {
 				// ランダーの開始処理
-				_Lunder.PlayStart ();
+				_Lander.PlayStart ();
 
 				// メッセージを非表示にする。
 				_UIManager.SetMsgActive(UI_MSG_ITEM.GAME_START,false);
@@ -212,12 +212,12 @@ public class MainGameManager : MonoBehaviour {
 		UIUpdate ();
 
 		// 着陸成功ならクリアモードへ変更する。
-		if (_Lunder.isLanding == true) {
+		if (_Lander.isLanding == true) {
 			ChangeGameMode (MAIN_GAME_MODE.GAME_END_CLEAR);
 		}
 
 		// 着陸失敗ならゲームオーバーモードへ変更する。
-		if (_Lunder.isDestroy == true) {
+		if (_Lander.isDestroy == true) {
 			ChangeGameMode (MAIN_GAME_MODE.GAME_END_OVER);
 		}
 	}
@@ -260,10 +260,10 @@ public class MainGameManager : MonoBehaviour {
 	private void UIUpdate()
 	{
 		// 燃料・高度・水平速度・垂直速度の更新
-		_UIManager.SetInfoItem (UI_INFO_ITEM.FUEL, (int)_Lunder._Status.GetStatus ().fuel);
-		_UIManager.SetInfoItem (UI_INFO_ITEM.ALTITUDE, (int)_Lunder._Status.GetStatus ().altitude);
-		_UIManager.SetInfoItem (UI_INFO_ITEM.HORIZONTAL_SPEED, (int)_Lunder._Status.GetStatus ().horizontal_speed);
-		_UIManager.SetInfoItem (UI_INFO_ITEM.VERTICAL_SPEED, (int)_Lunder._Status.GetStatus ().vertical_speed);
+		_UIManager.SetInfoItem (UI_INFO_ITEM.FUEL, (int)_Lander._Status.GetStatus ().fuel);
+		_UIManager.SetInfoItem (UI_INFO_ITEM.ALTITUDE, (int)_Lander._Status.GetStatus ().altitude);
+		_UIManager.SetInfoItem (UI_INFO_ITEM.HORIZONTAL_SPEED, (int)_Lander._Status.GetStatus ().horizontal_speed);
+		_UIManager.SetInfoItem (UI_INFO_ITEM.VERTICAL_SPEED, (int)_Lander._Status.GetStatus ().vertical_speed);
 	}
 	/*---------------------------------------------------------------------*/
 	/// <summary>
@@ -273,10 +273,10 @@ public class MainGameManager : MonoBehaviour {
 	/// <param name="point">着陸地点</param>
 	/// <param name="score">スコア受け取り用変数</param>
 	/// <param name="bonusfuel">ボーナス燃料受け取り用変数</param>
-	private void ScoreCalc(LunderStatus status,LandingPoint point,out float score,out float bonusfuel)
+	private void ScoreCalc(LanderStatus status,LandingPoint point,out float score,out float bonusfuel)
 	{
 		// ステータス情報の取得
-		LunderStatus.STATUS _status = status.GetStatus ();
+		LanderStatus.STATUS _status = status.GetStatus ();
 
 		// 水平速度と垂直速度をベクトルとし、ベクトルの長さの半分をスピード値として取得する。
 		int speed =(int)(new Vector2 (_status.horizontal_speed, _status.vertical_speed).magnitude/2);

@@ -8,7 +8,9 @@ public class CameraManager : MonoBehaviour {
 
 	// ゲームオブジェクト
 	[SerializeField]
-	private LunderStatus _Lunder; // ランダー
+	private LanderStatus _Lander; // ランダー
+	[SerializeField]
+	private GameObject _BackGround; // 背景
 
 	// カメラモード
 	private enum MODE
@@ -93,7 +95,7 @@ public class CameraManager : MonoBehaviour {
 			modeupdate = new ModeUpdate (ZoomUpdate);
 
 			// カメラの座標を設定
-			Vector3 vZoomPos = _Lunder.transform.position;
+			Vector3 vZoomPos = _Lander.transform.position;
 
 			// 範囲外を映している場合、X座標を移動させる。
 			float fZoomWidth = Mathf.Abs( this.transform.position.x - GetScreenLeftTop ().x);
@@ -102,7 +104,7 @@ public class CameraManager : MonoBehaviour {
 			} else if (normalRightBottom.x <= vZoomPos.x + fZoomWidth) {
 				vZoomPos.x = normalRightBottom.x - fZoomWidth;
 			}
-			//vZoomPos.y += _Lunder.transform.localScale.y;
+			//vZoomPos.y += _Lander.transform.localScale.y;
 			vZoomPos.z = this.transform.position.z;
 			this.transform.position = vZoomPos;
 
@@ -122,15 +124,21 @@ public class CameraManager : MonoBehaviour {
 	/// </summary>
 	private void NormalUpdate()
 	{
+		// 背景の座標をカメラに合わせる
+		Vector3 bgpos = _BackGround.transform.position;
+		bgpos.x = this.transform.position.x;
+		bgpos.y = this.transform.position.y;
+		_BackGround.transform.position = bgpos;
+
 		// ランダーのY座標が上ラインを超えた場合、カメラを動かす。
-		if(_Lunder.transform.position.y >= vLeftTopLine.y )
+		if(_Lander.transform.position.y >= vLeftTopLine.y )
 		{
 			Vector3 vTopPos = this.transform.position;
-			vTopPos.y = _Lunder.transform.position.y - vLeftTopLine.y;
+			vTopPos.y = _Lander.transform.position.y - vLeftTopLine.y;
 			this.transform.position = vTopPos;
 		}
 		// ランダーの高度が指定の高度より低くなった場合、ズームモードに変更する。
-		if (_Lunder.GetStatus ().altitude <= Const.CameraData.ZOOM_LUDER_ALTITUDE) {
+		if (_Lander.GetStatus ().altitude <= Const.CameraData.ZOOM_LUDER_ALTITUDE) {
 			ChangeMode (MODE.ZOOM);
 		}
 	}
@@ -140,35 +148,35 @@ public class CameraManager : MonoBehaviour {
 	private void ZoomUpdate ()
 	{
 		// ランダーのY座標が上ラインを超えた場合、カメラを動かす。
-		if(_Lunder.transform.position.y >= vLeftTopLine.y )
+		if(_Lander.transform.position.y >= vLeftTopLine.y )
 		{
 			Vector3 vTopPos = this.transform.position;
-			vTopPos.y = vZoom.y + _Lunder.transform.position.y - vLeftTopLine.y;
+			vTopPos.y = vZoom.y + _Lander.transform.position.y - vLeftTopLine.y;
 			this.transform.position = vTopPos;
 		}
-		else if(_Lunder.transform.position.y <= vRightBottomLine.y )
+		else if(_Lander.transform.position.y <= vRightBottomLine.y )
 		{
 			Vector3 vBottomPos = this.transform.position;
-			vBottomPos.y = vZoom.y + _Lunder.transform.position.y - vRightBottomLine.y;
+			vBottomPos.y = vZoom.y + _Lander.transform.position.y - vRightBottomLine.y;
 			this.transform.position = vBottomPos;
 		}
 		// ランダーのX座標が左ラインを超えた場合 かつ 画面左端がノーマル時の左端を超えていない場合
-		if (vLeftTopLine.x >= _Lunder.transform.position.x && GetScreenLeftTop ().x > normalLeftTop.x) {
+		if (vLeftTopLine.x >= _Lander.transform.position.x && GetScreenLeftTop ().x > normalLeftTop.x) {
 			
 			// カメラの座標を左に動かす
 			Vector3 vLeftPos = this.transform.position;
-			vLeftPos.x = vZoom.x + _Lunder.transform.position.x - vLeftTopLine.x;
+			vLeftPos.x = vZoom.x + _Lander.transform.position.x - vLeftTopLine.x;
 			this.transform.position = vLeftPos;
 
 			// 右ラインを更新する。
 			vRightBottomLine.x = GetScreenRightBottom ().x - Const.CameraData.ZOOM_LEFTRIGHT_LINE;
 
 		} // ランダーのX座標が右ラインを超えた場合　かつ 画面右端がノーマル時の右端を超えていない場合
-		else if (vRightBottomLine.x <= _Lunder.transform.position.x && GetScreenRightBottom().x < normalRightBottom.x) {
+		else if (vRightBottomLine.x <= _Lander.transform.position.x && GetScreenRightBottom().x < normalRightBottom.x) {
 			
 			// カメラの座標を右に動かす
 			Vector3 vRightPos = this.transform.position;
-			vRightPos.x = vZoom.x + _Lunder.transform.position.x - vRightBottomLine.x;
+			vRightPos.x = vZoom.x + _Lander.transform.position.x - vRightBottomLine.x;
 			this.transform.position = vRightPos;
 
 			// 左ラインを更新する。
@@ -180,7 +188,7 @@ public class CameraManager : MonoBehaviour {
 		}
 
 		// ランダーの高度が指定の高度より高くなった場合、ノーマルモードに変更する。
-		if (_Lunder.GetStatus ().altitude >= Const.CameraData.NORMAL_LUNDER_ALTITUDE) {
+		if (_Lander.GetStatus ().altitude >= Const.CameraData.NORMAL_LANDER_ALTITUDE) {
 			ChangeMode (MODE.NORMAL);
 		}
 	}

@@ -1,5 +1,5 @@
 ﻿namespace Const{
-	public static class LunderData{
+	public static class LanderData{
 		
 		public const float INIT_FUEL = 91000.0f;		// 初期燃料
 
@@ -19,7 +19,7 @@
 		public const float MODE_NORMAL_SIZE = 10.0f;
 		public const float MODE_ZOOM_SIZE = 6.0f;
 
-		public const float NORMAL_LUNDER_ALTITUDE = 900.0f;
+		public const float NORMAL_LANDER_ALTITUDE = 900.0f;
 		public const float ZOOM_LUDER_ALTITUDE = 450.0f;
 
 		public const float NORMAL_TOP_LINE = 5.0f;

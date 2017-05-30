@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class LunderStatus : MonoBehaviour {
+public class LanderStatus : MonoBehaviour {
 	// ステータス構造体
 	[System.Serializable]
 	public struct STATUS
