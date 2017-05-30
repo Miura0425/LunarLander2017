@@ -6,6 +6,7 @@ public class LanderManager : MonoBehaviour {
 	// コンポーネント
 	public LanderStatus _Status;			// ステータススクリプト
 	private Rigidbody2D _Rigidbody;			// Rigidbody2D
+	[SerializeField]
 	private SpriteRenderer _SpriteRenderer; // SpriteRenderer
 	private CircleCollider2D _Collider;		// CircleCollider2D
 
@@ -38,7 +39,6 @@ public class LanderManager : MonoBehaviour {
 	void Awake () {
 		_Status = this.GetComponent<LanderStatus> ();
 		_Rigidbody = this.GetComponent<Rigidbody2D> ();
-		_SpriteRenderer = this.GetComponent<SpriteRenderer> ();
 		_Collider = this.GetComponent<CircleCollider2D> ();
 
 	}
