@@ -187,14 +187,16 @@ public class LunderManager : MonoBehaviour {
 	{
 		// ↓キーが押されたら 炎を表示
 		if (Input.GetKeyDown (KeyCode.DownArrow)) {
+			isRocket = true;
 			_RocketFire.SetActive (true);
 		}
 		// ↓キーが離されたら 炎を非表示
 		if (Input.GetKeyUp (KeyCode.DownArrow)) {
+			isRocket = false;
 			_RocketFire.SetActive (false);
 		}
 		// ↓キーが押されている間　推進ロケット処理を行う。
-		if (isRocket = Input.GetKey (KeyCode.DownArrow) == true) {
+		if (isRocket == true) {
 			// 燃料を消費
 			fFuel = Mathf.Max (0, fFuel - fRocketCost);
 			// 燃料が０になったら入力フラグをfalseにし、炎を消す。
@@ -202,8 +204,6 @@ public class LunderManager : MonoBehaviour {
 				isInputEnable = false;
 				_RocketFire.SetActive (false);
 			}
-			// ランダーの向いている方向に推進ロケットの力を加える。
-			//_Rigidbody.AddForce (transform.up*fRocketPower);
 		}
 	}
 	private void Rocket()
