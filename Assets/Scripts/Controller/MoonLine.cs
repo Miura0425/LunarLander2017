@@ -9,6 +9,8 @@ public class MoonLine : MonoBehaviour {
 
 	[SerializeField]
 	private CameraManager _Camera; // カメラ
+	[SerializeField]
+	private MeshFilter _MoonMesh;
 
 	[SerializeField]
 	private int nVertexNum; // 月面ステージの頂点数
@@ -142,9 +144,9 @@ public class MoonLine : MonoBehaviour {
 		collier.points= vertices2D;
 	}
 	/*---------------------------------------------------------------------*/
-	// 作成途中
-	[SerializeField]
-	Vector3[] AddVertices ;
+	/// <summary>
+	/// 月面メッシュの作成
+	/// </summary>
 	public void CreateMesh()
 	{
 		// メッシュの頂点を作成
@@ -152,16 +154,43 @@ public class MoonLine : MonoBehaviour {
 		for (int i = 0; i < vertices.Length; i++) {
 			meshVertices.Add(vertices [i]);
 		}
-		for (int i = 0; i < AddVertices.Length; i++) {
-			meshVertices.Add(AddVertices [i]);
+		float bottom = _Camera.GetScreenRightBottom ().y-5.0f;
+		for (int i = vertices.Length-1; i >= 0; i--) {
+			meshVertices.Add (new Vector2 (vertices [i].x, bottom));
 		}
 		// メッシュのインデックスを作成
-		List<Vector3> meshIndices = new List<Vector3>();
-	
-		string st = "";
-		foreach (Vector3 v in meshVertices) {
-			st += v.ToString ()+"\n";
+		List<int> meshIndices = new List<int>();
+		for (int i = 0; i < vertices.Length-1; i++) {
+			meshIndices.Add (i);
+			meshIndices.Add (i + 1);
+			meshIndices.Add (meshVertices.Count - 1 - i);
 		}
+		for (int i = vertices.Length,j=0; i < meshVertices.Count-1; i++,j++) {
+			meshIndices.Add (i);
+			meshIndices.Add (i + 1);
+			meshIndices.Add (vertices.Length - 1 - j);
+		}
+
+		float left = _Camera.GetScreenLeftTop ().x;	// 画面左端座標
+		float lenX = _Camera.GetScreenRightBottom().x - _Camera.GetScreenLeftTop().x; // X軸の長さ
+		float lenY = Mathf.Abs(Max_Y - Min_Y);	// Y軸の長さ
+		// UV作成
+		List<Vector2> meshUVs = new List<Vector2> ();
+		for (int i = 0; i < meshVertices.Count; i++) {
+			float uvX = Mathf.Abs ((meshVertices[i].x - left)/lenX);
+			float uvY = Mathf.Abs ((Max_Y- meshVertices [i].y) / lenY);
+			Vector2 uv = new Vector2 (uvX,uvY);
+			meshUVs.Add (uv);
+		}
+
+		// メッシュの作成し、頂点とインデックス、UVを設定する。
+		Mesh mesh = new Mesh ();
+		mesh.vertices = meshVertices.ToArray ();
+		mesh.triangles = meshIndices.ToArray ();
+		mesh.uv = meshUVs.ToArray ();
+
+		// メッシュフィルターにメッシュを設定する。
+		_MoonMesh.sharedMesh = mesh;
 
 	}
 }

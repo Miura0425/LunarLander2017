@@ -1,23 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class LandingPoint : MonoBehaviour {
 
 	private int nBonusRate = 0;		// ボーナス倍率
 	private Vector2 vStart;		// 着陸地点の始点
 	private Vector2 vEnd;		// 着陸地点の終点
+
+	[SerializeField]
+	private SpriteRenderer _BonusImg;
+
+	[SerializeField]
+	private Sprite[] _BonusRateSprites;
+
 	/*---------------------------------------------------------------------*/
 	// ボーナス倍率のゲッター
 	public int GetBonusRate()
 	{
 		return nBonusRate;
 	}
-
 	/*---------------------------------------------------------------------*/
-	void Awake()
-	{
-		
-	}
 	/// <summary>
 	/// 着陸地点の初期化
 	/// </summary>
@@ -39,6 +42,9 @@ public class LandingPoint : MonoBehaviour {
 		// 座標の設定
 		Vector2 pos = new Vector2(vStart.x+lenx/2,vStart.y+scale.y/2);
 		transform.position = pos;
+		// ボーナス画像の座標設定
+		_BonusImg.transform.position = new Vector3 (transform.position.x,transform.position.y+transform.localScale.y/4);
+		_BonusImg.sprite = _BonusRateSprites [nBonusRate-1];
 	}
 	/// <summary>
 	/// 着陸地点の初期化

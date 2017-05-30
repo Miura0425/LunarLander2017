@@ -80,6 +80,7 @@ public class MoonManager : MonoBehaviour {
 		}
 		// 月面のラインの更新
 		moonline.LineAndColliderUpdate ();
-
+		// 月面メッシュの作成
+		moonline.CreateMesh ();
 	}
 }
