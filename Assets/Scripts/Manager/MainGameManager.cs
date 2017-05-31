@@ -3,8 +3,8 @@ using System.Collections;
 using UnityEngine.UI;
 
 public enum MAIN_GAME_MODE
-{
-	GAME_START = 0,
+{ 
+	GAME_START= 0,
 	GAME_PLAYING,
 	GAME_END_CLEAR,
 	GAME_END_OVER,
@@ -27,6 +27,7 @@ public class MainGameManager : MonoBehaviour {
 	ModeUpdate modeupdate = null;
 
 	// 処理用変数
+	private bool isFirst = true;	// 初回ステージフラグ
 	private bool isClear = false; 	// ステージのクリアフラグ
 	private int nStage=0;			// 現在のステージ番号
 	private float fScore=0;			// 現在の総合スコア
@@ -129,6 +130,11 @@ public class MainGameManager : MonoBehaviour {
 		_UIManager.SetMsgItem<GameStartMsg.INFO_ITEM> (UI_MSG_ITEM.GAME_START,GameStartMsg.INFO_ITEM.STAGE, nStage);
 		_UIManager.SetMsgActive (UI_MSG_ITEM.GAME_START, true);
 
+		// 初回ステージなら操作方法を表示する。
+		if (isFirst == true) {
+			_UIManager.SetInputImageActive (true);
+		}
+
 		// 更新処理を設定
 		modeupdate = new ModeUpdate (GameStart_Update);
 	}
@@ -187,20 +193,31 @@ public class MainGameManager : MonoBehaviour {
 		// ＵＩ情報の更新処理
 		UIUpdate ();
 
-		// 各オブジェクトの初期化が完了しているならゲームを開始する。
-		if (_Lander.isInit == true && _Moon.isInit == true && _Camera.isInit == true) {
+		// 操作方法を非表示にする。
+		if (isFirst == true && Input.GetKeyDown (KeyCode.DownArrow)) {
+			isFirst = false;
+			fStartTime = Time.timeSinceLevelLoad;
+			_UIManager.SetInputImageActive (false);
+		}
+		if (isFirst == true)
+			return;
+
+
+			// 各オブジェクトの初期化が完了しているならゲームを開始する。
+			if (_Lander.isInit == true && _Moon.isInit == true && _Camera.isInit == true) {
 			float fTime = Time.timeSinceLevelLoad - fStartTime;
 			if (fTime > fStartWaitTime) {
 				// ランダーの開始処理
 				_Lander.PlayStart ();
 
 				// メッセージを非表示にする。
-				_UIManager.SetMsgActive(UI_MSG_ITEM.GAME_START,false);
+				_UIManager.SetMsgActive (UI_MSG_ITEM.GAME_START, false);
 
 				// ゲームプレイモードへ変更する。
 				ChangeGameMode (MAIN_GAME_MODE.GAME_PLAYING);
 			}
 		}
+		
 	}
 	/*---------------------------------------------------------------------*/
 	/// <summary>

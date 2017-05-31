@@ -21,17 +21,6 @@ public class MoonManager : MonoBehaviour {
 	public bool isInit = false; // 初期化完了フラグ
 
 	/*---------------------------------------------------------------------*/
-	void Awake()
-	{
-	}
-
-	// Update is called once per frame
-	void Update () {
-		if (Input.GetKeyDown (KeyCode.Space)) {
-			Init ();
-		}
-	}
-	/*---------------------------------------------------------------------*/
 	/// <summary>
 	/// 初期化処理 ゲーム開始前に呼び出す
 	/// </summary>

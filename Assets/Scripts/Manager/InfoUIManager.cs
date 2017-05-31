@@ -27,6 +27,9 @@ public class InfoUIManager : MonoBehaviour {
 	[SerializeField]
 	private GameObject _Message;	// メッセージアイテムの親オブジェクト
 	private MsgItem[] _MsgItems;	// メッセージアイテム
+
+	[SerializeField]
+	private GameObject _InputImage; // 操作方法画像
 	/*---------------------------------------------------------------------*/
 	void Awake()
 	{
@@ -65,5 +68,10 @@ public class InfoUIManager : MonoBehaviour {
 	public void SetMsgActive(UI_MSG_ITEM item, bool active)
 	{
 		_MsgItems [(int)item].SetItemActive (active);
+	}
+	/*---------------------------------------------------------------------*/
+	public void SetInputImageActive(bool active)
+	{
+		_InputImage.SetActive(active);
 	}
 }
