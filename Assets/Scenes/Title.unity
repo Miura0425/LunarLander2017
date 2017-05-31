@@ -491,7 +491,7 @@ MonoBehaviour:
   _image: {fileID: 1085615405}
   Speed: 1
   Max_RGB: 1
-  Min_RGB: 0.5
+  Min_RGB: 0.187
 --- !u!1 &1768776250
 GameObject:
   m_ObjectHideFlags: 0

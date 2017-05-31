@@ -2980,7 +2980,7 @@ MonoBehaviour:
   _image: {fileID: 0}
   Speed: 1
   Max_RGB: 1
-  Min_RGB: 0.5
+  Min_RGB: 0.1
 --- !u!1 &1096918948
 GameObject:
   m_ObjectHideFlags: 0
