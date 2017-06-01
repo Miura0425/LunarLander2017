@@ -1,4 +1,5 @@
 ﻿namespace Const{
+	// ランダーで扱う定数
 	public static class LanderData{
 		
 		public const float INIT_FUEL = 1000.0f;		// 初期燃料
@@ -7,13 +8,15 @@
 		public const int INIT_POS_X_MIN = -8;	// 初期X座標の最低値
 		public const int INIT_POS_X_MAX = 9;	// 初期X座標の最高値
 
-		public const float SPEED_VALUE_RATE = 200.0f;
-		public const float ALTITUDE_VALUE_RATE = 100.0f;
+		public const float SPEED_VALUE_RATE = 200.0f;		// UIに送る速度値にかける倍率
+		public const float ALTITUDE_VALUE_RATE = 100.0f;	// UIに送る高度値にかける倍率
 
-		public const float LANDIGN_SUCCESS_SPEED = 100.0f;
-		public const float LANDING_SUCCESS_ROTATION_Z = 1.0f;
+		public const float LANDIGN_SUCCESS_SPEED = 100.0f;		// 着陸成功とする速度
+		public const float LANDING_SUCCESS_ROTATION_Z = 1.0f;	// 着陸成功とする回転値
+
+		public const float ALERT_FUEL = 200.0f; // 燃料警報を鳴らす残り燃料数
 	}
-
+	// カメラで扱う定数
 	public static class CameraData{
 
 		public const float MODE_NORMAL_SIZE = 10.0f;

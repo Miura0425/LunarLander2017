@@ -25,6 +25,8 @@ public class LanderManager : MonoBehaviour {
 	[SerializeField]
 	private bool isInputEnable = true; // 入力可能フラグ
 	private bool isRocket = false;	// 推進ロケットフラグ
+	private bool isFuelAlert = false; // 燃料警報フラグ
+	private bool isSuccess = false; // 着陸可能フラグ
 
 	// 処理用変数
 	[SerializeField]
@@ -34,6 +36,14 @@ public class LanderManager : MonoBehaviour {
 	[SerializeField]
 	private float fRocketCost; // 推進ロケットで使用する燃料コスト
 	private float fFuel;		// 書き込み用燃料
+	[SerializeField]
+	private float fAlertTime; // 燃料警報の点滅時間
+	private float fAlertStartTIme; // 燃料警報開始時間
+
+	[SerializeField]
+	private Color cSuccess; // 着陸できる時の色
+
+
 	public LandingPoint _LandingPoint; // 着陸した着陸地点
 	/*---------------------------------------------------------------------*/
 	void Awake () {
@@ -51,6 +61,8 @@ public class LanderManager : MonoBehaviour {
 			InputRocket ();
 		}
 		MoveLimit ();
+		CheckLanding ();
+		FuelAlert ();
 	}
 	void FixedUpdate()
 	{
@@ -73,7 +85,7 @@ public class LanderManager : MonoBehaviour {
 		_Rigidbody.isKinematic = true;
 
 		// SpriteRendererの設定
-		_SpriteRenderer.enabled = true;
+		_SpriteRenderer.gameObject.SetActive(true);
 		// 推進ロケットの炎を非表示にする。
 		_RocketFire.SetActive (false);
 
@@ -90,6 +102,8 @@ public class LanderManager : MonoBehaviour {
 		isDestroy = false;
 		isInputEnable =	false;
 		isRocket = false;
+		isFuelAlert = false;
+		_SpriteRenderer.color = Color.white;
 
 		// 着陸した着陸地点をnullにする。
 		_LandingPoint = null;
@@ -202,10 +216,48 @@ public class LanderManager : MonoBehaviour {
 			// 燃料が０になったら入力フラグをfalseにし、炎を消す。
 			if (fFuel == 0) {
 				isInputEnable = false;
+				isRocket = false;
 				_RocketFire.SetActive (false);
 			}
 		}
 	}
+	/// <summary>
+	/// 残り燃料が少なくなったら赤く点滅する
+	/// </summary>
+	private void FuelAlert()
+	{
+		float fuel = _Status.GetStatus ().fuel;
+		Color baseColor = _SpriteRenderer.color;
+		if (isFuelAlert == false && fuel <= Const.LanderData.ALERT_FUEL) {
+			isFuelAlert = true;
+			fAlertStartTIme = Time.timeSinceLevelLoad;
+
+		}
+
+		if (isFuelAlert == true) {
+			
+			float diff = Time.timeSinceLevelLoad - fAlertStartTIme;
+			if (diff >= fAlertTime*2) {
+				fAlertStartTIme = Time.timeSinceLevelLoad;
+			}
+			float rate = diff / (fAlertTime*2) ;
+			Color _color = _SpriteRenderer.color;
+			if (diff < fAlertTime){
+				_color.r = Mathf.Lerp (baseColor.r, Color.red.r, rate);
+				_color.g = Mathf.Lerp(baseColor.g,Color.red.g,rate);
+				_color.b = Mathf.Lerp(baseColor.b,Color.red.b,rate);
+			} else {
+				_color.r = Mathf.Lerp (Color.red.r, baseColor.r, rate);
+				_color.g = Mathf.Lerp (Color.red.g, baseColor.g, rate);
+				_color.b = Mathf.Lerp (Color.red.b, baseColor.b, rate);
+			}
+			_SpriteRenderer.color = _color;
+		}
+	}
+	/*---------------------------------------------------------------------*/
+	/// <summary>
+	/// ロケットの力を加える処理
+	/// </summary>
 	private void Rocket()
 	{
 		if (isRocket == true) {
@@ -213,6 +265,7 @@ public class LanderManager : MonoBehaviour {
 			_Rigidbody.AddForce (transform.up*fRocketPower);
 		}
 	}
+
 	/*---------------------------------------------------------------------*/
 	// 衝突処理
 	void OnCollisionEnter2D(Collision2D c)
@@ -228,23 +281,29 @@ public class LanderManager : MonoBehaviour {
 	}
 	/*---------------------------------------------------------------------*/
 	/// <summary>
-	/// 着陸に成功しているかチェックする。
+	/// 着陸できる状態かチェックする。
 	/// </summary>
 	/// <returns><c>true</c>着陸成功 <c>false</c> 着陸失敗</returns>
 	private bool CheckLanding()
 	{
+		isSuccess = true;
 		// 速度が低速かチェックする。
 		if (Mathf.Abs (_Status.GetStatus ().horizontal_speed) > Const.LanderData.LANDIGN_SUCCESS_SPEED ||
 			Mathf.Abs (_Status.GetStatus ().vertical_speed) > Const.LanderData.LANDIGN_SUCCESS_SPEED) {
-			return false;
+			isSuccess = false;
 		}
 		// 自身の回転Z値が制限範囲内かどうか
 		if (this.transform.rotation.eulerAngles.z > Const.LanderData.LANDING_SUCCESS_ROTATION_Z &&
 		    this.transform.rotation.eulerAngles.z < 360.0f - Const.LanderData.LANDING_SUCCESS_ROTATION_Z) {
-			return false;
+			isSuccess = false;
 		}
 
-		return true;
+		if (isSuccess == true) {
+			_SpriteRenderer.color = cSuccess;
+		} else {
+			_SpriteRenderer.color = Color.white;
+		}
+		return isSuccess;
 	}
 	/// <summary>
 	/// 着陸処理
@@ -254,7 +313,7 @@ public class LanderManager : MonoBehaviour {
 		// 推進ロケットの炎を非表示にする。
 		_RocketFire.SetActive (false);
 		// 着陸に成功しているかチェックする。
-		isLanding = CheckLanding();
+		isLanding = isSuccess;
 		// 入力フラグをfalseにする。
 		isInputEnable = false;
 		// RigidbodyのisKinematicをtrueにする。
@@ -278,7 +337,7 @@ public class LanderManager : MonoBehaviour {
 		// RigidbodyのisKinematicをtrueにする。
 		_Rigidbody.isKinematic = true;
 		// ランダーのスプライトを非表示にする。
-		_SpriteRenderer.enabled = false;
+		_SpriteRenderer.gameObject.SetActive(false);
 		// 破壊エフェクトを表示する。
 		GameObject.Instantiate(_DestroyParticle,this.transform.position,Quaternion.identity);
 		// 破壊フラグをtrueにする。

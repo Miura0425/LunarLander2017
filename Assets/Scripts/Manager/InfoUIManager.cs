@@ -17,6 +17,7 @@ public enum UI_MSG_ITEM
 	GAME_START = 0,
 	GAME_CLEAR ,
 	GAME_OVER,
+	OUT_OF_FUEL,
 }
 
 public class InfoUIManager : MonoBehaviour {

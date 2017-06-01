@@ -204,7 +204,7 @@ Transform:
   m_GameObject: {fileID: 1000012969046886}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000010142759814}
@@ -216,8 +216,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013857878928}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 1.039, y: 0.028, z: 0}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000010142759814}
@@ -242,7 +242,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013050606090}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.251, y: 0.844, z: 0}
+  m_LocalPosition: {x: 0.251, y: 0.857, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -256,7 +256,7 @@ Transform:
   m_GameObject: {fileID: 1000012616939102}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000010142759814}
@@ -269,7 +269,7 @@ Transform:
   m_GameObject: {fileID: 1000011168784324}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000010142759814}
@@ -326,9 +326,9 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_Offset: {x: 0, y: -0.375}
+  m_Offset: {x: 0, y: -0.39358607}
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.25}
+  m_Size: {x: 1, y: 0.21282786}
 --- !u!61 &61000013949392994
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -356,11 +356,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BonusImg: {fileID: 212000011642444988}
   _BonusRateSprites:
-  - {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
-  - {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
-  - {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
-  - {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
-  - {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
+  - {fileID: 21300000, guid: ae5ccd9dc114c04468cea7b2ff382d91, type: 3}
+  - {fileID: 21300002, guid: ae5ccd9dc114c04468cea7b2ff382d91, type: 3}
+  - {fileID: 21300004, guid: ae5ccd9dc114c04468cea7b2ff382d91, type: 3}
+  - {fileID: 21300006, guid: ae5ccd9dc114c04468cea7b2ff382d91, type: 3}
+  - {fileID: 21300008, guid: ae5ccd9dc114c04468cea7b2ff382d91, type: 3}
 --- !u!114 &114000010995498528
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -374,11 +374,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BonusImg: {fileID: 212000010877116774}
   _BonusRateSprites:
-  - {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
-  - {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
-  - {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
-  - {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
-  - {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
+  - {fileID: 21300000, guid: ae5ccd9dc114c04468cea7b2ff382d91, type: 3}
+  - {fileID: 21300002, guid: ae5ccd9dc114c04468cea7b2ff382d91, type: 3}
+  - {fileID: 21300004, guid: ae5ccd9dc114c04468cea7b2ff382d91, type: 3}
+  - {fileID: 21300006, guid: ae5ccd9dc114c04468cea7b2ff382d91, type: 3}
+  - {fileID: 21300008, guid: ae5ccd9dc114c04468cea7b2ff382d91, type: 3}
 --- !u!114 &114000011013414198
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -392,11 +392,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BonusImg: {fileID: 212000011447088304}
   _BonusRateSprites:
-  - {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
-  - {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
-  - {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
-  - {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
-  - {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
+  - {fileID: 21300000, guid: ae5ccd9dc114c04468cea7b2ff382d91, type: 3}
+  - {fileID: 21300002, guid: ae5ccd9dc114c04468cea7b2ff382d91, type: 3}
+  - {fileID: 21300004, guid: ae5ccd9dc114c04468cea7b2ff382d91, type: 3}
+  - {fileID: 21300006, guid: ae5ccd9dc114c04468cea7b2ff382d91, type: 3}
+  - {fileID: 21300008, guid: ae5ccd9dc114c04468cea7b2ff382d91, type: 3}
 --- !u!114 &114000012954324734
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -410,11 +410,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BonusImg: {fileID: 212000012824942852}
   _BonusRateSprites:
-  - {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
-  - {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
-  - {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
-  - {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
-  - {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
+  - {fileID: 21300000, guid: ae5ccd9dc114c04468cea7b2ff382d91, type: 3}
+  - {fileID: 21300002, guid: ae5ccd9dc114c04468cea7b2ff382d91, type: 3}
+  - {fileID: 21300004, guid: ae5ccd9dc114c04468cea7b2ff382d91, type: 3}
+  - {fileID: 21300006, guid: ae5ccd9dc114c04468cea7b2ff382d91, type: 3}
+  - {fileID: 21300008, guid: ae5ccd9dc114c04468cea7b2ff382d91, type: 3}
 --- !u!212 &212000010050674138
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -445,7 +445,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 78650451b586a96419dcbc229c8c0dfe, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 1, b: 0.6689656, a: 1}
   m_FlipX: 0
   m_FlipY: 0
 --- !u!212 &212000010877116774
@@ -477,7 +477,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -511,7 +511,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 78650451b586a96419dcbc229c8c0dfe, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 1, b: 0.6689656, a: 1}
   m_FlipX: 0
   m_FlipY: 0
 --- !u!212 &212000011447088304
@@ -543,7 +543,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -576,7 +576,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -609,7 +609,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 60bd48c4ef657364cb7cc3206bebed65, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -643,7 +643,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 78650451b586a96419dcbc229c8c0dfe, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 1, b: 0.6689656, a: 1}
   m_FlipX: 0
   m_FlipY: 0
 --- !u!212 &212000013067581878
@@ -676,6 +676,6 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 78650451b586a96419dcbc229c8c0dfe, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 1, b: 0.6689656, a: 1}
   m_FlipX: 0
   m_FlipY: 0

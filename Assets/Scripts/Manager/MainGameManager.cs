@@ -129,6 +129,8 @@ public class MainGameManager : MonoBehaviour {
 		// 表示する開始メッセージの情報更新と表示
 		_UIManager.SetMsgItem<GameStartMsg.INFO_ITEM> (UI_MSG_ITEM.GAME_START,GameStartMsg.INFO_ITEM.STAGE, nStage);
 		_UIManager.SetMsgActive (UI_MSG_ITEM.GAME_START, true);
+		// 燃料切れメッセージが出ている可能性があるので非表示にする。
+		_UIManager.SetMsgActive(UI_MSG_ITEM.OUT_OF_FUEL,false);
 
 		// 初回ステージなら操作方法を表示する。
 		if (isFirst == true) {
@@ -152,6 +154,7 @@ public class MainGameManager : MonoBehaviour {
 		fScore += score;
 
 		// メッセージの情報更新と表示
+		_UIManager.SetMsgActive(UI_MSG_ITEM.OUT_OF_FUEL,false);
 		_UIManager.SetMsgItem<GameClearMsg.INFO_ITEM>(UI_MSG_ITEM.GAME_CLEAR,GameClearMsg.INFO_ITEM.SCORE,(int)score);
 		_UIManager.SetMsgItem<GameClearMsg.INFO_ITEM>(UI_MSG_ITEM.GAME_CLEAR,GameClearMsg.INFO_ITEM.BONUSFUEL,(int)fBonusFuel);
 		_UIManager.SetMsgActive(UI_MSG_ITEM.GAME_CLEAR,true);
@@ -172,6 +175,7 @@ public class MainGameManager : MonoBehaviour {
 	private void GameOver()
 	{
 		// メッセージの情報更新と表示
+		_UIManager.SetMsgActive(UI_MSG_ITEM.OUT_OF_FUEL,false);
 		_UIManager.SetMsgItem<GameOverMsg.INFO_ITEM>(UI_MSG_ITEM.GAME_OVER,GameOverMsg.INFO_ITEM.CLEARSTAGE,nStage-1);
 		_UIManager.SetMsgItem<GameOverMsg.INFO_ITEM>(UI_MSG_ITEM.GAME_OVER,GameOverMsg.INFO_ITEM.SCORE,(int)fScore);
 		_UIManager.SetMsgActive(UI_MSG_ITEM.GAME_OVER,true);
@@ -227,6 +231,10 @@ public class MainGameManager : MonoBehaviour {
 	{
 		// ＵＩ情報の更新処理
 		UIUpdate ();
+
+		if (_Lander._Status.GetStatus ().fuel <= 0) {
+			_UIManager.SetMsgActive (UI_MSG_ITEM.OUT_OF_FUEL, true);
+		}
 
 		// 着陸成功ならクリアモードへ変更する。
 		if (_Lander.isLanding == true) {
