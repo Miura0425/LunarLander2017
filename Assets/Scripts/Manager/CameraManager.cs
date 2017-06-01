@@ -124,12 +124,7 @@ public class CameraManager : MonoBehaviour {
 	/// </summary>
 	private void NormalUpdate()
 	{
-		// 背景の座標をカメラに合わせる
-		Vector3 bgpos = _BackGround.transform.position;
-		bgpos.x = this.transform.position.x;
-		bgpos.y = this.transform.position.y;
-		_BackGround.transform.position = bgpos;
-
+		
 		// ランダーのY座標が上ラインを超えた場合、カメラを動かす。
 		if(_Lander.transform.position.y >= vLeftTopLine.y )
 		{
@@ -141,6 +136,12 @@ public class CameraManager : MonoBehaviour {
 		if (_Lander.GetStatus ().altitude <= Const.CameraData.ZOOM_LUDER_ALTITUDE) {
 			ChangeMode (MODE.ZOOM);
 		}
+		// 背景の座標をカメラに合わせる
+		Vector3 bgpos = _BackGround.transform.position;
+		bgpos.x = this.transform.position.x;
+		bgpos.y = this.transform.position.y;
+		_BackGround.transform.position = bgpos;
+
 	}
 	/// <summary>
 	/// ズームモードの更新処理
