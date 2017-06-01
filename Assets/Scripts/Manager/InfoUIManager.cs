@@ -30,7 +30,7 @@ public class InfoUIManager : MonoBehaviour {
 	private MsgItem[] _MsgItems;	// メッセージアイテム
 
 	[SerializeField]
-	private GameObject _InputImage; // 操作方法画像
+	private HowToMsg _HowToImage; // 操作方法画像
 	/*---------------------------------------------------------------------*/
 	void Awake()
 	{
@@ -71,8 +71,12 @@ public class InfoUIManager : MonoBehaviour {
 		_MsgItems [(int)item].SetItemActive (active);
 	}
 	/*---------------------------------------------------------------------*/
-	public void SetInputImageActive(bool active)
+	public void HowToStart()
 	{
-		_InputImage.SetActive(active);
+		_HowToImage.HowToStart ();
+	}
+	public bool HowToNext()
+	{
+		return _HowToImage.NextMsg ();
 	}
 }
