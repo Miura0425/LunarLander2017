@@ -10,7 +10,7 @@ public class CameraManager : MonoBehaviour {
 	[SerializeField]
 	private LanderStatus _Lander; // ランダー
 	[SerializeField]
-	private GameObject _BackGround; // 背景
+	private GameObject[] _BackGround; // 背景
 
 	// カメラモード
 	private enum MODE
@@ -33,7 +33,9 @@ public class CameraManager : MonoBehaviour {
 	private Vector2 vRightBottomLine; 	// カメラを右下方向に動かしだす座標
 	private Vector3 vZoom;				// ズーム時のベース座標保存用
 
-	public bool isInit = false;
+	private int nowIdx= 0; // 背景スクロール用 現在の中心背景インデックス
+
+	public bool isInit = false; // 初期化フラグ
 	/*---------------------------------------------------------------------*/
 
 	void Awake () {
@@ -137,10 +139,31 @@ public class CameraManager : MonoBehaviour {
 			ChangeMode (MODE.ZOOM);
 		}
 		// 背景の座標をカメラに合わせる
-		Vector3 bgpos = _BackGround.transform.position;
-		bgpos.x = this.transform.position.x;
-		bgpos.y = this.transform.position.y;
-		_BackGround.transform.position = bgpos;
+		ScrollBackGround();
+
+	}
+	/// <summary>
+	/// 背景スクロール処理
+	/// </summary>
+	private void ScrollBackGround()
+	{
+		float lenY = GetScreenLeftTop ().y - GetScreenRightBottom ().y;
+		float topLine = _BackGround [nowIdx].transform.position.y + lenY / 2;
+		float bottomLine = _BackGround [nowIdx].transform.position.y - lenY / 2;
+
+		if (this.transform.position.y + lenY/2 > topLine) {
+			Vector3 pos = _BackGround [nowIdx].transform.position;
+			pos.y += lenY; 
+			_BackGround [(nowIdx + 1) % 2].transform.position = pos;
+		}
+		else if (this.transform.position.y - lenY/2 < bottomLine) {
+			Vector3 pos = _BackGround [nowIdx].transform.position;
+			pos.y -= lenY;
+			_BackGround [(nowIdx + 1) % 2].transform.position = pos;
+		}
+		if (this.transform.position.y - lenY / 2 >= topLine || this.transform.position.y + lenY / 2 <= bottomLine) {
+			nowIdx = (nowIdx + 1) % 2;
+		}
 
 	}
 	/// <summary>
