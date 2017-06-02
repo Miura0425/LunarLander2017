@@ -27,6 +27,7 @@ public class LanderManager : MonoBehaviour {
 	private bool isRocket = false;	// 推進ロケットフラグ
 	private bool isFuelAlert = false; // 燃料警報フラグ
 	private bool isSuccess = false; // 着陸可能フラグ
+	private bool isAboveLandingPoint = false; // 着陸地点の上を飛んでいるフラグ
 
 	// 処理用変数
 	[SerializeField]
@@ -43,14 +44,22 @@ public class LanderManager : MonoBehaviour {
 	[SerializeField]
 	private Color cSuccess; // 着陸できる時の色
 
-
 	public LandingPoint _LandingPoint; // 着陸した着陸地点
+
+	private int layer;	// ray用のレイヤーマスク
+	private Ray2D ray;	// rayのキャッシュ
 	/*---------------------------------------------------------------------*/
 	void Awake () {
 		_Status = this.GetComponent<LanderStatus> ();
 		_Rigidbody = this.GetComponent<Rigidbody2D> ();
 		_Collider = this.GetComponent<CircleCollider2D> ();
 
+	}
+	void Start()
+	{
+		// ray の初期化
+		layer = LayerMask.GetMask (new string[]{ "Moon" });
+		ray = new Ray2D (transform.position-new Vector3(0,_Collider.radius-_Collider.offset.y,0), Vector2.down);
 	}
 	
 	// 更新処理
@@ -130,8 +139,7 @@ public class LanderManager : MonoBehaviour {
 			_Status.SetHorizontalSpeed (_Rigidbody.velocity.x * Const.LanderData.SPEED_VALUE_RATE);
 			_Status.SetVerticalSpeed (_Rigidbody.velocity.y * Const.LanderData.SPEED_VALUE_RATE);
 			// 高度の取得と更新
-			int layer = LayerMask.GetMask (new string[]{ "Moon" });
-			Ray2D ray = new Ray2D (transform.position-new Vector3(0,_Collider.radius-_Collider.offset.y,0), Vector2.down);
+			ray.origin = transform.position-new Vector3(0,_Collider.radius-_Collider.offset.y,0);
 			RaycastHit2D hit = Physics2D.Raycast (ray.origin,ray.direction,float.MaxValue,layer);
 			if (hit.collider != null) {
 				_Status.SetAltitude (hit.distance*Const.LanderData.ALTITUDE_VALUE_RATE);
@@ -298,12 +306,21 @@ public class LanderManager : MonoBehaviour {
 			isSuccess = false;
 		}
 
-		if (isSuccess == true) {
+		isAboveLandingPoint = false;
+		ray.origin = transform.position-new Vector3(_Collider.radius,_Collider.radius-_Collider.offset.y,0);
+		RaycastHit2D hitleft = Physics2D.Raycast (ray.origin,ray.direction,float.MaxValue,layer);
+		ray.origin = transform.position-new Vector3(-_Collider.radius,_Collider.radius-_Collider.offset.y,0);
+		RaycastHit2D hitright = Physics2D.Raycast (ray.origin, ray.direction, float.MaxValue, layer);
+		if (hitleft.collider.tag == "LandingPoint" || hitright.collider.tag == "LandingPoint") {
+			isAboveLandingPoint = true;
+		}
+		if (isSuccess == true && isAboveLandingPoint == true) {
 			_SpriteRenderer.color = cSuccess;
+			return true;
 		} else {
 			_SpriteRenderer.color = Color.white;
+			return false;
 		}
-		return isSuccess;
 	}
 	/// <summary>
 	/// 着陸処理
