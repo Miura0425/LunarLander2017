@@ -11,6 +11,11 @@ public class PressMsg : MonoBehaviour {
 	/*---------------------------------------------------------------------*/
 	void Awake () {
 		MsgImg = GetComponent<Graphic> ();
+		MsgImg.enabled = false;
+	}
+
+	void Start()
+	{
 		fNextTime = Time.time;
 	}
 	

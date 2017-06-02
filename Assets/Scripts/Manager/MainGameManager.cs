@@ -134,7 +134,7 @@ public class MainGameManager : MonoBehaviour {
 
 		// 初回ステージなら操作方法を表示する。
 		if (isFirst == true) {
-			_UIManager.SetInputImageActive (true);
+			_UIManager.HowToStart ();
 		}
 
 		// 更新処理を設定
@@ -199,9 +199,10 @@ public class MainGameManager : MonoBehaviour {
 
 		// 操作方法を非表示にする。
 		if (isFirst == true && Input.GetKeyDown (KeyCode.DownArrow)) {
-			isFirst = false;
-			fStartTime = Time.timeSinceLevelLoad;
-			_UIManager.SetInputImageActive (false);
+			if (!_UIManager.HowToNext ()) {
+				isFirst = false;
+				fStartTime = Time.timeSinceLevelLoad;
+			}
 		}
 		if (isFirst == true)
 			return;
