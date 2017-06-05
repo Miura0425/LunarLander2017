@@ -258,11 +258,14 @@ public class MainGameManager : MonoBehaviour {
 
 		// 待ち時間が経過した場合、次のステージへ
 		if (fTime > fResultWaitTime) {
-			// メッセージを非表示にする。
-			_UIManager.SetMsgActive(UI_MSG_ITEM.GAME_CLEAR,false);
+			
+			if (Input.GetKeyDown (KeyCode.DownArrow)) {
+				// メッセージを非表示にする。
+				_UIManager.SetMsgActive (UI_MSG_ITEM.GAME_CLEAR, false);
 
-			// ゲームスタートモードへ変更する。
-			ChangeGameMode (MAIN_GAME_MODE.GAME_START);
+				// ゲームスタートモードへ変更する。
+				ChangeGameMode (MAIN_GAME_MODE.GAME_START);
+			}
 		}
 	}
 	/*---------------------------------------------------------------------*/
@@ -276,7 +279,9 @@ public class MainGameManager : MonoBehaviour {
 
 		// 待ち時間が経過した場合、タイトルシーンへ遷移する。
 		if (fTime > fResultWaitTime) {
-			TransitionManager.Instance.ChangeScene (GAME_SCENE.TITLE);
+			if (Input.GetKeyDown (KeyCode.DownArrow)) {
+				TransitionManager.Instance.ChangeScene (GAME_SCENE.TITLE);
+			}
 		}
 	}
 	/*---------------------------------------------------------------------*/
