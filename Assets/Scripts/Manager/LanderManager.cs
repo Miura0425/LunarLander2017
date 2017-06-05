@@ -119,6 +119,7 @@ public class LanderManager : MonoBehaviour {
 		// 初期化完了
 		isInit = true;
 	}
+	/*---------------------------------------------------------------------*/
 	/// <summary>
 	/// プレイ開始処理
 	/// </summary>
@@ -147,6 +148,7 @@ public class LanderManager : MonoBehaviour {
 			_Status.SetFuel(fFuel);
 		}
 	}
+	/*---------------------------------------------------------------------*/
 	/// <summary>
 	/// 移動限界処理
 	/// </summary>
@@ -201,6 +203,7 @@ public class LanderManager : MonoBehaviour {
 			this.transform.rotation = Quaternion.identity;
 		}
 	}
+	/*---------------------------------------------------------------------*/
 	/// <summary>
 	/// 推進ロケット処理
 	/// </summary>
@@ -228,6 +231,7 @@ public class LanderManager : MonoBehaviour {
 			}
 		}
 	}
+	/*---------------------------------------------------------------------*/
 	/// <summary>
 	/// 残り燃料が少なくなったら赤く点滅する
 	/// </summary>
@@ -238,25 +242,18 @@ public class LanderManager : MonoBehaviour {
 		if (isFuelAlert == false && fuel <= Const.LanderData.ALERT_FUEL) {
 			isFuelAlert = true;
 			fAlertStartTIme = Time.timeSinceLevelLoad;
-
 		}
-
 		if (isFuelAlert == true) {
 			
 			float diff = Time.timeSinceLevelLoad - fAlertStartTIme;
 			if (diff >= fAlertTime*2) {
 				fAlertStartTIme = Time.timeSinceLevelLoad;
 			}
-			float rate = diff / (fAlertTime*2) ;
 			Color _color = _SpriteRenderer.color;
 			if (diff < fAlertTime){
-				_color.r = Mathf.Lerp (baseColor.r, Color.red.r, rate);
-				_color.g = Mathf.Lerp(baseColor.g,Color.red.g,rate);
-				_color.b = Mathf.Lerp(baseColor.b,Color.red.b,rate);
+				_color = Color.red;
 			} else {
-				_color.r = Mathf.Lerp (Color.red.r, baseColor.r, rate);
-				_color.g = Mathf.Lerp (Color.red.g, baseColor.g, rate);
-				_color.b = Mathf.Lerp (Color.red.b, baseColor.b, rate);
+				_color = baseColor;
 			}
 			_SpriteRenderer.color = _color;
 		}
@@ -332,6 +329,7 @@ public class LanderManager : MonoBehaviour {
 			_SpriteRenderer.color = Color.white;
 		}
 	}
+	/*---------------------------------------------------------------------*/
 	/// <summary>
 	/// 着陸処理
 	/// </summary>
@@ -354,6 +352,7 @@ public class LanderManager : MonoBehaviour {
 			_LandingPoint = point.GetComponent<LandingPoint> ();
 		}
 	}
+	/*---------------------------------------------------------------------*/
 	/// <summary>
 	/// 着陸失敗 ゲームオーバー処理
 	/// </summary>
