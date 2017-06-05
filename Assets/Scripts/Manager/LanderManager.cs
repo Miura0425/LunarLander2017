@@ -8,7 +8,8 @@ public class LanderManager : MonoBehaviour {
 	private Rigidbody2D _Rigidbody;			// Rigidbody2D
 	[SerializeField]
 	private SpriteRenderer _SpriteRenderer; // SpriteRenderer
-	private BoxCollider2D _BoxCollider; // BoxCollider
+	[SerializeField]
+	private BoxCollider2D _Foot; // Foot BoxCollider
 
 	// ゲームオブジェクト
 	[SerializeField]
@@ -27,7 +28,6 @@ public class LanderManager : MonoBehaviour {
 	private bool isRocket = false;	// 推進ロケットフラグ
 	private bool isFuelAlert = false; // 燃料警報フラグ
 	private bool isSuccess = false; // 着陸可能フラグ
-	private bool isAboveLandingPoint = false; // 着陸地点の上を飛んでいるフラグ
 
 	// 処理用変数
 	[SerializeField]
@@ -52,7 +52,6 @@ public class LanderManager : MonoBehaviour {
 	void Awake () {
 		_Status = this.GetComponent<LanderStatus> ();
 		_Rigidbody = this.GetComponent<Rigidbody2D> ();
-		_BoxCollider = this.GetComponent<BoxCollider2D> ();
 
 	}
 	void Start()
@@ -139,7 +138,7 @@ public class LanderManager : MonoBehaviour {
 			_Status.SetHorizontalSpeed (_Rigidbody.velocity.x * Const.LanderData.SPEED_VALUE_RATE);
 			_Status.SetVerticalSpeed (_Rigidbody.velocity.y * Const.LanderData.SPEED_VALUE_RATE);
 			// 高度の取得と更新
-			ray.origin = (Vector2)transform.position + new Vector2(0,-_BoxCollider.size.y);
+			ray.origin = (Vector2)_Foot.transform.position + new Vector2(0,-_Foot.size.y);
 			RaycastHit2D hit = Physics2D.Raycast (ray.origin,ray.direction,float.MaxValue,layer);
 			if (hit.collider != null) {
 				_Status.SetAltitude (hit.distance*Const.LanderData.ALTITUDE_VALUE_RATE);
@@ -305,33 +304,29 @@ public class LanderManager : MonoBehaviour {
 		    this.transform.rotation.eulerAngles.z < 360.0f - Const.LanderData.LANDING_SUCCESS_ROTATION_Z) {
 			isSuccess = false;
 		}
-		// 着陸地点の上空かRayで判定する。
-		isAboveLandingPoint = false;
-		// 左下からRayを飛ばす
-		ray.origin = new Vector2 (transform.position.x - _BoxCollider.size.x / 2, transform.position.y - _BoxCollider.size.y);
+		// Footが着陸地点の範囲に入っているかRayで判定する。
+		// Footの左からRayを飛ばす
+		ray.origin = new Vector2 (_Foot.transform.position.x - _Foot.size.x / 2, _Foot.transform.position.y - _Foot.size.y/2);
 		RaycastHit2D hitleft = Physics2D.Raycast (ray.origin,ray.direction,float.MaxValue,layer);
-		// 右下からRayを飛ばす
-		ray.origin = new Vector2 (transform.position.x + _BoxCollider.size.x / 2, transform.position.y - _BoxCollider.size.y);
+		// Fottの右からRayを飛ばす
+		ray.origin = new Vector2 (_Foot.transform.position.x + _Foot.size.x / 2, _Foot.transform.position.y - _Foot.size.y/2);
 		RaycastHit2D hitright = Physics2D.Raycast (ray.origin, ray.direction, float.MaxValue, layer);
-		// 左右どちらかのRayが着陸地点を取得した場合 フラグをTrueにする。
-		if (hitleft.collider != null && hitleft.collider.tag == "LandingPoint") {
-			isAboveLandingPoint = true;
-		} else if (hitright.collider != null && hitright.collider.tag == "LandingPoint") {
-			isAboveLandingPoint = true;
-		}
-		// 左右のRayの取得したオブジェクトまでの距離が短い方のタグがMoonLine(月面)ならフラグをFalseにする。
+		// 得られたオブジェクトの左右どちらかが着陸地点ではない場合、フラグをFalseにする。
 		if (hitleft.collider != null && hitright.collider != null) {
-			if (hitleft.distance < hitright.distance && hitleft.collider.tag == "MoonLine") {
-				isAboveLandingPoint = false;
+			if (hitleft.collider != null && hitleft.collider.tag != "LandingPoint") {
+				isSuccess = false;
 			}
-			if (hitright.distance < hitleft.distance && hitright.collider.tag == "MoonLine") {
-				isAboveLandingPoint = false;
+			if (hitright.collider != null && hitright.collider.tag != "LandingPoint") {
+				isSuccess = false;
 			}
 		}
-
+		// なにもオブジェクトを得られていない場合もフラグをFalseにする。
+		else {
+			isSuccess = false;
+		}
 
 		// 着陸可能な状態ならランダーの色を設定色にする。
-		if (isSuccess == true && isAboveLandingPoint == true) {
+		if (isSuccess == true) {
 			_SpriteRenderer.color = cSuccess;
 		} else {
 			_SpriteRenderer.color = Color.white;
