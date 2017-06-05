@@ -8,7 +8,7 @@ public class LanderManager : MonoBehaviour {
 	private Rigidbody2D _Rigidbody;			// Rigidbody2D
 	[SerializeField]
 	private SpriteRenderer _SpriteRenderer; // SpriteRenderer
-	private CircleCollider2D _Collider;		// CircleCollider2D
+	private BoxCollider2D _BoxCollider; // BoxCollider
 
 	// ゲームオブジェクト
 	[SerializeField]
@@ -47,19 +47,19 @@ public class LanderManager : MonoBehaviour {
 	public LandingPoint _LandingPoint; // 着陸した着陸地点
 
 	private int layer;	// ray用のレイヤーマスク
-	private Ray2D ray;	// rayのキャッシュ
+	private Ray2D ray = new Ray2D();
 	/*---------------------------------------------------------------------*/
 	void Awake () {
 		_Status = this.GetComponent<LanderStatus> ();
 		_Rigidbody = this.GetComponent<Rigidbody2D> ();
-		_Collider = this.GetComponent<CircleCollider2D> ();
+		_BoxCollider = this.GetComponent<BoxCollider2D> ();
 
 	}
 	void Start()
 	{
 		// ray の初期化
 		layer = LayerMask.GetMask (new string[]{ "Moon" });
-		ray = new Ray2D (transform.position-new Vector3(0,_Collider.radius-_Collider.offset.y,0), Vector2.down);
+		ray.direction = Vector2.down;
 	}
 	
 	// 更新処理
@@ -139,7 +139,7 @@ public class LanderManager : MonoBehaviour {
 			_Status.SetHorizontalSpeed (_Rigidbody.velocity.x * Const.LanderData.SPEED_VALUE_RATE);
 			_Status.SetVerticalSpeed (_Rigidbody.velocity.y * Const.LanderData.SPEED_VALUE_RATE);
 			// 高度の取得と更新
-			ray.origin = transform.position-new Vector3(0,_Collider.radius-_Collider.offset.y,0);
+			ray.origin = (Vector2)transform.position + new Vector2(0,-_BoxCollider.size.y);
 			RaycastHit2D hit = Physics2D.Raycast (ray.origin,ray.direction,float.MaxValue,layer);
 			if (hit.collider != null) {
 				_Status.SetAltitude (hit.distance*Const.LanderData.ALTITUDE_VALUE_RATE);
@@ -292,7 +292,7 @@ public class LanderManager : MonoBehaviour {
 	/// 着陸できる状態かチェックする。
 	/// </summary>
 	/// <returns><c>true</c>着陸成功 <c>false</c> 着陸失敗</returns>
-	private bool CheckLanding()
+	private void CheckLanding()
 	{
 		isSuccess = true;
 		// 速度が低速かチェックする。
@@ -305,21 +305,36 @@ public class LanderManager : MonoBehaviour {
 		    this.transform.rotation.eulerAngles.z < 360.0f - Const.LanderData.LANDING_SUCCESS_ROTATION_Z) {
 			isSuccess = false;
 		}
-
+		// 着陸地点の上空かRayで判定する。
 		isAboveLandingPoint = false;
-		ray.origin = transform.position-new Vector3(_Collider.radius,_Collider.radius-_Collider.offset.y,0);
+		// 左下からRayを飛ばす
+		ray.origin = new Vector2 (transform.position.x - _BoxCollider.size.x / 2, transform.position.y - _BoxCollider.size.y);
 		RaycastHit2D hitleft = Physics2D.Raycast (ray.origin,ray.direction,float.MaxValue,layer);
-		ray.origin = transform.position-new Vector3(-_Collider.radius,_Collider.radius-_Collider.offset.y,0);
+		// 右下からRayを飛ばす
+		ray.origin = new Vector2 (transform.position.x + _BoxCollider.size.x / 2, transform.position.y - _BoxCollider.size.y);
 		RaycastHit2D hitright = Physics2D.Raycast (ray.origin, ray.direction, float.MaxValue, layer);
-		if (hitleft.collider.tag == "LandingPoint" || hitright.collider.tag == "LandingPoint") {
+		// 左右どちらかのRayが着陸地点を取得した場合 フラグをTrueにする。
+		if (hitleft.collider != null && hitleft.collider.tag == "LandingPoint") {
+			isAboveLandingPoint = true;
+		} else if (hitright.collider != null && hitright.collider.tag == "LandingPoint") {
 			isAboveLandingPoint = true;
 		}
+		// 左右のRayの取得したオブジェクトまでの距離が短い方のタグがMoonLine(月面)ならフラグをFalseにする。
+		if (hitleft.collider != null && hitright.collider != null) {
+			if (hitleft.distance < hitright.distance && hitleft.collider.tag == "MoonLine") {
+				isAboveLandingPoint = false;
+			}
+			if (hitright.distance < hitleft.distance && hitright.collider.tag == "MoonLine") {
+				isAboveLandingPoint = false;
+			}
+		}
+
+
+		// 着陸可能な状態ならランダーの色を設定色にする。
 		if (isSuccess == true && isAboveLandingPoint == true) {
 			_SpriteRenderer.color = cSuccess;
-			return true;
 		} else {
 			_SpriteRenderer.color = Color.white;
-			return false;
 		}
 	}
 	/// <summary>
