@@ -17,6 +17,9 @@ public class BackGround : MonoBehaviour {
 	private Image _image;			// Image
 
 	[SerializeField]
+	private Sprite[] _patternSprites; // 数種類の背景スプライト
+
+	[SerializeField]
 	private float Speed;			// 速さ
 	private float fStartTime;		// 開始時間
 	[SerializeField][Range(0,1)]
@@ -24,6 +27,7 @@ public class BackGround : MonoBehaviour {
 	[SerializeField][Range(0,1)]
 	private float Min_RGB;			// カラーRGB 最小値
 	private Color _color = new Color(1,1,1,1); // 変更用カラー
+	private int nPatternIdx; // 背景パターンのインデックス
 	/*---------------------------------------------------------------------*/
 	void Awake () {
 		// SpriteRendererとImageどちらが登録されているかチャックして、タイプを設定する。
@@ -53,6 +57,12 @@ public class BackGround : MonoBehaviour {
 	private void Reset()
 	{
 		fStartTime = Time.timeSinceLevelLoad;
+		nPatternIdx = (nPatternIdx + 1) % _patternSprites.Length;
+		if (type == TYPE.IMAGE) {
+			_image.sprite = _patternSprites [nPatternIdx];
+		} else if(type == TYPE.SPRITE){
+			_sprite.sprite = _patternSprites [nPatternIdx];
+		}
 	}
 	/// <summary>
 	/// 色を徐々に変更し、また戻していく処理
