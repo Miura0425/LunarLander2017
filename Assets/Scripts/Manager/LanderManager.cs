@@ -242,7 +242,7 @@ public class LanderManager : MonoBehaviour {
 	/// </summary>
 	private void InputDestorySelf()
 	{
-		if (isDestroy == false) {
+		if (isDestroy == true || _Rigidbody.isKinematic == true) {
 			return;
 		}
 		// 左Shift＋Rキーが押されたら自爆する。

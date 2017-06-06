@@ -5,6 +5,7 @@ public enum MENU_ITEM_ID
 {
 	START =0,
 	HOWTOPLAY,
+	OPTION,
 	EXIT,
 }
 
@@ -16,6 +17,8 @@ public class MenuManager : MonoBehaviour {
 	[SerializeField]
 	private HowToMsg _howto;
 	private bool isHowto;
+	[SerializeField]
+	private OptionMenu _option;
 
 	private bool isInputEnable ;
 
@@ -31,8 +34,13 @@ public class MenuManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		
 		InputSelect ();
 		InputHowto ();
+
+		if (isInputEnable == false && _option.isEnable == false) {
+			isInputEnable = true;
+		}
 	}
 
 	public void Init()
@@ -71,6 +79,10 @@ public class MenuManager : MonoBehaviour {
 			case MENU_ITEM_ID.HOWTOPLAY:
 				_howto.HowToStart ();
 				isHowto = true;
+				isInputEnable = false;
+				break;
+			case MENU_ITEM_ID.OPTION:
+				_option.SetEnable (true);
 				isInputEnable = false;
 				break;
 			case MENU_ITEM_ID.EXIT:
