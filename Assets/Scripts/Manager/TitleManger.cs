@@ -5,6 +5,13 @@ public class TitleManger : MonoBehaviour {
 	[SerializeField,TooltipAttribute("スタートするためのキー")]
 	private KeyCode StartKey;
 
+	[SerializeField]
+	private MenuManager _Menu;
+	[SerializeField]
+	private PressMsg _PressMsg;
+
+	private bool isStart = false;
+
 	/*---------------------------------------------------------------------*/
 	// 更新処理
 	void Update () {
@@ -15,11 +22,16 @@ public class TitleManger : MonoBehaviour {
 	/// </summary>
 	private void CheckStartKey()
 	{
-		if(Input.GetKeyDown(StartKey))
+		if(isStart == false && Input.anyKeyDown)
 		{
+			isStart = true;
+			_PressMsg.gameObject.SetActive (false);
+			_Menu.Init ();
+			Debug.Log ("Menu");
 			// メインゲームへ遷移する。
-			TransitionManager.Instance.ChangeScene(GAME_SCENE.MAINGAME);
+			//TransitionManager.Instance.ChangeScene(GAME_SCENE.MAINGAME);
 		}
 	}
 	/*---------------------------------------------------------------------*/
+
 }

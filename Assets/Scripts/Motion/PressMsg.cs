@@ -5,9 +5,9 @@ using UnityEngine.UI;
 public class PressMsg : MonoBehaviour {
 	
 	private Graphic MsgImg;
-	private float fNextTime=0;
 	[SerializeField]
 	private float fIntervalTime=0;
+	private float fStartTime = 0;
 	/*---------------------------------------------------------------------*/
 	void Awake () {
 		MsgImg = GetComponent<Graphic> ();
@@ -16,7 +16,7 @@ public class PressMsg : MonoBehaviour {
 
 	void Start()
 	{
-		fNextTime = Time.time;
+		fStartTime = Time.timeSinceLevelLoad;
 	}
 	
 	// Update is called once per frame
@@ -26,9 +26,9 @@ public class PressMsg : MonoBehaviour {
 
 	private void FlashingMsg()
 	{
-		if (Time.time > fNextTime) {
+		if (Time.timeSinceLevelLoad -fStartTime > fIntervalTime) {
 			MsgImg.enabled = !MsgImg.enabled;
-			fNextTime += fIntervalTime;
+			fStartTime = Time.timeSinceLevelLoad;
 		}
 	}
 	/*---------------------------------------------------------------------*/
