@@ -8,19 +8,20 @@ public class HowToMsg : MonoBehaviour {
 	private int nIdx=0;
 	public bool isFinish = false;
 
+	/*---------------------------------------------------------------------*/
 	void Awake()
 	{
 		foreach (GameObject msg in _Msgs) {
 			msg.SetActive (false);
 		}
 	}
-
+	/*---------------------------------------------------------------------*/
 	public void HowToStart(){
 		nIdx = 0;
 		_Msgs [nIdx].SetActive (true);
 		isFinish = false;
 	}
-
+	/*---------------------------------------------------------------------*/
 	public bool NextMsg()
 	{
 		_Msgs [nIdx].SetActive (false);
@@ -32,4 +33,5 @@ public class HowToMsg : MonoBehaviour {
 		_Msgs [nIdx].SetActive (true);
 		return true;
 	}
+	/*---------------------------------------------------------------------*/
 }

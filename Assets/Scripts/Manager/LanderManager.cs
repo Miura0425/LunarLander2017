@@ -242,6 +242,7 @@ public class LanderManager : MonoBehaviour {
 	/// </summary>
 	private void InputDestorySelf()
 	{
+		// 死亡中もしくは動きを制限されているときは自爆できない。
 		if (isDestroy == true || _Rigidbody.isKinematic == true) {
 			return;
 		}

@@ -20,6 +20,7 @@ public class MenuItem : MonoBehaviour {
 	[SerializeField]
 	private Vector2 vTargetScale;
 
+	/*---------------------------------------------------------------------*/
 	void Awake()
 	{
 		isSelect = false;
@@ -46,28 +47,30 @@ public class MenuItem : MonoBehaviour {
 			}
 		}
 	}
-
+	/*---------------------------------------------------------------------*/
 	public void Select()
 	{
 		fStartTime = Time.timeSinceLevelLoad;
 		isSelect = true;
 		_outline.enabled = isSelect;
 	}
+	/*---------------------------------------------------------------------*/
 	public void NotSelect()
 	{
 		isSelect = false;
 		_outline.enabled = isSelect;
 		this.transform.localScale = vBaseScale;
 	}
-
+	/*---------------------------------------------------------------------*/
 	public MENU_ITEM_ID Dicide()
 	{
 		
 		return _id;
 	}
-
+	/*---------------------------------------------------------------------*/
 	public void SetEnable(bool flag)
 	{
 		_text.enabled = flag;
 	}
+	/*---------------------------------------------------------------------*/
 }

@@ -4,10 +4,10 @@ using UnityEngine.UI;
 
 public class PressMsg : MonoBehaviour {
 	
-	private Graphic MsgImg;
+	private Graphic MsgImg;	// グラフィックコンポーネント
 	[SerializeField]
-	private float fIntervalTime=0;
-	private float fStartTime = 0;
+	private float fIntervalTime=0;	// インターバル時間
+	private float fStartTime = 0;	// 開始時間
 	/*---------------------------------------------------------------------*/
 	void Awake () {
 		MsgImg = GetComponent<Graphic> ();
@@ -19,11 +19,14 @@ public class PressMsg : MonoBehaviour {
 		fStartTime = Time.timeSinceLevelLoad;
 	}
 	
-	// Update is called once per frame
+	// 更新処理
 	void Update () {
 		FlashingMsg ();
 	}
-
+	/*---------------------------------------------------------------------*/
+	/// <summary>
+	/// 点滅処理
+	/// </summary>
 	private void FlashingMsg()
 	{
 		if (Time.timeSinceLevelLoad -fStartTime > fIntervalTime) {
