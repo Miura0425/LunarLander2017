@@ -68,6 +68,7 @@ public class LanderManager : MonoBehaviour {
 			InputRotation ();
 			InputRocket ();
 		}
+		InputDestorySelf ();
 		MoveLimit ();
 		CheckLanding ();
 		FuelAlert ();
@@ -88,10 +89,6 @@ public class LanderManager : MonoBehaviour {
 		_Status.SetFuel(fuel);
 		fFuel = fuel;
 
-		// RigidBody2Dの設定
-		_Rigidbody.velocity = new Vector2();
-		_Rigidbody.isKinematic = true;
-
 		// SpriteRendererの設定
 		_SpriteRenderer.gameObject.SetActive(true);
 		// 推進ロケットの炎を非表示にする。
@@ -104,6 +101,10 @@ public class LanderManager : MonoBehaviour {
 		this.transform.position = vInitPos;
 		// 回転値の初期化
 		this.transform.rotation = Quaternion.identity;
+
+		// RigidBody2Dの設定
+		_Rigidbody.velocity = new Vector2();
+		_Rigidbody.isKinematic = true;
 
 		// フラグの初期化
 		isLanding = false;
@@ -127,6 +128,10 @@ public class LanderManager : MonoBehaviour {
 	{
 		isInputEnable = true;
 		_Rigidbody.isKinematic = false;
+
+		float velX = (transform.position.x < 0 ? 1 : -1)* Const.LanderData.INIT_VELOCITY_X;
+		Debug.Log (velX);
+		_Rigidbody.velocity = new Vector2 (velX, 0);
 	}
 	/*---------------------------------------------------------------------*/
 	/// <summary>
@@ -229,6 +234,13 @@ public class LanderManager : MonoBehaviour {
 				isRocket = false;
 				_RocketFire.SetActive (false);
 			}
+		}
+	}
+	/*---------------------------------------------------------------------*/
+	private void InputDestorySelf()
+	{
+		if (Input.GetKeyDown (KeyCode.R) && Input.GetKey(KeyCode.LeftShift)) {
+			GameOver ();
 		}
 	}
 	/*---------------------------------------------------------------------*/

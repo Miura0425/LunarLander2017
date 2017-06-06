@@ -51,3 +51,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1bf8c09bdc825d469757795e0771b17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _Mode: 0
+  fStartWaitTime: 1.5
+  fResultWaitTime: 1
