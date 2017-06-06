@@ -8,7 +8,8 @@ public class LanderManager : MonoBehaviour {
 	private Rigidbody2D _Rigidbody;			// Rigidbody2D
 	[SerializeField]
 	private SpriteRenderer _SpriteRenderer; // SpriteRenderer
-	private CircleCollider2D _Collider;		// CircleCollider2D
+	[SerializeField]
+	private BoxCollider2D _Foot; // Foot BoxCollider
 
 	// ゲームオブジェクト
 	[SerializeField]
@@ -43,14 +44,21 @@ public class LanderManager : MonoBehaviour {
 	[SerializeField]
 	private Color cSuccess; // 着陸できる時の色
 
-
 	public LandingPoint _LandingPoint; // 着陸した着陸地点
+
+	private int layer;	// ray用のレイヤーマスク
+	private Ray2D ray = new Ray2D();
 	/*---------------------------------------------------------------------*/
 	void Awake () {
 		_Status = this.GetComponent<LanderStatus> ();
 		_Rigidbody = this.GetComponent<Rigidbody2D> ();
-		_Collider = this.GetComponent<CircleCollider2D> ();
 
+	}
+	void Start()
+	{
+		// ray の初期化
+		layer = LayerMask.GetMask (new string[]{ "Moon" });
+		ray.direction = Vector2.down;
 	}
 	
 	// 更新処理
@@ -60,6 +68,7 @@ public class LanderManager : MonoBehaviour {
 			InputRotation ();
 			InputRocket ();
 		}
+		InputDestorySelf ();
 		MoveLimit ();
 		CheckLanding ();
 		FuelAlert ();
@@ -80,10 +89,6 @@ public class LanderManager : MonoBehaviour {
 		_Status.SetFuel(fuel);
 		fFuel = fuel;
 
-		// RigidBody2Dの設定
-		_Rigidbody.velocity = new Vector2();
-		_Rigidbody.isKinematic = true;
-
 		// SpriteRendererの設定
 		_SpriteRenderer.gameObject.SetActive(true);
 		// 推進ロケットの炎を非表示にする。
@@ -96,6 +101,10 @@ public class LanderManager : MonoBehaviour {
 		this.transform.position = vInitPos;
 		// 回転値の初期化
 		this.transform.rotation = Quaternion.identity;
+
+		// RigidBody2Dの設定
+		_Rigidbody.velocity = new Vector2();
+		_Rigidbody.isKinematic = true;
 
 		// フラグの初期化
 		isLanding = false;
@@ -111,6 +120,7 @@ public class LanderManager : MonoBehaviour {
 		// 初期化完了
 		isInit = true;
 	}
+	/*---------------------------------------------------------------------*/
 	/// <summary>
 	/// プレイ開始処理
 	/// </summary>
@@ -118,6 +128,10 @@ public class LanderManager : MonoBehaviour {
 	{
 		isInputEnable = true;
 		_Rigidbody.isKinematic = false;
+
+		float velX = (transform.position.x < 0 ? 1 : -1)* Const.LanderData.INIT_VELOCITY_X;
+		Debug.Log (velX);
+		_Rigidbody.velocity = new Vector2 (velX, 0);
 	}
 	/*---------------------------------------------------------------------*/
 	/// <summary>
@@ -130,8 +144,7 @@ public class LanderManager : MonoBehaviour {
 			_Status.SetHorizontalSpeed (_Rigidbody.velocity.x * Const.LanderData.SPEED_VALUE_RATE);
 			_Status.SetVerticalSpeed (_Rigidbody.velocity.y * Const.LanderData.SPEED_VALUE_RATE);
 			// 高度の取得と更新
-			int layer = LayerMask.GetMask (new string[]{ "Moon" });
-			Ray2D ray = new Ray2D (transform.position-new Vector3(0,_Collider.radius-_Collider.offset.y,0), Vector2.down);
+			ray.origin = (Vector2)_Foot.transform.position + new Vector2(0,-_Foot.size.y);
 			RaycastHit2D hit = Physics2D.Raycast (ray.origin,ray.direction,float.MaxValue,layer);
 			if (hit.collider != null) {
 				_Status.SetAltitude (hit.distance*Const.LanderData.ALTITUDE_VALUE_RATE);
@@ -140,6 +153,7 @@ public class LanderManager : MonoBehaviour {
 			_Status.SetFuel(fFuel);
 		}
 	}
+	/*---------------------------------------------------------------------*/
 	/// <summary>
 	/// 移動限界処理
 	/// </summary>
@@ -194,6 +208,7 @@ public class LanderManager : MonoBehaviour {
 			this.transform.rotation = Quaternion.identity;
 		}
 	}
+	/*---------------------------------------------------------------------*/
 	/// <summary>
 	/// 推進ロケット処理
 	/// </summary>
@@ -221,6 +236,22 @@ public class LanderManager : MonoBehaviour {
 			}
 		}
 	}
+	/*---------------------------------------------------------------------*/
+	/// <summary>
+	/// 自爆処理
+	/// </summary>
+	private void InputDestorySelf()
+	{
+		// 死亡中もしくは動きを制限されているときは自爆できない。
+		if (isDestroy == true || _Rigidbody.isKinematic == true) {
+			return;
+		}
+		// 左Shift＋Rキーが押されたら自爆する。
+		if (Input.GetKeyDown (KeyCode.R) && Input.GetKey(KeyCode.LeftShift)) {
+			GameOver ();
+		}
+	}
+	/*---------------------------------------------------------------------*/
 	/// <summary>
 	/// 残り燃料が少なくなったら赤く点滅する
 	/// </summary>
@@ -231,25 +262,18 @@ public class LanderManager : MonoBehaviour {
 		if (isFuelAlert == false && fuel <= Const.LanderData.ALERT_FUEL) {
 			isFuelAlert = true;
 			fAlertStartTIme = Time.timeSinceLevelLoad;
-
 		}
-
 		if (isFuelAlert == true) {
 			
 			float diff = Time.timeSinceLevelLoad - fAlertStartTIme;
 			if (diff >= fAlertTime*2) {
 				fAlertStartTIme = Time.timeSinceLevelLoad;
 			}
-			float rate = diff / (fAlertTime*2) ;
 			Color _color = _SpriteRenderer.color;
 			if (diff < fAlertTime){
-				_color.r = Mathf.Lerp (baseColor.r, Color.red.r, rate);
-				_color.g = Mathf.Lerp(baseColor.g,Color.red.g,rate);
-				_color.b = Mathf.Lerp(baseColor.b,Color.red.b,rate);
+				_color = Color.red;
 			} else {
-				_color.r = Mathf.Lerp (Color.red.r, baseColor.r, rate);
-				_color.g = Mathf.Lerp (Color.red.g, baseColor.g, rate);
-				_color.b = Mathf.Lerp (Color.red.b, baseColor.b, rate);
+				_color = baseColor;
 			}
 			_SpriteRenderer.color = _color;
 		}
@@ -284,7 +308,7 @@ public class LanderManager : MonoBehaviour {
 	/// 着陸できる状態かチェックする。
 	/// </summary>
 	/// <returns><c>true</c>着陸成功 <c>false</c> 着陸失敗</returns>
-	private bool CheckLanding()
+	private void CheckLanding()
 	{
 		isSuccess = true;
 		// 速度が低速かチェックする。
@@ -297,14 +321,35 @@ public class LanderManager : MonoBehaviour {
 		    this.transform.rotation.eulerAngles.z < 360.0f - Const.LanderData.LANDING_SUCCESS_ROTATION_Z) {
 			isSuccess = false;
 		}
+		// Footが着陸地点の範囲に入っているかRayで判定する。
+		// Footの左からRayを飛ばす
+		ray.origin = new Vector2 (_Foot.transform.position.x - _Foot.size.x / 2, _Foot.transform.position.y - _Foot.size.y/2);
+		RaycastHit2D hitleft = Physics2D.Raycast (ray.origin,ray.direction,float.MaxValue,layer);
+		// Fottの右からRayを飛ばす
+		ray.origin = new Vector2 (_Foot.transform.position.x + _Foot.size.x / 2, _Foot.transform.position.y - _Foot.size.y/2);
+		RaycastHit2D hitright = Physics2D.Raycast (ray.origin, ray.direction, float.MaxValue, layer);
+		// 得られたオブジェクトの左右どちらかが着陸地点ではない場合、フラグをFalseにする。
+		if (hitleft.collider != null && hitright.collider != null) {
+			if (hitleft.collider != null && hitleft.collider.tag != "LandingPoint") {
+				isSuccess = false;
+			}
+			if (hitright.collider != null && hitright.collider.tag != "LandingPoint") {
+				isSuccess = false;
+			}
+		}
+		// なにもオブジェクトを得られていない場合もフラグをFalseにする。
+		else {
+			isSuccess = false;
+		}
 
+		// 着陸可能な状態ならランダーの色を設定色にする。
 		if (isSuccess == true) {
 			_SpriteRenderer.color = cSuccess;
 		} else {
 			_SpriteRenderer.color = Color.white;
 		}
-		return isSuccess;
 	}
+	/*---------------------------------------------------------------------*/
 	/// <summary>
 	/// 着陸処理
 	/// </summary>
@@ -327,6 +372,7 @@ public class LanderManager : MonoBehaviour {
 			_LandingPoint = point.GetComponent<LandingPoint> ();
 		}
 	}
+	/*---------------------------------------------------------------------*/
 	/// <summary>
 	/// 着陸失敗 ゲームオーバー処理
 	/// </summary>

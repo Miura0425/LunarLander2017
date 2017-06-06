@@ -43,7 +43,7 @@ public class LandingPoint : MonoBehaviour {
 		Vector2 pos = new Vector2(vStart.x+lenx/2,vStart.y+scale.y/2);
 		transform.position = pos;
 		// ボーナス画像の座標設定
-		_BonusImg.transform.position = new Vector3 (transform.position.x,transform.position.y+transform.localScale.y/4);
+		_BonusImg.transform.position = new Vector3 (transform.position.x,transform.position.y-transform.localScale.y);
 		_BonusImg.sprite = _BonusRateSprites [nBonusRate-1];
 	}
 	/// <summary>
