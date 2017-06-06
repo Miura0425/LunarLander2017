@@ -237,8 +237,15 @@ public class LanderManager : MonoBehaviour {
 		}
 	}
 	/*---------------------------------------------------------------------*/
+	/// <summary>
+	/// 自爆処理
+	/// </summary>
 	private void InputDestorySelf()
 	{
+		if (isDestroy == false) {
+			return;
+		}
+		// 左Shift＋Rキーが押されたら自爆する。
 		if (Input.GetKeyDown (KeyCode.R) && Input.GetKey(KeyCode.LeftShift)) {
 			GameOver ();
 		}
