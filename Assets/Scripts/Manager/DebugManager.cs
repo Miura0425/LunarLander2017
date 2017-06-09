@@ -23,15 +23,24 @@ public class DebugManager : MonoBehaviour {
 	private LineRenderer _YMINLine;
 
 	[SerializeField]
+	private Toggle _DrawCutLine;
+	[SerializeField]
 	private Toggle _DrawLine;
 	[SerializeField]
 	private Toggle _DrawMesh;
 	[SerializeField]
 	private Toggle _DrawLanding;
 
+	[SerializeField]
+	private LineRenderer DebugLine;
+	[SerializeField]
+	private GameObject _DebugLines;
 
 	// 処理用変数
 	private bool isOpen = false;	// デバッグUIを開いているかどうか
+
+	float maxX = 18;
+	float minX = -18;
 
 	/*---------------------------------------------------------------------*/
 	void Awake()
@@ -52,6 +61,12 @@ public class DebugManager : MonoBehaviour {
 		_DrawMesh.isOn = _Moon.BFmoonmesh.enabled;
 		_StageYMAX.value = _Moon.BFmoonline.BFMax_Y;
 		_StageYMIN.value = _Moon.BFmoonline.BFMin_Y;
+
+		for (int i = 0; i < _StageCut.maxValue; i++) {
+			GameObject obj = (GameObject)Instantiate (DebugLine.gameObject);
+			obj.name += i.ToString (); 
+			obj.transform.SetParent (_DebugLines.transform);
+		}
 	}
 	
 	// 更新処理
@@ -67,7 +82,6 @@ public class DebugManager : MonoBehaviour {
 	{
 		if (Input.GetKeyDown (KeyCode.D) && Input.GetKey (KeyCode.LeftControl)) {
 			isOpen = !isOpen;
-
 			foreach (GameObject ui in _DebugUIs) {
 				ui.SetActive (isOpen);
 			}
@@ -82,12 +96,33 @@ public class DebugManager : MonoBehaviour {
 				_StageYMIN.value = _StageYMAX.value - 0.5f;
 			}
 
-			float maxX = 18;
-			float minX = -18;
+
 			_YMAXLine.SetPosition (0, new Vector3 (minX, _StageYMAX.value, -1));
 			_YMAXLine.SetPosition (1, new Vector3 (maxX, _StageYMAX.value, -1));
 			_YMINLine.SetPosition (0, new Vector3 (minX, _StageYMIN.value, -1));
 			_YMINLine.SetPosition (1, new Vector3 (maxX, _StageYMIN.value, -1));
+		}
+	}
+	/*---------------------------------------------------------------------*/
+	public void OnChangedCutNum()
+	{
+		if (_DrawCutLine.isOn == false) {
+			return;
+		}
+
+		LineRenderer[] lines = _DebugLines.GetComponentsInChildren<LineRenderer> ();
+		if (lines.Length == 0) {
+			return;
+		}
+		for (int i = 0; i < lines.Length; i++) {
+			lines [i].enabled = false;
+		}
+
+		float len = Mathf.Abs (_StageYMAX.value - _StageYMIN.value) / _StageCut.value;
+		for (int i = 0; i < _StageCut.value; i++) {
+			lines [i].enabled = true;
+			lines [i].SetPosition (0, new Vector3 (minX,_StageYMIN.value + len*i,-1));
+			lines [i].SetPosition (1, new Vector3 (maxX,_StageYMIN.value + len*i,-1));
 		}
 	}
 	/*---------------------------------------------------------------------*/
@@ -149,6 +184,23 @@ public class DebugManager : MonoBehaviour {
 	}
 
 	/*---------------------------------------------------------------------*/
+	public void ToggleCutLine()
+	{
+		LineRenderer[] lines = _DebugLines.GetComponentsInChildren<LineRenderer> ();
+		if (lines.Length == 0) {
+			return;
+		}
+		for (int i = 0; i < lines.Length; i++) {
+			lines [i].enabled = false;
+		}
+
+		float len = Mathf.Abs (_StageYMAX.value - _StageYMIN.value) / _StageCut.value;
+		for (int i = 0; i < _StageCut.value; i++) {
+			lines [i].enabled = _DrawCutLine.isOn;
+			lines [i].SetPosition (0, new Vector3 (minX,_StageYMIN.value + len*i,-1));
+			lines [i].SetPosition (1, new Vector3 (maxX,_StageYMIN.value + len*i,-1));
+		}
+	}
 	public void ToggleLine()
 	{
 		_Moon.BFmoonline.GetComponent<LineRenderer> ().enabled = _DrawLine.isOn;
