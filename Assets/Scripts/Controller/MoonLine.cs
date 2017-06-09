@@ -21,19 +21,19 @@ public class MoonLine : MonoBehaviour {
 	[SerializeField]
 	private float Min_Y; // Y座標範囲最小値
 	[SerializeField]
-	private Vector3[] vertices; 	//　頂点
+	private List<Vector3> vertices = new List<Vector3>(); 	//　頂点
 
 	private List<int> nExclusionIndex = new List<int>(); // 着陸地点選択から除外する頂点リスト
+	/*---------------------------------------------------------------------*/
+	public int BFnVertexNum{get{return nVertexNum;}set{nVertexNum =value;}}
+	public int BFCutNum{get{return CutNum;}set{CutNum =value;}}
+	public float BFMax_Y{get{return Max_Y;}set{Max_Y =value;}}
+	public float BFMin_Y{get{return Min_Y;}set{Min_Y =value;}}
 	/*---------------------------------------------------------------------*/
 	// Use this for initialization
 	void Awake () {
 		linerenderer = this.GetComponent<LineRenderer> ();
 		collier = this.GetComponent<EdgeCollider2D> ();
-		vertices = new Vector3[nVertexNum];
-	}
-	// Update is called once per frame
-	void Update () {
-		
 	}
 	/*---------------------------------------------------------------------*/
 	public void Init()
@@ -43,8 +43,13 @@ public class MoonLine : MonoBehaviour {
 		// LineRendererとCollierの頂点を更新
 		LineAndColliderUpdate ();
 	}
+	/*---------------------------------------------------------------------*/
 	private void CreateLine()
 	{
+		vertices.Clear ();
+		for (int i = 0; i < nVertexNum; i++) {
+			vertices.Add (Vector3.zero);
+		}
 		// 着陸地点選択から除外する頂点リストをクリア
 		nExclusionIndex.Clear ();
 
@@ -61,11 +66,13 @@ public class MoonLine : MonoBehaviour {
 		float left = _Camera.normalLeftTop.x;
 		float right = _Camera.normalRightBottom.x;
 		// 画面幅/頂点数で1辺の長さを取得する。
-		float lenX = Mathf.Abs (right - left) / (vertices.Length-1);
+		float lenX = Mathf.Abs (right - left) / (vertices.Count-1);
 		// 頂点の座標を設定する。
-		for (int i=0; i < vertices.Length; i++) {
-			vertices [i].x = left + i * lenX;
-			vertices [i].y = Random.Range(groupY[pick],groupY[pick+1]);	// 選択した範囲内でY座標を乱数で設定
+		for (int i=0; i < vertices.Count; i++) {
+			Vector3 tmp = Vector3.zero;
+			tmp.x = left + i * lenX;
+			tmp.y = Random.Range(groupY[pick],groupY[pick+1]);	// 選択した範囲内でY座標を乱数で設定
+			vertices[i] = tmp;
 
 			// 次の頂点のY座標範囲を決定する。
 			pick = PickGroup (pick);
@@ -105,11 +112,11 @@ public class MoonLine : MonoBehaviour {
 	public Vector2[] CreateFlatPoint(int pointNum,int partNum,MoonManager.BONUS_LEVEL level)
 	{
 		// 1範囲の頂点数
-		int partVertNum = vertices.Length / pointNum;
+		int partVertNum = vertices.Count / pointNum;
 
 		// 範囲の最初の頂点と最後の頂点
 		int PartMin = partNum * partVertNum;
-		int partMax = pointNum==partNum+1 ? vertices.Length -1 : PartMin + partVertNum;
+		int partMax = pointNum==partNum+1 ? vertices.Count -1 : PartMin + partVertNum;
 
 		// ボーナスレベルを範囲減少値に使用
 		int plusVert = (int)level;
@@ -117,7 +124,9 @@ public class MoonLine : MonoBehaviour {
 		// 始点を範囲内からランダムに選択する。
 		int firstIdx = Random.Range (PartMin + 1, partMax-plusVert);
 		for (int i = 1; i <= plusVert; i++) {
-			vertices [firstIdx + i].y = vertices [firstIdx].y;
+			Vector3 tmp = vertices [firstIdx + i];
+			tmp.y = vertices[firstIdx].y;
+			vertices [firstIdx + i] = tmp;
 		}
 
 		// 返却用の配列作成
@@ -133,12 +142,12 @@ public class MoonLine : MonoBehaviour {
 	public void LineAndColliderUpdate()
 	{
 		// 線の頂点の設定
-		linerenderer.SetVertexCount (vertices.Length);
-		linerenderer.SetPositions (vertices);
+		linerenderer.SetVertexCount (vertices.Count);
+		linerenderer.SetPositions (vertices.ToArray());
 
 		// あたり判定の設定
-		Vector2[] vertices2D = new Vector2[vertices.Length];
-		for (int i = 0; i < vertices.Length; i++) {
+		Vector2[] vertices2D = new Vector2[vertices.Count];
+		for (int i = 0; i < vertices.Count; i++) {
 			vertices2D [i] = vertices [i];
 		}
 		collier.points= vertices2D;
@@ -151,24 +160,24 @@ public class MoonLine : MonoBehaviour {
 	{
 		// メッシュの頂点を作成
 		List<Vector3> meshVertices = new List<Vector3>();
-		for (int i = 0; i < vertices.Length; i++) {
+		for (int i = 0; i < vertices.Count; i++) {
 			meshVertices.Add(vertices [i]);
 		}
 		float bottom = _Camera.GetScreenRightBottom ().y-5.0f;
-		for (int i = vertices.Length-1; i >= 0; i--) {
+		for (int i = vertices.Count-1; i >= 0; i--) {
 			meshVertices.Add (new Vector2 (vertices [i].x, bottom));
 		}
 		// メッシュのインデックスを作成
 		List<int> meshIndices = new List<int>();
-		for (int i = 0; i < vertices.Length-1; i++) {
+		for (int i = 0; i < vertices.Count-1; i++) {
 			meshIndices.Add (i);
 			meshIndices.Add (i + 1);
 			meshIndices.Add (meshVertices.Count - 1 - i);
 		}
-		for (int i = vertices.Length,j=0; i < meshVertices.Count-1; i++,j++) {
+		for (int i = vertices.Count,j=0; i < meshVertices.Count-1; i++,j++) {
 			meshIndices.Add (i);
 			meshIndices.Add (i + 1);
-			meshIndices.Add (vertices.Length - 1 - j);
+			meshIndices.Add (vertices.Count - 1 - j);
 		}
 
 		float left = _Camera.GetScreenLeftTop ().x;	// 画面左端座標

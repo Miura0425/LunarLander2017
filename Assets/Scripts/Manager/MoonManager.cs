@@ -6,6 +6,10 @@ public class MoonManager : MonoBehaviour {
 
 	[SerializeField]
 	private MoonLine moonline;
+	public MoonLine BFmoonline{get{return moonline;}}
+	[SerializeField]
+	private MeshRenderer moonmesh;
+	public MeshRenderer BFmoonmesh{ get { return moonmesh; } }
 	[SerializeField]
 	private LandingPoint[] landingPoint;
 	[SerializeField]
@@ -40,6 +44,19 @@ public class MoonManager : MonoBehaviour {
 		// 月面のライン初期化
 		moonline.Init ();
 
+		SetLandingPoint ();
+
+		// 月面のラインの更新
+		moonline.LineAndColliderUpdate ();
+		// 月面メッシュの作成
+		moonline.CreateMesh ();
+	}
+	public void BFSetLandingPoint()
+	{
+		SetLandingPoint ();
+	}
+	private void SetLandingPoint()
+	{
 		// ボーナス倍率リスト
 		List<int> BonusRateList = new List<int> ();
 		// 設定用配列から倍率をリストに追加
@@ -67,9 +84,5 @@ public class MoonManager : MonoBehaviour {
 			// 選ばれたものをリストから削除
 			BonusRateList.RemoveAt (pick);
 		}
-		// 月面のラインの更新
-		moonline.LineAndColliderUpdate ();
-		// 月面メッシュの作成
-		moonline.CreateMesh ();
 	}
 }

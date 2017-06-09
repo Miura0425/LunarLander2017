@@ -44,7 +44,7 @@ public class CameraManager : MonoBehaviour {
 	
 	// 更新処理
 	void Update () {
-		if (isInit == false)
+		if (isInit == false || Time.timeScale == 0)
 			return;
 		modeupdate ();
 	}
