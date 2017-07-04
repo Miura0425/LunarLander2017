@@ -9,6 +9,8 @@ public class LandingPoint : MonoBehaviour {
 	private Vector2 vEnd;		// 着陸地点の終点
 
 	[SerializeField]
+	private SpriteRenderer _LandingPointImg;
+	[SerializeField]
 	private SpriteRenderer _BonusImg;
 
 	[SerializeField]
@@ -37,8 +39,8 @@ public class LandingPoint : MonoBehaviour {
 		// 長さを取得
 		float lenx = vEnd.x-vStart.x;
 		// サイズの設定
-		Vector2 scale = new Vector2 (lenx, transform.localScale.y);
-		transform.localScale = scale;
+		Vector2 scale = new Vector2 (lenx, _LandingPointImg.transform.localScale.y);
+		_LandingPointImg.transform.localScale = scale;
 		// 座標の設定
 		Vector2 pos = new Vector2(vStart.x+lenx/2,vStart.y+scale.y/2);
 		transform.position = pos;

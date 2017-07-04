@@ -109,7 +109,7 @@ public class MoonLine : MonoBehaviour {
 	/// 着陸地点用の平坦なラインを作成する。
 	/// </summary>
 	/// <returns>The flat point.</returns>
-	public Vector2[] CreateFlatPoint(int pointNum,int partNum,MoonManager.BONUS_LEVEL level)
+	public Vector2[] CreateFlatPoint(int pointNum,int partNum,int level)
 	{
 		// 1範囲の頂点数
 		int partVertNum = vertices.Count / pointNum;
@@ -119,7 +119,7 @@ public class MoonLine : MonoBehaviour {
 		int partMax = pointNum==partNum+1 ? vertices.Count -1 : PartMin + partVertNum;
 
 		// ボーナスレベルを範囲減少値に使用
-		int plusVert = (int)level;
+		int plusVert = level;
 
 		// 始点を範囲内からランダムに選択する。
 		int firstIdx = Random.Range (PartMin + 1, partMax-plusVert);

@@ -38,15 +38,4 @@ public class TransitionManager : MonoBehaviour {
 		SceneManager.LoadScene ((int)scene);
 	}
 	/*---------------------------------------------------------------------*/
-	// テストコード
-	/*
-	public GAME_SCENE nextscene;
-	void Update()
-	{
-		if (Input.GetMouseButtonDown (0)) {
-			ChangeScene (nextscene);
-		}
-	}
-	*/
-	/*---------------------------------------------------------------------*/
 }

@@ -130,7 +130,6 @@ public class LanderManager : MonoBehaviour {
 		_Rigidbody.isKinematic = false;
 
 		float velX = (transform.position.x < 0 ? 1 : -1)* Const.LanderData.INIT_VELOCITY_X;
-		Debug.Log (velX);
 		_Rigidbody.velocity = new Vector2 (velX, 0);
 	}
 	/*---------------------------------------------------------------------*/

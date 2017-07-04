@@ -29,6 +29,7 @@ public class MainGameManager : MonoBehaviour {
 	// 処理用変数
 	private bool isFirst = true;	// 初回ステージフラグ
 	private bool isClear = false; 	// ステージのクリアフラグ
+	private bool isRetry = false;	// リトライフラグ
 	private int nStage=0;			// 現在のステージ番号
 	private float fScore=0;			// 現在の総合スコア
 	private float fBonusFuel=0;		// クリア時に取得するボーナス燃料
@@ -116,8 +117,15 @@ public class MainGameManager : MonoBehaviour {
 		// クリアフラグをFalseに設定
 		isClear = false;
 
+		if (isRetry == true) {
+			nStage = 0;
+			fScore = 0;
+
+			isRetry = false;
+		}
+
 		// ステージ番号の更新
-		nStage++;
+		nStage ++;
 
 		// 開始待ち処理の待ち開始時間の取得
 		fStartTime = Time.timeSinceLevelLoad;
@@ -140,6 +148,7 @@ public class MainGameManager : MonoBehaviour {
 		// 更新処理を設定
 		modeupdate = new ModeUpdate (GameStart_Update);
 	}
+
 	/*---------------------------------------------------------------------*/
 	/// <summary>
 	/// ゲームクリア時の処理
@@ -259,7 +268,7 @@ public class MainGameManager : MonoBehaviour {
 		// 待ち時間が経過した場合、次のステージへ
 		if (fTime > fResultWaitTime) {
 			
-			if (Input.GetKeyDown (KeyCode.DownArrow)) {
+			if (Input.anyKeyDown) {
 				// メッセージを非表示にする。
 				_UIManager.SetMsgActive (UI_MSG_ITEM.GAME_CLEAR, false);
 
@@ -279,8 +288,14 @@ public class MainGameManager : MonoBehaviour {
 
 		// 待ち時間が経過した場合、タイトルシーンへ遷移する。
 		if (fTime > fResultWaitTime) {
-			if (Input.GetKeyDown (KeyCode.DownArrow)) {
+			if (Input.GetKeyDown(KeyCode.DownArrow)) {
 				TransitionManager.Instance.ChangeScene (GAME_SCENE.TITLE);
+			}
+			if (Input.GetKeyDown (KeyCode.UpArrow)) {
+				// メッセージを非表示にする。
+				_UIManager.SetMsgActive (UI_MSG_ITEM.GAME_OVER, false);
+				isRetry = true;
+				ChangeGameMode (MAIN_GAME_MODE.GAME_START);
 			}
 		}
 	}

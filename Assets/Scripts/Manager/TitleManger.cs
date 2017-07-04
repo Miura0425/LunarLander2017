@@ -27,9 +27,6 @@ public class TitleManger : MonoBehaviour {
 			isStart = true;
 			_PressMsg.gameObject.SetActive (false);
 			_Menu.Init ();
-			Debug.Log ("Menu");
-			// メインゲームへ遷移する。
-			//TransitionManager.Instance.ChangeScene(GAME_SCENE.MAINGAME);
 		}
 	}
 	/*---------------------------------------------------------------------*/
