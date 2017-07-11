@@ -1,7 +1,7 @@
 ﻿namespace Const{
 	// ランダーで扱う定数
 	public static class LanderData{
-		
+
 		public const float INIT_FUEL = 1500.0f;		// 初期燃料
 
 		public const float INIT_POS_Y = 3.0f;		// 初期Y座標
@@ -38,4 +38,7 @@
 		public const int SCORE_CALC_BASE = 100; // スコアを計算する際に利用するベース値
 	}
 
+	public static class WebRequest{
+		public const string BASE_URL = "http://localhost/unitywebtest/index.php/Webtest/";
+	}
 }
