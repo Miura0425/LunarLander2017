@@ -41,4 +41,13 @@
 	public static class WebRequest{
 		public const string BASE_URL = "http://localhost/unitywebtest/index.php/Webtest/";
 	}
+
+
+	public static class UserAccount{
+		public const string USER_ID_KEY = "ID";
+		public const string USER_PASS_KEY = "PASS";
+		public const string USER_NAME_KEY = "NAME";
+		public const string USER_NUM_KEY = "NUM";
+
+	}
 }

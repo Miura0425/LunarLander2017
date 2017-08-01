@@ -2,6 +2,15 @@
 using System.Collections;
 
 public class TitleManger : MonoBehaviour {
+	static private TitleManger instance=null;
+	static public TitleManger Instance
+	{
+		get{
+			return instance;
+		}
+	}
+
+
 	[SerializeField,TooltipAttribute("スタートするためのキー")]
 	private KeyCode StartKey;
 
@@ -9,17 +18,20 @@ public class TitleManger : MonoBehaviour {
 	[SerializeField]
 	private MenuManager _Menu; // メニュー
 	[SerializeField]
-	private SignUpUI _SignUpUI;
+	private UserAccountUIManager _UserAccountMgr;
 	[SerializeField]
 	private PressMsg _PressMsg; // プレスメッセージ
 
 	// はじめのキーが押されているか
 	private bool isPress = false;
+	public bool isWait = false;
 
 	/*---------------------------------------------------------------------*/
-	void Start()
+	void Awake()
 	{
-		CheckStartUp ();
+		if (instance == null) {
+			instance = this;
+		}
 	}
 	// 更新処理
 	void Update () {
@@ -35,19 +47,20 @@ public class TitleManger : MonoBehaviour {
 		{
 			isPress = true;
 			_PressMsg.gameObject.SetActive (false);
-			_Menu.Init ();
+			_UserAccountMgr.CheckUserAccount ();
+			StartCoroutine (WaitUserAccount ());
 		}
 	}
 	/*---------------------------------------------------------------------*/
-	private void CheckStartUp()
+	private IEnumerator WaitUserAccount()
 	{
-		if (PlayerPrefs.GetString ("ID") == "") {
-			// サインアップウィンドウ表示
-			_SignUpUI.Init();
-		} else {
-			// ログイン処理
-			UserAccountManager.AutoLogin();
+		isWait = true;
+		while (isWait) {
+			yield return null;
 		}
+		_UserAccountMgr.SetActiveUI (false);
+		_UserAccountMgr.SetLoginUser ();
+		_Menu.Init ();
 	}
 	/*---------------------------------------------------------------------*/
 	public void UserDataDelete()

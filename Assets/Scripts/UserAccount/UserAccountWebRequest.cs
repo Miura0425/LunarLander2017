@@ -31,33 +31,34 @@ public class UserAccountWebRequest  {
 				// ヘッダー情報 クッキー取得
 				CookieHeaderSetting(request);
 
-
 				// レスポンスからJson形式のテキストデータを取得する。
 				string text = request.downloadHandler.text;
 				UserAccountResponseData response = JsonUtility.FromJson<UserAccountResponseData>(text);
 				if (response.Message == "Error") {
-					UserAccountManager.AutoSignUp(_NAME);
+					yield return UserAccountManager.AutoSignUp(_NAME);
 					yield break;
 				}
 
 				// IDとパスを暗号化
 				string encID = StringEncrypter.EncryptString (_ID);
 				string encPASS = StringEncrypter.EncryptString (_PASS);
-
+				UserAccountDebugUI.Instance.SetID (_ID);
+				UserAccountDebugUI.Instance.SetPASS (_PASS);
 				// ローカルへ保存
-				PlayerPrefs.SetString("ID",encID);
-				PlayerPrefs.SetString ("PASS", encPASS);
-				PlayerPrefs.SetInt ("NUM", response.num);
+				PlayerPrefs.SetString(Const.UserAccount.USER_ID_KEY,encID);
+				PlayerPrefs.SetString (Const.UserAccount.USER_PASS_KEY, encPASS);
+				PlayerPrefs.SetInt (Const.UserAccount.USER_NUM_KEY, response.num);
+				PlayerPrefs.SetString (Const.UserAccount.USER_NAME_KEY, response.name);
 			}
 		}
 
 	}
 	/*------------------------------------------------------------------------------------------------------------*/
-	public static IEnumerator AutoLoginRequest()
+	public static IEnumerator AutoLoginRequest(string ID,string PASS)
 	{
 		// リクエストURLを生成
 		string url_base = Const.WebRequest.BASE_URL+"Login/";
-		string url_param = "?id="+PlayerPrefs.GetString("ID")+"&pass="+PlayerPrefs.GetString("PASS");
+		string url_param = "?id="+ID+"&pass="+PASS;
 		UnityWebRequest request = UnityWebRequest.Get(url_base+url_param);
 
 		// ヘッダー情報 クッキーがあれば設定する。
@@ -82,12 +83,15 @@ public class UserAccountWebRequest  {
 				string text = request.downloadHandler.text;
 				UserAccountResponseData response = JsonUtility.FromJson<UserAccountResponseData>(text);
 
+				// データの取得ができているか
 				if (response.Message == "Error") {
-
 					yield break;
 				}
 
-				PlayerPrefs.SetInt ("NUM", response.num);
+				// ローカルに保存する。
+				PlayerPrefs.SetString (Const.UserAccount.USER_NAME_KEY, response.name);
+				PlayerPrefs.SetInt (Const.UserAccount.USER_NUM_KEY, response.num);
+
 			}
 		}
 	}
@@ -113,7 +117,6 @@ public class UserAccountWebRequest  {
 			} else {
 				header = "";
 			}
-			Debug.Log (header);
 		}
 	}
 }

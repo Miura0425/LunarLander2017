@@ -5,7 +5,7 @@ using System.Collections;
 public class UserAccountManager   {
 	/*--------------------------------------------------------------------------*/
 	/// 自動サインアップ
-	public static void AutoSignUp(string name)
+	public static IEnumerator AutoSignUp(string name)
 	{
 		// IDの自動生成
 		string id = Guid.NewGuid ().ToString ("N");
@@ -14,17 +14,23 @@ public class UserAccountManager   {
 		string pass = Guid.NewGuid ().ToString ("N");
 		string _PASS = pass.Substring (0, 8);
 
-		//StartCoroutine (/*サーバー通信クラス サインアップリクエスト*/);
+		yield return UserAccountWebRequest.AutoSignUpRequest(_ID,_PASS,name);
+		TitleManger.Instance.isWait = false;
 	}
 	/*--------------------------------------------------------------------------*/
 
 	/// 自動ログイン
-	public static void AutoLogin()
+	public static IEnumerator AutoLogin()
 	{
-		string _ID = StringEncrypter.DecryptString( PlayerPrefs.GetString ("ID"));
-		string _PASS = StringEncrypter.DecryptString( PlayerPrefs.GetString ("PASS"));
+		string _ID = StringEncrypter.DecryptString( PlayerPrefs.GetString (Const.UserAccount.USER_ID_KEY));
+		string _PASS = StringEncrypter.DecryptString( PlayerPrefs.GetString (Const.UserAccount.USER_PASS_KEY));
 
-		//StartCoroutine (/*サーバー通信クラス ログインリクエスト*/);
+		UserAccountDebugUI.Instance.SetID (_ID);
+		UserAccountDebugUI.Instance.SetPASS (_PASS);
+
+		yield return UserAccountWebRequest.AutoLoginRequest(_ID,_PASS);
+		yield return new WaitForSeconds (2);
+		TitleManger.Instance.isWait = false;
 	}
 	/*--------------------------------------------------------------------------*/
 	/// データ削除
