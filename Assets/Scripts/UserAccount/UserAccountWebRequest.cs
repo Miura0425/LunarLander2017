@@ -24,6 +24,7 @@ public class UserAccountWebRequest  {
 		// 通信エラーチェック
 		if (request.isError) {
 			Debug.Log (request.error);
+			UserAccountManager.IsLogin = false;
 		} else {
 
 			if (request.responseCode == 200) {
@@ -49,6 +50,8 @@ public class UserAccountWebRequest  {
 				PlayerPrefs.SetString (Const.UserAccount.USER_PASS_KEY, encPASS);
 				PlayerPrefs.SetInt (Const.UserAccount.USER_NUM_KEY, response.num);
 				PlayerPrefs.SetString (Const.UserAccount.USER_NAME_KEY, response.name);
+
+				UserAccountManager.IsLogin = true;
 			}
 		}
 
@@ -72,6 +75,7 @@ public class UserAccountWebRequest  {
 		// 通信エラーチェック
 		if (request.isError) {
 			Debug.Log (request.error);
+			UserAccountManager.IsLogin = false;
 		} else {
 
 			if (request.responseCode == 200) {
@@ -92,6 +96,105 @@ public class UserAccountWebRequest  {
 				PlayerPrefs.SetString (Const.UserAccount.USER_NAME_KEY, response.name);
 				PlayerPrefs.SetInt (Const.UserAccount.USER_NUM_KEY, response.num);
 
+				UserAccountManager.IsLogin = true;
+			}
+		}
+	}
+	/*------------------------------------------------------------------------------------------------------------*/
+
+	public static IEnumerator DisconnectRequest()
+	{
+		// リクエストURLを生成
+		string url_base = Const.WebRequest.BASE_URL+"Disconnect/";
+		UnityWebRequest request = UnityWebRequest.Get(url_base);
+
+		// ヘッダー情報 クッキーがあれば設定する。
+		if (header.Length > 0) {
+			request.SetRequestHeader ("Cookie",header);
+		}
+
+		// リクエスト送信
+		yield return request.Send();
+
+		// 通信エラーチェック
+		if (request.isError) {
+			Debug.Log (request.error);
+		} else {
+			if (request.responseCode == 200) {
+				Debug.Log ("Disconnect");
+			}
+		}
+	}
+	/*------------------------------------------------------------------------------------------------------------*/
+	public static IEnumerator CheckInheritSetting(string _ID, string _PASS)
+	{
+		yield return new WaitForSeconds (1.5f);
+
+		string url_base = Const.WebRequest.BASE_URL + "CheckInheritSetting/";
+		string url_param = "?id="+_ID+"&pass="+_PASS;
+		UnityWebRequest request = UnityWebRequest.Get(url_base+url_param);
+
+		// ヘッダー情報 クッキーがあれば設定する。
+		if (header.Length > 0) {
+			request.SetRequestHeader ("Cookie",header);
+		}
+
+		yield return request.Send ();
+
+		if (request.isError) {
+			Debug.Log ("Error");
+		}else{
+			if (request.responseCode == 200) {
+				CookieHeaderSetting (request);
+				// レスポンスからJson形式のテキストデータを取得する。
+				string text = request.downloadHandler.text;
+
+				UserAccountManager.IsInherit = true;
+			}
+		}
+
+	}
+	/*------------------------------------------------------------------------------------------------------------*/
+	public static IEnumerator CheckInheriting()
+	{
+		yield return new WaitForSeconds (1.5f);
+
+		string url_base = Const.WebRequest.BASE_URL + "CheckInheriting/";
+		string url_param = "?num="+PlayerPrefs.GetInt(Const.UserAccount.USER_NUM_KEY);
+		UnityWebRequest request = UnityWebRequest.Get(url_base+url_param);
+
+		// ヘッダー情報 クッキーがあれば設定する。
+		if (header.Length > 0) {
+			request.SetRequestHeader ("Cookie",header);
+		}
+
+		yield return request.Send ();
+
+		if (request.isError) {
+			Debug.Log ("Error");
+		}else{
+			if (request.responseCode == 200) {
+				CookieHeaderSetting (request);
+				// レスポンスからJson形式のテキストデータを取得する。
+				string text = request.downloadHandler.text;
+				InheritResponseData result = JsonUtility.FromJson<InheritResponseData> (text);
+
+				Debug.Log (result.Message);
+
+				if (result.id != "") {
+
+					// IDとパスを暗号化
+					string encID = StringEncrypter.EncryptString (result.id);
+					string encPASS = StringEncrypter.EncryptString (result.pass);
+
+					// ローカルへ保存
+					PlayerPrefs.SetString (Const.UserAccount.USER_ID_KEY, encID);
+					PlayerPrefs.SetString (Const.UserAccount.USER_PASS_KEY, encPASS);
+					PlayerPrefs.SetString (Const.UserAccount.USER_NAME_KEY, result.name);
+
+
+					UserAccountManager.IsInherit = true;
+				}
 			}
 		}
 	}

@@ -18,8 +18,6 @@ public class TitleManger : MonoBehaviour {
 	[SerializeField]
 	private MenuManager _Menu; // メニュー
 	[SerializeField]
-	private UserAccountUIManager _UserAccountMgr;
-	[SerializeField]
 	private PressMsg _PressMsg; // プレスメッセージ
 
 	// はじめのキーが押されているか
@@ -38,6 +36,12 @@ public class TitleManger : MonoBehaviour {
 		CheckStartKey ();
 	}
 	/*---------------------------------------------------------------------*/
+	private void OpenMenu()
+	{
+		UserAccountUIManager.Instance.SetActiveUI (false);
+		_Menu.Init ();
+	}
+	/*---------------------------------------------------------------------*/
 	/// <summary>
 	/// スタートキーが押されたかチェックする。
 	/// </summary>
@@ -47,20 +51,43 @@ public class TitleManger : MonoBehaviour {
 		{
 			isPress = true;
 			_PressMsg.gameObject.SetActive (false);
-			_UserAccountMgr.CheckUserAccount ();
-			StartCoroutine (WaitUserAccount ());
+			if (cGameManager.Instance.IsOffline) {
+				OpenMenu ();
+			} else {
+				UserAccountUIManager.Instance.CheckUserAccount ();
+				StartCoroutine (WaitUserAccount ());
+			}
 		}
 	}
 	/*---------------------------------------------------------------------*/
-	private IEnumerator WaitUserAccount()
+	public IEnumerator WaitUserAccount()
 	{
 		isWait = true;
 		while (isWait) {
 			yield return null;
 		}
-		_UserAccountMgr.SetActiveUI (false);
-		_UserAccountMgr.SetLoginUser ();
-		_Menu.Init ();
+		if (!UserAccountManager.IsLogin) {
+			UserAccountUIManager.Instance.ChangeMode (UserAccountUIManager.eMode.ERROR);
+		} else {
+			UserAccountUIManager.Instance.SetLoginUser ();
+			OpenMenu ();
+		}
+	}
+
+	public IEnumerator WaitIntherit()
+	{
+		isWait = true;
+		while (isWait) {
+			yield return null;
+		}
+		if (!UserAccountManager.IsInherit) {
+			// 汎用ダイアログ表示 引継処理失敗
+			Debug.Log("失敗");
+		} else {
+			// 汎用ダイアログ表示 引き継ぎ処理成功
+			Debug.Log("成功");
+		}
+
 	}
 	/*---------------------------------------------------------------------*/
 	public void UserDataDelete()
@@ -69,11 +96,9 @@ public class TitleManger : MonoBehaviour {
 	}
 	public void UserDataInheritSetting()
 	{
-		UserAccountManager.InheritSetting ();
 	}
 	public void UserDataInheriting()
 	{
-		UserAccountManager.Inheriting ();
 	}
 	/*---------------------------------------------------------------------*/
 

@@ -17,5 +17,9 @@ public class UserAccountUI : MonoBehaviour {
 
 	public virtual void SetActive (bool value){}
 
+	public virtual void SetTitle(string title)
+	{
+		_TitleName.text = title;
+	}
 
 }

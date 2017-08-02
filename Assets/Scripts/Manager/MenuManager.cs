@@ -6,6 +6,7 @@ public enum MENU_ITEM_ID
 {
 	START =0,
 	HOWTOPLAY,
+	USERPAGE,
 	OPTION,
 	EXIT,
 }
@@ -20,6 +21,7 @@ public class MenuManager : MonoBehaviour {
 	private bool isHowto;	// ゲーム説明中フラグ
 	[SerializeField]
 	private OptionMenu _option;	// オプションUIオブジェクト
+
 
 	private bool isInputEnable ;	// 入力可能フラグ
 
@@ -95,7 +97,7 @@ public class MenuManager : MonoBehaviour {
 			// IDによって処理を実行。
 			switch (_id) {
 			case MENU_ITEM_ID.START: // メインゲームへ遷移
-				TransitionManager.Instance.ChangeScene(GAME_SCENE.MAINGAME);
+				cGameManager.Instance.ChangeScene(GAME_SCENE.MAINGAME);
 				break;
 			case MENU_ITEM_ID.HOWTOPLAY: // ゲーム説明を開く
 				_howto.HowToStart ();

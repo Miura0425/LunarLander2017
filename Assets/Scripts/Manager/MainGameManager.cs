@@ -289,7 +289,7 @@ public class MainGameManager : MonoBehaviour {
 		// 待ち時間が経過した場合、タイトルシーンへ遷移する。
 		if (fTime > fResultWaitTime) {
 			if (Input.GetKeyDown(KeyCode.DownArrow)) {
-				TransitionManager.Instance.ChangeScene (GAME_SCENE.TITLE);
+				cGameManager.Instance.ChangeScene (GAME_SCENE.TITLE);
 			}
 			if (Input.GetKeyDown (KeyCode.UpArrow)) {
 				// メッセージを非表示にする。

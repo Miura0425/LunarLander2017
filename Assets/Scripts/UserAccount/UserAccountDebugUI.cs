@@ -11,6 +11,8 @@ public class UserAccountDebugUI : MonoBehaviour {
 
 	public InputField _ID;
 	public InputField _PASS;
+	public Button _InheritSettingButton;
+	public Button _InheritingButton;
 
 	/*---------------------------------------------------------------------*/
 	void Awake()
@@ -29,4 +31,12 @@ public class UserAccountDebugUI : MonoBehaviour {
 		_PASS.text = pass;
 	}
 	/*---------------------------------------------------------------------*/
+	public void OnInheritSettingButton()
+	{
+		StartCoroutine(UserAccountManager.InheritSetting(_ID.text,_PASS.text));
+	}
+	public void OnInheritting()
+	{
+		StartCoroutine (UserAccountManager.Inheriting (_ID.text, _PASS.text));
+	}
 }

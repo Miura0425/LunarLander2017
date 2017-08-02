@@ -2,10 +2,18 @@
 using System.Collections;
 
 public class UserAccountUIManager : MonoBehaviour {
+	private static UserAccountUIManager instance = null;
+	public static UserAccountUIManager Instance{
+		get{
+			return instance;
+		}
+	}
 
-	private enum eMode{
+	public enum eMode{
 		SGIN_UP=0,
 		LOGIN,
+		ERROR,
+		MESSAGE,
 	}
 	private eMode mode = eMode.SGIN_UP;
 
@@ -13,6 +21,15 @@ public class UserAccountUIManager : MonoBehaviour {
 	private UserAccountUI[] _UserAccountUIs; 
 	[SerializeField]
 	private UserAccountLoginUserUI _LoginUserUI;
+
+	void Awake()
+	{
+		if (instance == null) {
+			instance = this;
+		}
+
+	}
+
 
 	/*---------------------------------------------------------------------*/
 	public void CheckUserAccount()
@@ -40,13 +57,34 @@ public class UserAccountUIManager : MonoBehaviour {
 		case eMode.LOGIN:
 			(_UserAccountUIs [(int)mode] as LoginUI).SetActive (value);
 			break;
+		case eMode.ERROR:
+			(_UserAccountUIs [(int)mode] as UserAccountErrorUI).SetActive (value);
+			break;
+		case eMode.MESSAGE:
+			(_UserAccountUIs [(int)mode] as UserAccountMessageUI).SetActive (value);
+			break;
 		default:
 			break;
 		}
+	}
+	public void ChangeMode(eMode next)
+	{
+		SetActiveUI (false);
+		mode = next;
+		SetActiveUI (true);
 	}
 	/*---------------------------------------------------------------------*/
 	public void SetLoginUser()
 	{
 		_LoginUserUI.SetLoginUser (PlayerPrefs.GetString (Const.UserAccount.USER_NAME_KEY));
+	}
+	/*---------------------------------------------------------------------*/
+	public void ShowMessageDialog(string title ,string message)
+	{
+		SetActiveUI (false);
+		mode = eMode.MESSAGE;
+		(_UserAccountUIs [(int)mode] as UserAccountMessageUI).SetTitleAndMessage (title, message);
+		SetActiveUI(true);
+		// 今日やることはUIオブジェクトを配置すること
 	}
 }
