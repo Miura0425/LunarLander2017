@@ -39,4 +39,8 @@ public class UserAccountDebugUI : MonoBehaviour {
 	{
 		StartCoroutine (UserAccountManager.Inheriting (_ID.text, _PASS.text));
 	}
+	public void OnDeleteButton()
+	{
+		UserAccountUIManager.Instance.ShowYesNoDialog ("DELETE", "REALLY DELETE?", cGameManager.Instance.UserData.DeleteYesNo);
+	}
 }

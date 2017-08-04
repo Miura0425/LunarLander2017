@@ -1344,7 +1344,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1e04b2eac6c18f46bde472c5f036d65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _LandingPointImg: {fileID: 0}
+  _LandingPointImg: {fileID: 1186399233}
   _BonusImg: {fileID: 532193449}
   _BonusRateSprites:
   - {fileID: 21300000, guid: ae5ccd9dc114c04468cea7b2ff382d91, type: 3}
@@ -3312,7 +3312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1e04b2eac6c18f46bde472c5f036d65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _LandingPointImg: {fileID: 0}
+  _LandingPointImg: {fileID: 1131522903}
   _BonusImg: {fileID: 336470169}
   _BonusRateSprites:
   - {fileID: 21300000, guid: ae5ccd9dc114c04468cea7b2ff382d91, type: 3}
@@ -3804,7 +3804,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1e04b2eac6c18f46bde472c5f036d65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _LandingPointImg: {fileID: 0}
+  _LandingPointImg: {fileID: 504479007}
   _BonusImg: {fileID: 486029476}
   _BonusRateSprites:
   - {fileID: 21300000, guid: ae5ccd9dc114c04468cea7b2ff382d91, type: 3}

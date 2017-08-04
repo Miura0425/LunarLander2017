@@ -24,7 +24,7 @@ public class UserAccountWebRequest  {
 		// 通信エラーチェック
 		if (request.isError) {
 			Debug.Log (request.error);
-			UserAccountManager.IsLogin = false;
+			cGameManager.Instance.UserData.IsLogin = false;
 		} else {
 
 			if (request.responseCode == 200) {
@@ -35,23 +35,21 @@ public class UserAccountWebRequest  {
 				// レスポンスからJson形式のテキストデータを取得する。
 				string text = request.downloadHandler.text;
 				UserAccountResponseData response = JsonUtility.FromJson<UserAccountResponseData>(text);
-				if (response.Message == "Error") {
+				cGameManager.Instance.UserData.UserResData = response;
+				if (response.message == "Error") {
 					yield return UserAccountManager.AutoSignUp(_NAME);
 					yield break;
 				}
 
 				// IDとパスを暗号化
-				string encID = StringEncrypter.EncryptString (_ID);
-				string encPASS = StringEncrypter.EncryptString (_PASS);
-				UserAccountDebugUI.Instance.SetID (_ID);
-				UserAccountDebugUI.Instance.SetPASS (_PASS);
-				// ローカルへ保存
-				PlayerPrefs.SetString(Const.UserAccount.USER_ID_KEY,encID);
-				PlayerPrefs.SetString (Const.UserAccount.USER_PASS_KEY, encPASS);
-				PlayerPrefs.SetInt (Const.UserAccount.USER_NUM_KEY, response.num);
-				PlayerPrefs.SetString (Const.UserAccount.USER_NAME_KEY, response.name);
+				//string encID = StringEncrypter.EncryptString (_ID);
+				//string encPASS = StringEncrypter.EncryptString (_PASS);
 
-				UserAccountManager.IsLogin = true;
+				UserAccountData.UserData userdata = new UserAccountData.UserData (_ID,_PASS,_NAME,response.num);
+				// ローカルへ保存
+				cGameManager.Instance.UserData.SaveUserData(userdata);
+
+				cGameManager.Instance.UserData.IsLogin = true;
 			}
 		}
 
@@ -75,7 +73,7 @@ public class UserAccountWebRequest  {
 		// 通信エラーチェック
 		if (request.isError) {
 			Debug.Log (request.error);
-			UserAccountManager.IsLogin = false;
+			cGameManager.Instance.UserData.IsLogin = false;
 		} else {
 
 			if (request.responseCode == 200) {
@@ -86,17 +84,18 @@ public class UserAccountWebRequest  {
 				// レスポンスからJson形式のテキストデータを取得する。
 				string text = request.downloadHandler.text;
 				UserAccountResponseData response = JsonUtility.FromJson<UserAccountResponseData>(text);
+				cGameManager.Instance.UserData.UserResData = response;
 
 				// データの取得ができているか
-				if (response.Message == "Error") {
+				if (response.message == "Error") {
 					yield break;
 				}
 
 				// ローカルに保存する。
-				PlayerPrefs.SetString (Const.UserAccount.USER_NAME_KEY, response.name);
-				PlayerPrefs.SetInt (Const.UserAccount.USER_NUM_KEY, response.num);
+				UserAccountData.UserData userdata = new UserAccountData.UserData (ID,PASS,response.name,response.num);
+				cGameManager.Instance.UserData.SaveUserData (userdata);
 
-				UserAccountManager.IsLogin = true;
+				cGameManager.Instance.UserData.IsLogin = true;
 			}
 		}
 	}
@@ -148,8 +147,11 @@ public class UserAccountWebRequest  {
 				CookieHeaderSetting (request);
 				// レスポンスからJson形式のテキストデータを取得する。
 				string text = request.downloadHandler.text;
+				MessageResponseData response = JsonUtility.FromJson<MessageResponseData>(text);
+				cGameManager.Instance.UserData.MessageResData = response;
 
-				UserAccountManager.IsInherit = true;
+				UserAccountUIManager.Instance.ShowMessageDialog ("InheritSetting", response.message);
+
 			}
 		}
 
@@ -160,7 +162,8 @@ public class UserAccountWebRequest  {
 		yield return new WaitForSeconds (1.5f);
 
 		string url_base = Const.WebRequest.BASE_URL + "CheckInheriting/";
-		string url_param = "?num="+PlayerPrefs.GetInt(Const.UserAccount.USER_NUM_KEY);
+		int NUM = cGameManager.Instance.UserData.Data.num;
+		string url_param = "?num="+NUM.ToString();
 		UnityWebRequest request = UnityWebRequest.Get(url_base+url_param);
 
 		// ヘッダー情報 クッキーがあれば設定する。
@@ -179,21 +182,49 @@ public class UserAccountWebRequest  {
 				string text = request.downloadHandler.text;
 				InheritResponseData result = JsonUtility.FromJson<InheritResponseData> (text);
 
-				Debug.Log (result.Message);
+				Debug.Log (result.message);
+				string title = "Inherit";
 
 				if (result.id != "") {
+					UserAccountUIManager.Instance.ShowMessageDialog (title, result.message);
 
-					// IDとパスを暗号化
-					string encID = StringEncrypter.EncryptString (result.id);
-					string encPASS = StringEncrypter.EncryptString (result.pass);
+					UserAccountData.UserData userdata = new UserAccountData.UserData (result.id, result.pass, result.name, NUM);
+					cGameManager.Instance.UserData.SaveUserData (userdata);
 
-					// ローカルへ保存
-					PlayerPrefs.SetString (Const.UserAccount.USER_ID_KEY, encID);
-					PlayerPrefs.SetString (Const.UserAccount.USER_PASS_KEY, encPASS);
-					PlayerPrefs.SetString (Const.UserAccount.USER_NAME_KEY, result.name);
+				} else {
+					UserAccountUIManager.Instance.ShowMessageDialog (title,result.message);
+				}
+			}
+		}
+	}
 
+	/*------------------------------------------------------------------------------------------------------------*/
+	public static IEnumerator DeleteUserAccount(string _ID,string _PASS)
+	{
+		string url_base = Const.WebRequest.BASE_URL + "Delete/";
+		string url_param = "?id="+_ID+"&pass="+_PASS;
+		UnityWebRequest request = UnityWebRequest.Get(url_base+url_param);
 
-					UserAccountManager.IsInherit = true;
+		// ヘッダー情報 クッキーがあれば設定する。
+		if (header.Length > 0) {
+			request.SetRequestHeader ("Cookie",header);
+		}
+
+		yield return request.Send ();
+
+		if (request.isError) {
+			Debug.Log ("Error");
+		}else{
+			if (request.responseCode == 200) {
+				CookieHeaderSetting (request);
+				// レスポンスからJson形式のテキストデータを取得する。
+				string text = request.downloadHandler.text;
+				MessageResponseData response = JsonUtility.FromJson<MessageResponseData> (text);
+				Debug.Log (response.message);
+
+				if (response.message != "") {
+					cGameManager.Instance.UserData.DeleteData ();
+					UserAccountUIManager.Instance.ShowMessageDialog ("DELETE", response.message);
 				}
 			}
 		}

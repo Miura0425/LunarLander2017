@@ -31,6 +31,14 @@ public class TitleManger : MonoBehaviour {
 			instance = this;
 		}
 	}
+	void Start()
+	{
+		UserAccountUIManager.Instance.SetLoginUser ();
+		if (UserAccountDebugUI.Instance != null) {
+			UserAccountDebugUI.Instance.SetID (cGameManager.Instance.UserData.Data.id);
+			UserAccountDebugUI.Instance.SetPASS (cGameManager.Instance.UserData.Data.pass);
+		}
+	}
 	// 更新処理
 	void Update () {
 		CheckStartKey ();
@@ -51,11 +59,10 @@ public class TitleManger : MonoBehaviour {
 		{
 			isPress = true;
 			_PressMsg.gameObject.SetActive (false);
-			if (cGameManager.Instance.IsOffline) {
+			if (cGameManager.Instance.IsOffline || cGameManager.Instance.UserData.IsLogin) {
 				OpenMenu ();
 			} else {
-				UserAccountUIManager.Instance.CheckUserAccount ();
-				StartCoroutine (WaitUserAccount ());
+				UserAccountUIManager.Instance.ShowUserAccountUI ();
 			}
 		}
 	}
@@ -66,7 +73,7 @@ public class TitleManger : MonoBehaviour {
 		while (isWait) {
 			yield return null;
 		}
-		if (!UserAccountManager.IsLogin) {
+		if (!cGameManager.Instance.UserData.IsLogin) {
 			UserAccountUIManager.Instance.ChangeMode (UserAccountUIManager.eMode.ERROR);
 		} else {
 			UserAccountUIManager.Instance.SetLoginUser ();
@@ -80,19 +87,12 @@ public class TitleManger : MonoBehaviour {
 		while (isWait) {
 			yield return null;
 		}
-		if (!UserAccountManager.IsInherit) {
-			// 汎用ダイアログ表示 引継処理失敗
-			Debug.Log("失敗");
-		} else {
-			// 汎用ダイアログ表示 引き継ぎ処理成功
-			Debug.Log("成功");
-		}
 
 	}
 	/*---------------------------------------------------------------------*/
 	public void UserDataDelete()
 	{
-		UserAccountManager.Delete ();
+		//UserAccountManager.Delete ();
 	}
 	public void UserDataInheritSetting()
 	{

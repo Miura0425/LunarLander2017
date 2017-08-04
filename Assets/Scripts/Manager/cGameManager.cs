@@ -17,7 +17,13 @@ public class cGameManager : MonoBehaviour {
 		}
 	}
 
+	private UserAccountData m_UserData = new UserAccountData();
+	public UserAccountData UserData {
+		get{ return m_UserData; }
+	}
+
 	public bool IsOffline = false;
+	public bool IsSignUp = false;
 	/*---------------------------------------------------------------------*/
 	void Awake()
 	{
@@ -30,8 +36,17 @@ public class cGameManager : MonoBehaviour {
 
 		// シーンのロード時に削除されないように設定する。
 		DontDestroyOnLoad (this);
-	}
 
+		StartCoroutine (Load ());
+	}
+	/*---------------------------------------------------------------------*/
+	public IEnumerator Load()
+	{
+		m_UserData.LoadUserData ();
+		if(IsSignUp)PlayerPrefs.DeleteAll();
+		yield return null;
+	}
+	/*---------------------------------------------------------------------*/
 	/// <summary>
 	/// シーンを切り替える
 	/// </summary>
@@ -39,7 +54,7 @@ public class cGameManager : MonoBehaviour {
 	{
 		SceneManager.LoadScene ((int)scene);
 	}
-
+	/*---------------------------------------------------------------------*/
 	/// <summary>
 	/// アプリ終了を検出
 	/// </summary>

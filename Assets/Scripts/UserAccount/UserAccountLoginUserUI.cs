@@ -6,13 +6,12 @@ public class UserAccountLoginUserUI : MonoBehaviour {
 	[SerializeField]
 	private Text UserName;
 
-	void Awake()
-	{
-		UserName.text = "NONE";
-	}
-
 	public void SetLoginUser(string Name)
 	{
+		string name = Name;
+		if (Name == "") {
+			name = "NONE";
+		}
 		UserName.text = Name;
 	}
 }

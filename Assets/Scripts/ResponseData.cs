@@ -1,4 +1,4 @@
-﻿/* UnityWebRequestのレスポンステキストがJsonなので、変換後データを受け取るためのクラス */
+﻿/* UnityWebRequestのレスポンステキストをJson形式にするので、変換後データを受け取るためのクラス */
 
 
 /// <summary>
@@ -6,7 +6,7 @@
 /// </summary>
 public class UserAccountResponseData
 {
-	public string Message = "";
+	public string message = "";
 	public int num = 0;
 	public string name = "";
 }
@@ -16,8 +16,13 @@ public class UserAccountResponseData
 /// </summary>
 public class InheritResponseData
 {
-	public string Message="";
+	public string message="";
 	public string id = "";
 	public string pass = "";
 	public string name = "";
+}
+
+public class MessageResponseData
+{
+	public string message ="";
 }

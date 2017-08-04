@@ -14,6 +14,7 @@ public class UserAccountUIManager : MonoBehaviour {
 		LOGIN,
 		ERROR,
 		MESSAGE,
+		YESNO,
 	}
 	private eMode mode = eMode.SGIN_UP;
 
@@ -27,23 +28,19 @@ public class UserAccountUIManager : MonoBehaviour {
 		if (instance == null) {
 			instance = this;
 		}
-
 	}
 
 
 	/*---------------------------------------------------------------------*/
-	public void CheckUserAccount()
+	public void ShowUserAccountUI()
 	{
-		//PlayerPrefs.SetString ("ID", "");
-		//PlayerPrefs.SetString ("PASS", "");
-		if (PlayerPrefs.GetString ("ID") == "") {
+		if (cGameManager.Instance.UserData.Data.id == "") {
 			mode = eMode.SGIN_UP;
 			(_UserAccountUIs [(int)mode] as SignUpUI).Init ();
-		} else {
+		} else{
 			mode = eMode.LOGIN;
 			(_UserAccountUIs [(int)mode] as LoginUI).Init ();
 		}
-
 
 	}
 	/*---------------------------------------------------------------------*/
@@ -63,6 +60,9 @@ public class UserAccountUIManager : MonoBehaviour {
 		case eMode.MESSAGE:
 			(_UserAccountUIs [(int)mode] as UserAccountMessageUI).SetActive (value);
 			break;
+		case eMode.YESNO:
+			(_UserAccountUIs [(int)mode] as UserAccountYesNoUI).SetActive (value);
+			break;
 		default:
 			break;
 		}
@@ -76,15 +76,21 @@ public class UserAccountUIManager : MonoBehaviour {
 	/*---------------------------------------------------------------------*/
 	public void SetLoginUser()
 	{
-		_LoginUserUI.SetLoginUser (PlayerPrefs.GetString (Const.UserAccount.USER_NAME_KEY));
+		_LoginUserUI.SetLoginUser (cGameManager.Instance.UserData.Data.name);
 	}
 	/*---------------------------------------------------------------------*/
-	public void ShowMessageDialog(string title ,string message)
+	public void ShowMessageDialog(string title ,string message,UserAccountMessageUI.OKFunc func=null)
 	{
 		SetActiveUI (false);
 		mode = eMode.MESSAGE;
-		(_UserAccountUIs [(int)mode] as UserAccountMessageUI).SetTitleAndMessage (title, message);
+		(_UserAccountUIs [(int)mode] as UserAccountMessageUI).SetTitleAndMessage (title, message,func);
 		SetActiveUI(true);
-		// 今日やることはUIオブジェクトを配置すること
+	}
+	public void ShowYesNoDialog(string title,string message,UserAccountYesNoUI.YesNoFunc func=null)
+	{
+		SetActiveUI (false);
+		mode = eMode.YESNO;
+		(_UserAccountUIs [(int)mode] as UserAccountYesNoUI).SetTitleAndMessage (title, message, func);
+		SetActiveUI (true);
 	}
 }
