@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class UserAccountUI : MonoBehaviour {
+public class DialogUI : MonoBehaviour {
 
 	[SerializeField]
 	protected Image _BackBord;

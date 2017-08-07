@@ -13,36 +13,45 @@ public enum MENU_ITEM_ID
 
 public class MenuManager : MonoBehaviour {
 
-	private int nSelectIdx = 0;	// 選択中インデックス
+	public int nSelectIdx = 0;	// 選択中インデックス
 	private MenuItem[] _Items;	// メニューアイテムリスト
 
 	[SerializeField]
-	private HowToMsg _howto;	// ゲーム説明UIオブジェクト
-	private bool isHowto;	// ゲーム説明中フラグ
+	private HowToMsg _howto=null;	// ゲーム説明UIオブジェクト
 	[SerializeField]
-	private OptionMenu _option;	// オプションUIオブジェクト
+	private OptionMenu _option = null;	// オプションUIオブジェクト
+	[SerializeField]
+	private UserPage _userpage = null ; // ユーザーページUIオブジェクト
 
-
-	private bool isInputEnable ;	// 入力可能フラグ
+	private bool isInputEnable = false;	// 入力可能フラグ
+	private bool isShow =false; // 表示状態フラグ
 
 	/*---------------------------------------------------------------------*/
 	void Awake()
 	{
 		// アイテム取得
 		_Items = this.GetComponentsInChildren<MenuItem> ();
+		for (int i=0;i<_Items.Length;i++) {
+			_Items[i].transform.localPosition = new Vector2(0,i*-30);
+			_Items[i]._MenuManger = this;
+		}
 	}
 	void Start()
 	{
 		// フラグ初期化
 		isInputEnable = false;
-		isHowto = false;
+		isShow = false;
 	}
 	
 	// 更新処理
 	void Update () {
-		
-		InputSelect ();
+
 		InputHowto ();
+
+		if (!isShow || _howto.isShow || _userpage.isShow)
+			return;
+
+		InputKeySelect ();
 
 		// 入力制限中 かつ オプションUI非表示なら 入力可能にする。
 		if (isInputEnable == false && _option.isEnable == false) {
@@ -66,12 +75,13 @@ public class MenuManager : MonoBehaviour {
 		_Items [nSelectIdx].Select ();
 		// 入力可能にする。
 		isInputEnable = true;
+		isShow = true;
 	}
 	/*---------------------------------------------------------------------*/
 	/// <summary>
-	/// 入力処理
+	/// キー入力処理
 	/// </summary>
-	private void InputSelect()
+	private void InputKeySelect()
 	{
 		// 入力制限中は処理しない
 		if (isInputEnable == false) {
@@ -91,29 +101,7 @@ public class MenuManager : MonoBehaviour {
 		}
 		// エンターキーが押されたら選択中のアイテムの処理を行う。
 		if (Input.GetKeyDown (KeyCode.Return)) {
-			// アイテムのIDを取得
-			MENU_ITEM_ID _id = _Items [nSelectIdx].Dicide ();
-
-			// IDによって処理を実行。
-			switch (_id) {
-			case MENU_ITEM_ID.START: // メインゲームへ遷移
-				cGameManager.Instance.ChangeScene(GAME_SCENE.MAINGAME);
-				break;
-			case MENU_ITEM_ID.HOWTOPLAY: // ゲーム説明を開く
-				_howto.HowToStart ();
-				isHowto = true;
-				isInputEnable = false;
-				break;
-			case MENU_ITEM_ID.OPTION: // オプションを開く
-				_option.SetEnable (true);
-				isInputEnable = false;
-				break;
-			case MENU_ITEM_ID.EXIT: // ゲームを終了する。
-				Application.Quit ();
-				break;
-			default:
-				break;
-			}
+			SelectMenu (_Items [nSelectIdx].ID);
 		}
 	}
 	/*---------------------------------------------------------------------*/
@@ -122,15 +110,60 @@ public class MenuManager : MonoBehaviour {
 	/// </summary>
 	private void InputHowto()
 	{
-		if (isHowto == false) {
+		if (!_howto.isShow) {
 			return;
 		}
 		if (Input.GetKeyDown (KeyCode.DownArrow)) {
 			if (!_howto.NextMsg ()) {
-				isHowto = false;
 				isInputEnable = true;
 			}
 		}
+	}
+	/*---------------------------------------------------------------------*/
+	public void SelectMenuType(MENU_ITEM_ID _id)
+	{
+		foreach(var item in _Items)
+		{
+			if(_id != item.ID)
+			{
+				item.NotSelect ();
+			}
+		}
+	}
+	/*---------------------------------------------------------------------*/
+	private void SelectMenu(MENU_ITEM_ID _id)
+	{
+		// IDによって処理を実行。
+		switch (_id) {
+		case MENU_ITEM_ID.START: // メインゲームへ遷移
+			cGameManager.Instance.ChangeScene(GAME_SCENE.MAINGAME);
+			break;
+		case MENU_ITEM_ID.HOWTOPLAY: // ゲーム説明を開く
+			_howto.HowToStart ();
+			isInputEnable = false;
+			break;
+		case MENU_ITEM_ID.USERPAGE:// ユーザーページを開く
+			if (cGameManager.Instance.UserData.IsLogin) {
+				_userpage.OpenPage ();
+				isInputEnable = false;
+			}
+			break;
+		case MENU_ITEM_ID.OPTION: // オプションを開く
+			_option.SetEnable (true);
+			isInputEnable = false;
+			break;
+		case MENU_ITEM_ID.EXIT: // ゲームを終了する。
+			Application.Quit ();
+			break;
+		default:
+			break;
+		}
+	}
+	/*---------------------------------------------------------------------*/
+	public void OnClickMenu(MenuItem item)
+	{
+		if (!isInputEnable) return;
+		SelectMenu (item.ID);
 	}
 	/*---------------------------------------------------------------------*/
 }

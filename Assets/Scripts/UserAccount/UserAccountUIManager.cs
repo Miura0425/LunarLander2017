@@ -13,13 +13,11 @@ public class UserAccountUIManager : MonoBehaviour {
 		SGIN_UP=0,
 		LOGIN,
 		ERROR,
-		MESSAGE,
-		YESNO,
 	}
 	private eMode mode = eMode.SGIN_UP;
 
 	[SerializeField]
-	private UserAccountUI[] _UserAccountUIs; 
+	private DialogUI[] _UserAccountUIs; 
 	[SerializeField]
 	private UserAccountLoginUserUI _LoginUserUI;
 
@@ -57,12 +55,6 @@ public class UserAccountUIManager : MonoBehaviour {
 		case eMode.ERROR:
 			(_UserAccountUIs [(int)mode] as UserAccountErrorUI).SetActive (value);
 			break;
-		case eMode.MESSAGE:
-			(_UserAccountUIs [(int)mode] as UserAccountMessageUI).SetActive (value);
-			break;
-		case eMode.YESNO:
-			(_UserAccountUIs [(int)mode] as UserAccountYesNoUI).SetActive (value);
-			break;
 		default:
 			break;
 		}
@@ -79,18 +71,4 @@ public class UserAccountUIManager : MonoBehaviour {
 		_LoginUserUI.SetLoginUser (cGameManager.Instance.UserData.Data.name);
 	}
 	/*---------------------------------------------------------------------*/
-	public void ShowMessageDialog(string title ,string message,UserAccountMessageUI.OKFunc func=null)
-	{
-		SetActiveUI (false);
-		mode = eMode.MESSAGE;
-		(_UserAccountUIs [(int)mode] as UserAccountMessageUI).SetTitleAndMessage (title, message,func);
-		SetActiveUI(true);
-	}
-	public void ShowYesNoDialog(string title,string message,UserAccountYesNoUI.YesNoFunc func=null)
-	{
-		SetActiveUI (false);
-		mode = eMode.YESNO;
-		(_UserAccountUIs [(int)mode] as UserAccountYesNoUI).SetTitleAndMessage (title, message, func);
-		SetActiveUI (true);
-	}
 }

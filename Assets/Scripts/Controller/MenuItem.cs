@@ -1,11 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class MenuItem : MonoBehaviour {
+public class MenuItem : MonoBehaviour ,IPointerEnterHandler,IPointerExitHandler{
+
+	public MenuManager _MenuManger = null;
 
 	[SerializeField]
 	private MENU_ITEM_ID _id ;
+
+	public MENU_ITEM_ID ID
+	{
+		get{ return _id; }
+		set{ _id = value; }
+	}
 
 	public bool isSelect = false;
 
@@ -17,9 +26,17 @@ public class MenuItem : MonoBehaviour {
 	private float fAnimationTime;
 	private float fStartTime;
 	private Vector2 vBaseScale;
+	private Vector2 vBaseSize;
 	[SerializeField]
 	private Vector2 vTargetScale;
 
+
+	public Vector2 LeftTop{
+		get{ return new Vector2(transform.position.x - vBaseSize.x/2,transform.position.y); }
+	}
+	public Vector2 RightBottom{
+		get{ return new Vector2(transform.position.x + vBaseSize.x/2,transform.position.y); }
+	}
 	/*---------------------------------------------------------------------*/
 	void Awake()
 	{
@@ -29,6 +46,7 @@ public class MenuItem : MonoBehaviour {
 		_text = this.GetComponent<Text> ();
 		_text.enabled = false;
 		vBaseScale = Vector2.one;
+		vBaseSize = GetComponent<RectTransform> ().sizeDelta;
 	}
 
 	void Update()
@@ -47,6 +65,18 @@ public class MenuItem : MonoBehaviour {
 			}
 		}
 	}
+
+	public void OnPointerEnter(PointerEventData eventData)
+	{
+		Select ();
+		_MenuManger.nSelectIdx = (int)_id;
+		_MenuManger.SelectMenuType (_id);
+	}
+	public void OnPointerExit(PointerEventData eventData)
+	{
+		NotSelect ();
+	}
+
 	/*---------------------------------------------------------------------*/
 	public void Select()
 	{
@@ -61,12 +91,7 @@ public class MenuItem : MonoBehaviour {
 		_outline.enabled = isSelect;
 		this.transform.localScale = vBaseScale;
 	}
-	/*---------------------------------------------------------------------*/
-	public MENU_ITEM_ID Dicide()
-	{
-		
-		return _id;
-	}
+
 	/*---------------------------------------------------------------------*/
 	public void SetEnable(bool flag)
 	{

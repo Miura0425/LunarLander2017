@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class UserAccountYesNoUI : UserAccountUI {
+public class UserAccountYesNoUI : DialogUI {
 
 	[SerializeField]
 	private Text _Message;

@@ -7,19 +7,22 @@ public class HowToMsg : MonoBehaviour {
 	private GameObject[] _Msgs;
 	private int nIdx=0;
 	public bool isFinish = false;
+	public bool isShow = false;
 
 	/*---------------------------------------------------------------------*/
 	void Awake()
 	{
+		isShow = false;
 		foreach (GameObject msg in _Msgs) {
-			msg.SetActive (false);
+			msg.SetActive (isShow);
 		}
 	}
 	/*---------------------------------------------------------------------*/
 	public void HowToStart(){
 		nIdx = 0;
-		_Msgs [nIdx].SetActive (true);
+		isShow = true;
 		isFinish = false;
+		_Msgs [nIdx].SetActive (isShow);
 	}
 	/*---------------------------------------------------------------------*/
 	public bool NextMsg()
@@ -28,6 +31,7 @@ public class HowToMsg : MonoBehaviour {
 		nIdx++;
 		if (nIdx >= _Msgs.Length) {
 			isFinish = true;
+			isShow = false;
 			return false;
 		}
 		_Msgs [nIdx].SetActive (true);

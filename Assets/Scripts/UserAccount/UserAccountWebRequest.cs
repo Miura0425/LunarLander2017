@@ -150,7 +150,7 @@ public class UserAccountWebRequest  {
 				MessageResponseData response = JsonUtility.FromJson<MessageResponseData>(text);
 				cGameManager.Instance.UserData.MessageResData = response;
 
-				UserAccountUIManager.Instance.ShowMessageDialog ("InheritSetting", response.message);
+				GenericUIManager.Instance.ShowMessageDialog ("InheritSetting", response.message);
 
 			}
 		}
@@ -186,13 +186,13 @@ public class UserAccountWebRequest  {
 				string title = "Inherit";
 
 				if (result.id != "") {
-					UserAccountUIManager.Instance.ShowMessageDialog (title, result.message);
+					GenericUIManager.Instance.ShowMessageDialog (title, result.message);
 
 					UserAccountData.UserData userdata = new UserAccountData.UserData (result.id, result.pass, result.name, NUM);
 					cGameManager.Instance.UserData.SaveUserData (userdata);
 
 				} else {
-					UserAccountUIManager.Instance.ShowMessageDialog (title,result.message);
+					GenericUIManager.Instance.ShowMessageDialog (title,result.message);
 				}
 			}
 		}
@@ -224,7 +224,7 @@ public class UserAccountWebRequest  {
 
 				if (response.message != "") {
 					cGameManager.Instance.UserData.DeleteData ();
-					UserAccountUIManager.Instance.ShowMessageDialog ("DELETE", response.message);
+					GenericUIManager.Instance.ShowMessageDialog ("DELETE", response.message);
 				}
 			}
 		}

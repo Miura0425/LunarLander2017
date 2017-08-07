@@ -159,7 +159,9 @@ public class UserAccountManager   {
 			yield return null;
 		string _ID = cGameManager.Instance.UserData.Data.id;
 		string _PASS = cGameManager.Instance.UserData.Data.pass;
-		yield return UserAccountWebRequest.DeleteUserAccount(_ID,_PASS);
+		//yield return UserAccountWebRequest.DeleteUserAccount(_ID,_PASS);
+		cGameManager.Instance.UserData.DeleteData ();
+		GenericUIManager.Instance.ShowMessageDialog ("DELETE", "Complete");
 		UserAccountUIManager.Instance.SetLoginUser ();
 		cGameManager.Instance.ChangeScene (GAME_SCENE.TITLE);
 	}

@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class SignUpUI : UserAccountUI {
+public class SignUpUI : DialogUI {
 
 	[SerializeField]
 	private InputField _InputName;

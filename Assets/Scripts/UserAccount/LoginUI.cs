@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class LoginUI : UserAccountUI{
+public class LoginUI : DialogUI{
 
 	public virtual void Init()
 	{

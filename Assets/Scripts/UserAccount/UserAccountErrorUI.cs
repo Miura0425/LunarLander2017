@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class UserAccountErrorUI : UserAccountUI {
+public class UserAccountErrorUI : DialogUI {
 
 	[SerializeField]
 	private Button _ReturnButton;

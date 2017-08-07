@@ -41,6 +41,6 @@ public class UserAccountDebugUI : MonoBehaviour {
 	}
 	public void OnDeleteButton()
 	{
-		UserAccountUIManager.Instance.ShowYesNoDialog ("DELETE", "REALLY DELETE?", cGameManager.Instance.UserData.DeleteYesNo);
+		GenericUIManager.Instance.ShowYesNoDialog ("DELETE", "REALLY DELETE?", cGameManager.Instance.UserData.DeleteYesNo);
 	}
 }
