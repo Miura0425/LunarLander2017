@@ -75,8 +75,8 @@ public class InfoUIManager : MonoBehaviour {
 	{
 		_HowToImage.HowToStart ();
 	}
-	public bool HowToNext()
+	public bool HowToIsShow()
 	{
-		return _HowToImage.NextMsg ();
+		return _HowToImage.isShow;
 	}
 }

@@ -45,16 +45,23 @@ public class UserAccountWebRequest  {
 				//string encID = StringEncrypter.EncryptString (_ID);
 				//string encPASS = StringEncrypter.EncryptString (_PASS);
 
-				UserAccountData.UserData userdata = new UserAccountData.UserData (_ID,_PASS,_NAME,response.num);
 				// ローカルへ保存
+				UserAccountData.UserData userdata = new UserAccountData.UserData (_ID,_PASS,_NAME,response.num);
 				cGameManager.Instance.UserData.SaveUserData(userdata);
 
+				// ログイン状態にする。
 				cGameManager.Instance.UserData.IsLogin = true;
 			}
 		}
 
 	}
 	/*------------------------------------------------------------------------------------------------------------*/
+	/// <summary>
+	/// 自動ログインリクエスト
+	/// </summary>
+	/// <returns>The login request.</returns>
+	/// <param name="ID">ID</param>
+	/// <param name="PASS">PASS</param>
 	public static IEnumerator AutoLoginRequest(string ID,string PASS)
 	{
 		// リクエストURLを生成
@@ -94,13 +101,16 @@ public class UserAccountWebRequest  {
 				// ローカルに保存する。
 				UserAccountData.UserData userdata = new UserAccountData.UserData (ID,PASS,response.name,response.num);
 				cGameManager.Instance.UserData.SaveUserData (userdata);
-
+				// ログイン状態にする
 				cGameManager.Instance.UserData.IsLogin = true;
 			}
 		}
 	}
 	/*------------------------------------------------------------------------------------------------------------*/
-
+	/// <summary>
+	/// 切断リクエスト
+	/// </summary>
+	/// <returns>The request.</returns>
 	public static IEnumerator DisconnectRequest()
 	{
 		// リクエストURLを生成
@@ -115,20 +125,21 @@ public class UserAccountWebRequest  {
 		// リクエスト送信
 		yield return request.Send();
 
-		// 通信エラーチェック
-		if (request.isError) {
-			Debug.Log (request.error);
-		} else {
-			if (request.responseCode == 200) {
-				Debug.Log ("Disconnect");
-			}
-		}
+		// レスポンスを処理することがないのでここで終了
 	}
 	/*------------------------------------------------------------------------------------------------------------*/
+	/// <summary>
+	/// 引き継ぎ設定 確認処理
+	/// </summary>
+	/// <returns>The inherit setting.</returns>
+	/// <param name="_ID">I.</param>
+	/// <param name="_PASS">PAS.</param>
 	public static IEnumerator CheckInheritSetting(string _ID, string _PASS)
 	{
+		// 仮待ち 1.5s
 		yield return new WaitForSeconds (1.5f);
 
+		// リクエスト作成
 		string url_base = Const.WebRequest.BASE_URL + "CheckInheritSetting/";
 		string url_param = "?id="+_ID+"&pass="+_PASS;
 		UnityWebRequest request = UnityWebRequest.Get(url_base+url_param);
@@ -142,6 +153,8 @@ public class UserAccountWebRequest  {
 
 		if (request.isError) {
 			Debug.Log ("Error");
+			// メッセージダイアログ表示
+			GenericUIManager.Instance.ShowMessageDialog ("InheritSetting", "Error");
 		}else{
 			if (request.responseCode == 200) {
 				CookieHeaderSetting (request);
@@ -150,6 +163,7 @@ public class UserAccountWebRequest  {
 				MessageResponseData response = JsonUtility.FromJson<MessageResponseData>(text);
 				cGameManager.Instance.UserData.MessageResData = response;
 
+				// メッセージダイアログ表示
 				GenericUIManager.Instance.ShowMessageDialog ("InheritSetting", response.message);
 
 			}
@@ -157,10 +171,16 @@ public class UserAccountWebRequest  {
 
 	}
 	/*------------------------------------------------------------------------------------------------------------*/
+	/// <summary>
+	/// 引き継ぎ チェック処理
+	/// </summary>
+	/// <returns>The inheriting.</returns>
 	public static IEnumerator CheckInheriting()
 	{
+		// 仮待ち 1.5s
 		yield return new WaitForSeconds (1.5f);
 
+		// リクエスト作成
 		string url_base = Const.WebRequest.BASE_URL + "CheckInheriting/";
 		int NUM = cGameManager.Instance.UserData.Data.num;
 		string url_param = "?num="+NUM.ToString();
@@ -175,23 +195,27 @@ public class UserAccountWebRequest  {
 
 		if (request.isError) {
 			Debug.Log ("Error");
+			// メッセージダイアログ表示
+			GenericUIManager.Instance.ShowMessageDialog ("Inherit", "Error");
 		}else{
 			if (request.responseCode == 200) {
 				CookieHeaderSetting (request);
 				// レスポンスからJson形式のテキストデータを取得する。
 				string text = request.downloadHandler.text;
 				InheritResponseData result = JsonUtility.FromJson<InheritResponseData> (text);
+				cGameManager.Instance.UserData.InheritResData = result;
 
 				Debug.Log (result.message);
 				string title = "Inherit";
 
 				if (result.id != "") {
+					// メッセージダイアログ表示
 					GenericUIManager.Instance.ShowMessageDialog (title, result.message);
-
-					UserAccountData.UserData userdata = new UserAccountData.UserData (result.id, result.pass, result.name, NUM);
-					cGameManager.Instance.UserData.SaveUserData (userdata);
+					// 引き継ぎ実行
+					cGameManager.Instance.UserData.InheritUserData ();
 
 				} else {
+					// 引き継ぎキャンセル メッセージダイアログ表示
 					GenericUIManager.Instance.ShowMessageDialog (title,result.message);
 				}
 			}
@@ -199,8 +223,15 @@ public class UserAccountWebRequest  {
 	}
 
 	/*------------------------------------------------------------------------------------------------------------*/
+	/// <summary>
+	/// 削除リクエスト
+	/// </summary>
+	/// <returns>The user account.</returns>
+	/// <param name="_ID">I.</param>
+	/// <param name="_PASS">PAS.</param>
 	public static IEnumerator DeleteUserAccount(string _ID,string _PASS)
 	{
+		// リクエスト作成
 		string url_base = Const.WebRequest.BASE_URL + "Delete/";
 		string url_param = "?id="+_ID+"&pass="+_PASS;
 		UnityWebRequest request = UnityWebRequest.Get(url_base+url_param);
@@ -223,13 +254,20 @@ public class UserAccountWebRequest  {
 				Debug.Log (response.message);
 
 				if (response.message != "") {
+
+					// ローカルから削除
 					cGameManager.Instance.UserData.DeleteData ();
+					// メッセージダイアログ表示
 					GenericUIManager.Instance.ShowMessageDialog ("DELETE", response.message);
 				}
 			}
 		}
 	}
 	/*------------------------------------------------------------------------------------------------------------*/
+	/// <summary>
+	/// クッキーをヘッダー情報に設定する。
+	/// </summary>
+	/// <param name="request">Request.</param>
 	private static void CookieHeaderSetting(UnityWebRequest request)
 	{
 		// クッキー取得

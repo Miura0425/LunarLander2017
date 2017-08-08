@@ -38,11 +38,12 @@
 		public const int SCORE_CALC_BASE = 100; // スコアを計算する際に利用するベース値
 	}
 
+	// ウェブリクエスト用定数
 	public static class WebRequest{
 		public const string BASE_URL = "http://localhost/unitywebtest/index.php/Webtest/";
 	}
 
-
+	// ユーザーアカウント用定数
 	public static class UserAccount{
 		public const string USER_ID_KEY = "ID";
 		public const string USER_PASS_KEY = "PASS";

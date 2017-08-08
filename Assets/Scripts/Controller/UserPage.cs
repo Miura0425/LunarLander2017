@@ -2,6 +2,9 @@
 using System.Collections;
 using UnityEngine.UI;
 
+/// <summary>
+/// ユーザーページオブジェクト
+/// </summary>
 public class UserPage : MonoBehaviour {
 
 	// UIオブジェクト

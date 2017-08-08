@@ -22,6 +22,9 @@ public class InheritResponseData
 	public string name = "";
 }
 
+/// <summary>
+/// メッセージのみのレスポンスデータ
+/// </summary>
 public class MessageResponseData
 {
 	public string message ="";

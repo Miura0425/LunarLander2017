@@ -45,12 +45,11 @@ public class MenuManager : MonoBehaviour {
 	
 	// 更新処理
 	void Update () {
-
-		InputHowto ();
-
+		// 非表示状態 又は 操作説明 ユーザーページが表示されているなら処理しない。
 		if (!isShow || _howto.isShow || _userpage.isShow)
 			return;
-
+		
+		// キー入力処理
 		InputKeySelect ();
 
 		// 入力制限中 かつ オプションUI非表示なら 入力可能にする。
@@ -106,21 +105,10 @@ public class MenuManager : MonoBehaviour {
 	}
 	/*---------------------------------------------------------------------*/
 	/// <summary>
-	/// ゲーム説明中の 入力処理
+	/// 選択中以外のメニュー項目を非選択状態にする。
 	/// </summary>
-	private void InputHowto()
-	{
-		if (!_howto.isShow) {
-			return;
-		}
-		if (Input.GetKeyDown (KeyCode.DownArrow)) {
-			if (!_howto.NextMsg ()) {
-				isInputEnable = true;
-			}
-		}
-	}
-	/*---------------------------------------------------------------------*/
-	public void SelectMenuType(MENU_ITEM_ID _id)
+	/// <param name="_id">Identifier.</param>
+	public void AnotherMenuNotSelect(MENU_ITEM_ID _id)
 	{
 		foreach(var item in _Items)
 		{
@@ -131,6 +119,10 @@ public class MenuManager : MonoBehaviour {
 		}
 	}
 	/*---------------------------------------------------------------------*/
+	/// <summary>
+	/// メニューの選択実行
+	/// </summary>
+	/// <param name="_id">Identifier.</param>
 	private void SelectMenu(MENU_ITEM_ID _id)
 	{
 		// IDによって処理を実行。
@@ -160,6 +152,10 @@ public class MenuManager : MonoBehaviour {
 		}
 	}
 	/*---------------------------------------------------------------------*/
+	/// <summary>
+	/// メニューをクリックしたときの処理
+	/// </summary>
+	/// <param name="item">Item.</param>
 	public void OnClickMenu(MenuItem item)
 	{
 		if (!isInputEnable) return;

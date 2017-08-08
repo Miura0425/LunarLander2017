@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// 汎用UIを管理する
+/// </summary>
 public class GenericUIManager : MonoBehaviour {
 	private static GenericUIManager instance = null;
 	public static GenericUIManager Instance{
@@ -9,6 +12,7 @@ public class GenericUIManager : MonoBehaviour {
 		}
 	}
 
+	// UIの種類
 	public enum eType{
 		MESSAGE=0,
 		YESNO,
@@ -16,7 +20,7 @@ public class GenericUIManager : MonoBehaviour {
 	private eType mode;
 
 	[SerializeField]
-	private DialogUI[] _DialogUIs; 
+	private DialogUI[] _DialogUIs; // ダイアログ
 
 	void Awake()
 	{
@@ -25,6 +29,10 @@ public class GenericUIManager : MonoBehaviour {
 		}
 	}
 	/*---------------------------------------------------------------------*/
+	/// <summary>
+	/// UIのアクティブを設定する
+	/// </summary>
+	/// <param name="value">If set to <c>true</c> value.</param>
 	public void SetActiveUI(bool value)
 	{
 		switch(mode)
@@ -40,6 +48,12 @@ public class GenericUIManager : MonoBehaviour {
 		}
 	}
 	/*---------------------------------------------------------------------*/
+	/// <summary>
+	/// メッセージダイアログを表示する。
+	/// </summary>
+	/// <param name="title">Title.</param>
+	/// <param name="message">Message.</param>
+	/// <param name="func">Func.</param>
 	public void ShowMessageDialog(string title ,string message,UserAccountMessageUI.OKFunc func=null)
 	{
 		SetActiveUI (false);
@@ -47,6 +61,12 @@ public class GenericUIManager : MonoBehaviour {
 		(_DialogUIs [(int)mode] as UserAccountMessageUI).SetTitleAndMessage (title, message,func);
 		SetActiveUI(true);
 	}
+	/// <summary>
+	/// YesNoダイアログを表示する。
+	/// </summary>
+	/// <param name="title">Title.</param>
+	/// <param name="message">Message.</param>
+	/// <param name="func">Func.</param>
 	public void ShowYesNoDialog(string title,string message,UserAccountYesNoUI.YesNoFunc func=null)
 	{
 		SetActiveUI (false);

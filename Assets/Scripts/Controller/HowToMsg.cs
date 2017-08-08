@@ -23,6 +23,20 @@ public class HowToMsg : MonoBehaviour {
 		isShow = true;
 		isFinish = false;
 		_Msgs [nIdx].SetActive (isShow);
+
+		StartCoroutine (this.ShowInputLoop ());
+	}
+	/*---------------------------------------------------------------------*/
+	private IEnumerator ShowInputLoop()
+	{
+		while (isShow) {
+
+			if (Input.GetKeyDown (KeyCode.DownArrow)) {
+				NextMsg ();
+			}
+
+			yield return null;
+		}
 	}
 	/*---------------------------------------------------------------------*/
 	public bool NextMsg()

@@ -207,11 +207,9 @@ public class MainGameManager : MonoBehaviour {
 		UIUpdate ();
 
 		// 操作方法を非表示にする。
-		if (isFirst == true && Input.GetKeyDown (KeyCode.DownArrow)) {
-			if (!_UIManager.HowToNext ()) {
+		if (isFirst == true && !_UIManager.HowToIsShow()) {
 				isFirst = false;
 				fStartTime = Time.timeSinceLevelLoad;
-			}
 		}
 		if (isFirst == true)
 			return;

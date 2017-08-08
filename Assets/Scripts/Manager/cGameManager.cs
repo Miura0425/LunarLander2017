@@ -9,6 +9,7 @@ public enum GAME_SCENE
 };
 
 public class cGameManager : MonoBehaviour {
+
 	// スタティックインスタンス
 	static private cGameManager instance;
 	static public cGameManager Instance {
@@ -16,14 +17,14 @@ public class cGameManager : MonoBehaviour {
 			return instance;
 		}
 	}
-
+	// ユーザーデータ
 	private UserAccountData m_UserData = new UserAccountData();
 	public UserAccountData UserData {
 		get{ return m_UserData; }
 	}
 
-	public bool IsOffline = false;
-	public bool IsSignUp = false;
+	public bool IsOffline = false; // オフラインフラグ
+
 	/*---------------------------------------------------------------------*/
 	void Awake()
 	{
@@ -37,13 +38,16 @@ public class cGameManager : MonoBehaviour {
 		// シーンのロード時に削除されないように設定する。
 		DontDestroyOnLoad (this);
 
-		StartCoroutine (Load ());
+		StartCoroutine (Load ()); // ローカルデータのロード
 	}
 	/*---------------------------------------------------------------------*/
+	/// <summary>
+	/// ローカルデータのロード処理
+	/// </summary>
 	public IEnumerator Load()
 	{
+		// ユーザーデータのロード
 		m_UserData.LoadUserData ();
-		if(IsSignUp)PlayerPrefs.DeleteAll();
 		yield return null;
 	}
 	/*---------------------------------------------------------------------*/
@@ -59,6 +63,7 @@ public class cGameManager : MonoBehaviour {
 	/// アプリ終了を検出
 	/// </summary>
 	void OnApplicationQuit() {
+		// 切断リクエスト
 		StartCoroutine (UserAccountManager.DisconnectRequest ());
 	}
 

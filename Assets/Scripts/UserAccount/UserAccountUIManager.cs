@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// ユーザーアカウントに関するUIを管理する。
+/// </summary>
 public class UserAccountUIManager : MonoBehaviour {
 	private static UserAccountUIManager instance = null;
 	public static UserAccountUIManager Instance{
@@ -9,6 +12,7 @@ public class UserAccountUIManager : MonoBehaviour {
 		}
 	}
 
+	// 表示モード
 	public enum eMode{
 		SGIN_UP=0,
 		LOGIN,
@@ -17,9 +21,9 @@ public class UserAccountUIManager : MonoBehaviour {
 	private eMode mode = eMode.SGIN_UP;
 
 	[SerializeField]
-	private DialogUI[] _UserAccountUIs; 
+	private DialogUI[] _UserAccountUIs; // 使用するダイアログ
 	[SerializeField]
-	private UserAccountLoginUserUI _LoginUserUI;
+	private UserAccountLoginUserUI _LoginUserUI; // ログインユーザーUI
 
 	void Awake()
 	{
@@ -30,18 +34,26 @@ public class UserAccountUIManager : MonoBehaviour {
 
 
 	/*---------------------------------------------------------------------*/
+	/// <summary>
+	/// ユーザーアカウントUIを表示する
+	/// </summary>
 	public void ShowUserAccountUI()
 	{
+		// ユーザーデータにIDが無い場合 サインアップ
 		if (cGameManager.Instance.UserData.Data.id == "") {
 			mode = eMode.SGIN_UP;
 			(_UserAccountUIs [(int)mode] as SignUpUI).Init ();
-		} else{
+
+		} else{ // ある場合 ログイン
 			mode = eMode.LOGIN;
 			(_UserAccountUIs [(int)mode] as LoginUI).Init ();
 		}
-
 	}
 	/*---------------------------------------------------------------------*/
+	/// <summary>
+	/// UIのアクティブ設定
+	/// </summary>
+	/// <param name="value">If set to <c>true</c> value.</param>
 	public void SetActiveUI(bool value)
 	{
 		switch(mode)
@@ -59,6 +71,11 @@ public class UserAccountUIManager : MonoBehaviour {
 			break;
 		}
 	}
+
+	/// <summary>
+	/// モードを切り替える
+	/// </summary>
+	/// <param name="next">Next.</param>
 	public void ChangeMode(eMode next)
 	{
 		SetActiveUI (false);
@@ -66,6 +83,9 @@ public class UserAccountUIManager : MonoBehaviour {
 		SetActiveUI (true);
 	}
 	/*---------------------------------------------------------------------*/
+	/// <summary>
+	/// ログインユーザーUIを更新する
+	/// </summary>
 	public void SetLoginUser()
 	{
 		_LoginUserUI.SetLoginUser (cGameManager.Instance.UserData.Data.name);

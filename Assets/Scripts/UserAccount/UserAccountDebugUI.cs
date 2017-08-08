@@ -2,6 +2,9 @@
 using System.Collections;
 using UnityEngine.UI;
 
+/// <summary>
+/// ユーザーアカウントに関するデバッグ用UI
+/// </summary>
 public class UserAccountDebugUI : MonoBehaviour {
 	static UserAccountDebugUI instance = null;
 	static public UserAccountDebugUI Instance
