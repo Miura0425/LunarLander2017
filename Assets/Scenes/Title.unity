@@ -1037,7 +1037,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsOffline: 0
-  IsSignUp: 0
 --- !u!4 &329678530
 Transform:
   m_ObjectHideFlags: 0
@@ -4641,7 +4640,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 2142414376}
+  m_TargetGraphic: {fileID: 1289520138}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -5605,7 +5604,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 2142414376}
+  m_TargetGraphic: {fileID: 1496550117}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -5765,7 +5764,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 2142414376}
+  m_TargetGraphic: {fileID: 1509355698}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -6738,7 +6737,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 2142414376}
+  m_TargetGraphic: {fileID: 1708051332}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -8682,7 +8681,6 @@ MonoBehaviour:
   _howto: {fileID: 1185501223}
   _option: {fileID: 1709390620}
   _userpage: {fileID: 567788131}
-  _inputMode: 1
 --- !u!1 &2142414373
 GameObject:
   m_ObjectHideFlags: 0

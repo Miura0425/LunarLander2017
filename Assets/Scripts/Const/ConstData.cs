@@ -51,4 +51,9 @@
 		public const string USER_NUM_KEY = "NUM";
 
 	}
+
+	public static class PlayData{
+		public const string PLAY_HIGHSCORE_KEY = "HIGHSCORE";
+		public const string PLAY_HIGHSTAGE_KEY = "HIGHSTAGE";
+	}
 }
