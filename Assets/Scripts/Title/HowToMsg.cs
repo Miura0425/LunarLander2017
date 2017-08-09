@@ -4,7 +4,7 @@ using System.Collections;
 public class HowToMsg : MonoBehaviour {
 
 	[SerializeField]
-	private GameObject[] _Msgs;
+	private GameObject[] _Msgs=null;
 	private int nIdx=0;
 	public bool isFinish = false;
 	public bool isShow = false;
@@ -17,6 +17,7 @@ public class HowToMsg : MonoBehaviour {
 			msg.SetActive (isShow);
 		}
 	}
+	/*---------------------------------------------------------------------*/
 	/*---------------------------------------------------------------------*/
 	public void HowToStart(){
 		nIdx = 0;
@@ -31,7 +32,7 @@ public class HowToMsg : MonoBehaviour {
 	{
 		while (isShow) {
 
-			if (Input.GetKeyDown (KeyCode.DownArrow)) {
+			if (Input.GetKeyDown (KeyCode.DownArrow) || Input.GetMouseButtonDown(0)) {
 				NextMsg ();
 			}
 

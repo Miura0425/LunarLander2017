@@ -16,9 +16,9 @@ public class OptionMenu : MonoBehaviour {
 
 	private Image _image; // 自身のイメージ
 	[SerializeField]
-	private Text _text;	// 子のテキスト
+	private Text _text=null;	// 子のテキスト
 	[SerializeField]
-	private Text _arrow; // 子の矢印テキスト
+	private Text _arrow=null; // 子の矢印テキスト
 
 	public bool isEnable = false; // 表示中かどうか
 
@@ -62,27 +62,42 @@ public class OptionMenu : MonoBehaviour {
 		}
 		// →キーが押されたら次のモードへ
 		if (Input.GetKeyDown (KeyCode.RightArrow)) {
-			_mode = (WINDOW_MODE)(((int)_mode+1)%(int)WINDOW_MODE.MODE_NUM);
-			_text.text = _mode.ToString ();
+			NextMode ();
 		}
 		// ←キーが押されてたら前のモードへ
 		if (Input.GetKeyDown (KeyCode.LeftArrow)) {
-			_mode = (WINDOW_MODE)(((int)_mode+(int)WINDOW_MODE.MODE_NUM-1)%(int)WINDOW_MODE.MODE_NUM);
-			_text.text = _mode.ToString ();
+			BackMode ();
 		}
 		// エンターキーが押されたら選択しているモードへ切り替える。
 		if (Input.GetKeyDown (KeyCode.Return)) {
-			switch (_mode) {
-			case WINDOW_MODE.WINDOW: // ウィンドウモード
-				Screen.SetResolution (960, 540, false, 60);
-				break;
-			case WINDOW_MODE.FULL_SCREEN: // フルスクリーンモード
-				Screen.SetResolution (1920, 1080, true, 60);
-				break;
-			}
+			ChangeMode ();
 			// 非表示にする。
 			SetEnable (false);
 		}
 	}
 	/*---------------------------------------------------------------------*/
+
+	public void NextMode()
+	{
+		_mode = (WINDOW_MODE)(((int)_mode+1)%(int)WINDOW_MODE.MODE_NUM);
+		_text.text = _mode.ToString ();
+	}
+	public void BackMode()
+	{
+		_mode = (WINDOW_MODE)(((int)_mode+(int)WINDOW_MODE.MODE_NUM-1)%(int)WINDOW_MODE.MODE_NUM);
+		_text.text = _mode.ToString ();
+	}
+	public void ChangeMode()
+	{
+		switch (_mode) {
+		case WINDOW_MODE.WINDOW: // ウィンドウモード
+			Screen.SetResolution (960, 540, false, 60);
+			break;
+		case WINDOW_MODE.FULL_SCREEN: // フルスクリーンモード
+			Screen.SetResolution (1920, 1080, true, 60);
+			break;
+		default:
+			break;
+		}
+	}
 }
