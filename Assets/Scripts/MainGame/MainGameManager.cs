@@ -26,9 +26,6 @@ public class MainGameManager : MonoBehaviour {
 	private delegate void ModeUpdate();
 	ModeUpdate modeupdate = null;
 
-	// プレイデータ
-	private PlayData m_PlayData = new PlayData();
-
 	// 処理用変数
 	private bool isSendPlayData = false; // プレイデータ送信中フラグ
 	private bool isFirst = true;	// 初回ステージフラグ
@@ -50,8 +47,6 @@ public class MainGameManager : MonoBehaviour {
 		_Moon = FindObjectOfType<MoonManager> ();
 		_Camera = FindObjectOfType<CameraManager> ();
 		_UIManager = FindObjectOfType<InfoUIManager> ();
-
-		m_PlayData.Load ();
 
 		// 現在のゲームモード初期化
 		ChangeGameMode(MAIN_GAME_MODE.GAME_START);
@@ -353,11 +348,8 @@ public class MainGameManager : MonoBehaviour {
 	private IEnumerator SendPlayData(){
 		// 通信中表示
 
-		// プレイデータを保存
-		m_PlayData.Save ((int)fScore, nStage - 1);
-
 		// 送信リクエスト
-		yield return PlayDataWebRequest.SendPlayDataRequest (m_PlayData,cGameManager.Instance.UserData.Data);
+		yield return PlayDataWebRequest.SendPlayDataRequest (cGameManager.Instance._PlayData,cGameManager.Instance.UserData.Data);
 		// 通信中非表示
 
 

@@ -1,5 +1,5 @@
 ﻿/* UnityWebRequestのレスポンステキストをJson形式にするので、変換後データを受け取るためのクラス */
-
+using System.Collections.Generic;
 
 /// <summary>
 /// ユーザーがサインアップ・ログイン・データ削除した際に受け取るレスポンスデータ
@@ -30,11 +30,14 @@ public class MessageResponseData
 	public string message ="";
 }
 
-public class PlayDataResponseData
+/// <summary>
+/// プレイログのレスポンスデータ
+/// </summary>
+public class PlayLogResponseData
 {
-	public string message="";
-	public int high_score=0;
-	public int high_stage=0;
+	public string message ="";
+	public int High_Score =0;
+	public int High_ClearStage = 0;
+	public List<PlayLogData> LogData = new List<PlayLogData>();
 
-	public string PlayLog="";
 }

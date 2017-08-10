@@ -1,5 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
+[System.Serializable]
+public class PlayLogData{
+	public int score=0;
+	public int stage=0;
+	public string date="";
+}
 
 public class PlayData  {
 
@@ -10,8 +18,11 @@ public class PlayData  {
 	private int m_HighScore = 0;
 	private int m_HighStage = 0;
 
-	private bool m_IsHighScore = false;
-	private bool m_IsHighStage = false;
+	private List<PlayLogData> m_PlayLogData =null;
+	public List<PlayLogData> PlayLogData {
+		get{ return m_PlayLogData; }
+		set{ m_PlayLogData = value; }
+	}
 
 	// プロパティ
 	public int Score {
@@ -41,11 +52,7 @@ public class PlayData  {
 		
 	}
 	/*---------------------------------------------------------------------*/
-	public void Load()
-	{
-		m_HighScore = PlayerPrefs.GetInt (Const.PlayData.PLAY_HIGHSCORE_KEY);
-		m_HighStage = PlayerPrefs.GetInt (Const.PlayData.PLAY_HIGHSTAGE_KEY);
-	}
+
 	/*---------------------------------------------------------------------*/
 	public void Save(int score,int stage)
 	{
@@ -54,11 +61,9 @@ public class PlayData  {
 
 		if (m_HighScore < m_Score) {
 			m_HighScore = m_Score;
-			PlayerPrefs.SetInt (Const.PlayData.PLAY_HIGHSCORE_KEY, m_HighScore);
 		}
 		if (m_HighStage < m_ClearStage) {
 			m_HighStage = m_ClearStage;
-			PlayerPrefs.SetInt (Const.PlayData.PLAY_HIGHSTAGE_KEY, m_HighStage);
 		}
 	}
 	/*---------------------------------------------------------------------*/

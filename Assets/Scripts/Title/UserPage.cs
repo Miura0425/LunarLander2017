@@ -9,25 +9,26 @@ public class UserPage : MonoBehaviour {
 
 	// UIオブジェクト
 	[SerializeField]
-	Image _BackGround; // 背景
+	Image _BackGround=null; // 背景
 	[SerializeField]
-	Button _CloseButton; // 閉じるボタン
+	Button _CloseButton=null; // 閉じるボタン
 	[SerializeField]
-	Text _TitleText; // ページタイトル
+	Text _TitleText=null; // ページタイトル
 	[SerializeField]
-	Text _UserName; // ユーザーネーム
+	Text _UserName=null; // ユーザーネーム
 	[SerializeField]
-	Text _HighScore; // ハイスコア
+	Text _HighScore=null; // ハイスコア
 	[SerializeField]
-	Text _HighStage; // 最高クリアステージ
+	Text _HighStage=null; // 最高クリアステージ
 	[SerializeField]
-	Button _InheritSettingButton; // 引き継ぎ設定ボタン
+	Button _InheritSettingButton=null; // 引き継ぎ設定ボタン
 	[SerializeField]
-	Button _InheritingButton; // 引き継ぎボタン
+	Button _InheritingButton=null; // 引き継ぎボタン
 	[SerializeField]
-	Button _DeleteButton; // 削除ボタン
+	Button _DeleteButton=null; // 削除ボタン
 
-	/* プレイ履歴オブジェクト */
+	[SerializeField]
+	PlayLogUI _PlayLog= null; // プレイ履歴オブジェク
 
 	public bool isShow = false; // 表示状態フラグ
 
@@ -50,11 +51,11 @@ public class UserPage : MonoBehaviour {
 	private IEnumerator RequestPlayData()
 	{
 		// リクエストを投げる
-		yield return null;
+		yield return _PlayLog.GetPlayLog();
 		// 取得した情報をUIに設定する。
 		_UserName.text = cGameManager.Instance.UserData.Data.name;
-		_HighScore.text = "000000";
-		_HighStage.text = "00";
+		_HighScore.text = cGameManager.Instance._PlayData.HighScore.ToString();
+		_HighStage.text = cGameManager.Instance._PlayData.HighStage.ToString();
 
 		// ページオブジェクトを表示する
 		SetActivePage(isShow);
@@ -91,6 +92,7 @@ public class UserPage : MonoBehaviour {
 		_InheritingButton.gameObject.SetActive (value);
 		_DeleteButton.gameObject.SetActive (value);
 		// プレイ履歴の表示
+		_PlayLog.SetActiveUI(value);
 	}
 	/*---------------------------------------------------------------------*/
 	/// <summary>

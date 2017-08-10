@@ -23,6 +23,12 @@ public class cGameManager : MonoBehaviour {
 		get{ return m_UserData; }
 	}
 
+	// プレイデータ
+	private PlayData m_PlayData = new PlayData();
+	public PlayData _PlayData {
+		get{ return m_PlayData; }
+	}
+
 	public bool IsOffline = false; // オフラインフラグ
 
 	/*---------------------------------------------------------------------*/
@@ -84,4 +90,5 @@ public class cGameManager : MonoBehaviour {
 		}
 	}
 	/*---------------------------------------------------------------------*/
+
 }
