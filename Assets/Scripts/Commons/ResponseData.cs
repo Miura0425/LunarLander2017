@@ -41,3 +41,9 @@ public class PlayLogResponseData
 	public List<PlayLogData> LogData = new List<PlayLogData>();
 
 }
+
+public class ScoreRankingResponseData
+{
+	public string message="";
+	public List<RankingData> Data = new List<RankingData>();
+}

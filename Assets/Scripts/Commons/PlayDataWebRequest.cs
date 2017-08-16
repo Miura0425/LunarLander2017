@@ -55,4 +55,33 @@ public static class PlayDataWebRequest {
 			}
 		}
 	}
+
+	/// <summary>
+	/// スコアランキングの取得リクエスト
+	/// </summary>
+	/// <returns>The ranking request.</returns>
+	public static IEnumerator ScoreRankingRequest()
+	{
+		// リクエストURLを生成
+		string url_base = Const.WebRequest.BASE_URL + "ScoreRanking/";
+		UnityWebRequest request = UnityWebRequest.Get(url_base);
+		// リクエスト送信
+		yield return request.Send();
+
+		// 通信エラーチェック
+		if (request.isError) {
+			Debug.Log (request.error);
+			GenericUIManager.Instance.ShowMessageDialog ("Error", request.error);
+		} else {
+			if (request.responseCode == 200) {
+				string text = request.downloadHandler.text;
+				// レスポンスデータの変換
+				ScoreRankingResponseData res = JsonUtility.FromJson<ScoreRankingResponseData> (text);
+
+				if (res.Data.Count != 0) {
+					cGameManager.Instance._RankingData = res.Data;
+				}
+			}
+		}
+	}
 }

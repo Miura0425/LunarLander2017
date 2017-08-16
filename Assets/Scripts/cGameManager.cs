@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 public enum GAME_SCENE
@@ -27,6 +28,13 @@ public class cGameManager : MonoBehaviour {
 	private PlayData m_PlayData = new PlayData();
 	public PlayData _PlayData {
 		get{ return m_PlayData; }
+	}
+
+	// ランキングデータ
+	private List<RankingData> m_RankingData  = new List<RankingData>();
+	public List<RankingData> _RankingData{
+		get{ return m_RankingData; }
+		set{ m_RankingData = value; }
 	}
 
 	public bool IsOffline = false; // オフラインフラグ

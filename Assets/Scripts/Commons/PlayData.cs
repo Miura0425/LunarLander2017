@@ -4,9 +4,18 @@ using System.Collections.Generic;
 
 [System.Serializable]
 public class PlayLogData{
+	public string id = "";
 	public int score=0;
 	public int stage=0;
 	public string date="";
+}
+[System.Serializable]
+public class RankingData{
+	public int rank = 0;
+	public string name = "";
+	public int score = 0;
+	public int stage = 0;
+
 }
 
 public class PlayData  {
@@ -51,8 +60,6 @@ public class PlayData  {
 	{
 		
 	}
-	/*---------------------------------------------------------------------*/
-
 	/*---------------------------------------------------------------------*/
 	public void Save(int score,int stage)
 	{
