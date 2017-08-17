@@ -45,5 +45,6 @@ public class PlayLogResponseData
 public class ScoreRankingResponseData
 {
 	public string message="";
+	public RankingData UserRank = new RankingData();
 	public List<RankingData> Data = new List<RankingData>();
 }

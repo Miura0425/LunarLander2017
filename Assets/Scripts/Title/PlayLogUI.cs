@@ -17,6 +17,8 @@ public class PlayLogUI : MonoBehaviour {
 
 	private List<PlayLogUIItem> PlayLogList = new List<PlayLogUIItem>();
 
+	public bool isShow = false;
+
 
 	public void SetActiveUI(bool value)
 	{
@@ -35,6 +37,7 @@ public class PlayLogUI : MonoBehaviour {
 		foreach (var logitem in PlayLogList) {
 			logitem.SetActiveUI (true);
 		}
+		isShow = true;
 	}
 	private void Close()
 	{
@@ -42,15 +45,21 @@ public class PlayLogUI : MonoBehaviour {
 		_TitleText.enabled = false;
 		_BackGround.enabled = false;
 		_LogFrame.enabled = false;
-		// 生成したログリストを削除する。
-		_LogFrame.transform.DetachChildren();
-		PlayLogList.Clear ();
+
+		foreach (var logitem in PlayLogList) {
+			logitem.SetActiveUI (false);
+		}
+
+		isShow = false;
 	}
 
 	public IEnumerator GetPlayLog()
 	{
 		// プレイログ取得リクエスト
 		yield return PlayDataWebRequest.PlayLogRequest (cGameManager.Instance.UserData.Data);
+
+		_LogFrame.transform.DetachChildren ();
+		PlayLogList.Clear ();
 		// ログリスト生成
 		List<PlayLogData> logData = cGameManager.Instance._PlayData.PlayLogData;
 		for(int i=0;i<logData.Count;i++) {

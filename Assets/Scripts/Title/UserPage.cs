@@ -26,11 +26,25 @@ public class UserPage : MonoBehaviour {
 	Button _InheritingButton=null; // 引き継ぎボタン
 	[SerializeField]
 	Button _DeleteButton=null; // 削除ボタン
+	[SerializeField]
+	Button _ChangeButton =null; // 表示情報変更ボタン
 
 	[SerializeField]
-	PlayLogUI _PlayLog= null; // プレイ履歴オブジェク
+	PlayLogUI _PlayLog= null; // プレイ履歴オブジェクト
+	[SerializeField]
+	ScoreRankingUI _RankingUI = null; // スコアランキングオブジェクト
+
 
 	public bool isShow = false; // 表示状態フラグ
+
+	private enum eShowInfoType
+	{
+		PlayLog= 0,
+		ScoreRanking,
+
+		TYPE_NUM,
+	};
+	private eShowInfoType _ShowInfoType = eShowInfoType.PlayLog;
 
 	/*---------------------------------------------------------------------*/
 	/// <summary>
@@ -39,23 +53,27 @@ public class UserPage : MonoBehaviour {
 	public void OpenPage()
 	{
 		isShow = true;
+		_ShowInfoType = eShowInfoType.PlayLog;
 
 		// ユーザースコア情報の取得 通信
-		StartCoroutine(this.RequestPlayData());
+		StartCoroutine(this.RequestInfo());
 		// 入力アップデート開始
 		StartCoroutine(this.InputUpdate());
 	}
 	/// <summary>
 	/// ユーザー情報の取得リクエスト
 	/// </summary>
-	private IEnumerator RequestPlayData()
+	private IEnumerator RequestInfo()
 	{
-		// リクエストを投げる
+		// プレイログリクエストを投げる
 		yield return _PlayLog.GetPlayLog();
 		// 取得した情報をUIに設定する。
 		_UserName.text = cGameManager.Instance.UserData.Data.name;
 		_HighScore.text = cGameManager.Instance._PlayData.HighScore.ToString();
 		_HighStage.text = cGameManager.Instance._PlayData.HighStage.ToString();
+
+		// スコアランキングリクエストを投げる
+		yield return _RankingUI.GetScoreRanking();
 
 		// ページオブジェクトを表示する
 		SetActivePage(isShow);
@@ -91,8 +109,15 @@ public class UserPage : MonoBehaviour {
 		_InheritSettingButton.gameObject.SetActive (value);
 		_InheritingButton.gameObject.SetActive (value);
 		_DeleteButton.gameObject.SetActive (value);
-		// プレイ履歴の表示
-		_PlayLog.SetActiveUI(value);
+		_ChangeButton.gameObject.SetActive (value);
+
+		if (_ShowInfoType == eShowInfoType.PlayLog) {
+			// プレイ履歴の表示
+			_PlayLog.SetActiveUI (value);
+		} else {
+			// ランキングを表示
+			_RankingUI.SetActiveUI(value);
+		}
 	}
 	/*---------------------------------------------------------------------*/
 	/// <summary>
@@ -135,6 +160,26 @@ public class UserPage : MonoBehaviour {
 	public void OnDeleteButton()
 	{
 		GenericUIManager.Instance.ShowYesNoDialog ("DELETE", "REALLY DELETE?", cGameManager.Instance.UserData.DeleteYesNo);
+	}
+
+	/// <summary>
+	/// 表示情報を切り替える
+	/// </summary>
+	public void OnChangeButton()
+	{
+		_ShowInfoType =(eShowInfoType)((int)(_ShowInfoType+1)%(int)eShowInfoType.TYPE_NUM );
+		switch (_ShowInfoType) {
+		case eShowInfoType.PlayLog:
+			_RankingUI.SetActiveUI (false);
+			_PlayLog.SetActiveUI (true);
+			break;
+		case eShowInfoType.ScoreRanking:
+			_PlayLog.SetActiveUI (false);
+			_RankingUI.SetActiveUI (true);
+			break;
+		default:
+			break;
+		}
 	}
 	/*---------------------------------------------------------------------*/
 

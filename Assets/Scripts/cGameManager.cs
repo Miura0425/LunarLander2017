@@ -31,8 +31,8 @@ public class cGameManager : MonoBehaviour {
 	}
 
 	// ランキングデータ
-	private List<RankingData> m_RankingData  = new List<RankingData>();
-	public List<RankingData> _RankingData{
+	private ScoreRankingResponseData m_RankingData  = new ScoreRankingResponseData();
+	public ScoreRankingResponseData _RankingData{
 		get{ return m_RankingData; }
 		set{ m_RankingData = value; }
 	}

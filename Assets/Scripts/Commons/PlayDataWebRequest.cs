@@ -60,11 +60,12 @@ public static class PlayDataWebRequest {
 	/// スコアランキングの取得リクエスト
 	/// </summary>
 	/// <returns>The ranking request.</returns>
-	public static IEnumerator ScoreRankingRequest()
+	public static IEnumerator ScoreRankingRequest(UserAccountData.UserData userdata)
 	{
 		// リクエストURLを生成
 		string url_base = Const.WebRequest.BASE_URL + "ScoreRanking/";
-		UnityWebRequest request = UnityWebRequest.Get(url_base);
+		string url_param = "?id=" + userdata.id;
+		UnityWebRequest request = UnityWebRequest.Get(url_base+url_param);
 		// リクエスト送信
 		yield return request.Send();
 
@@ -79,7 +80,7 @@ public static class PlayDataWebRequest {
 				ScoreRankingResponseData res = JsonUtility.FromJson<ScoreRankingResponseData> (text);
 
 				if (res.Data.Count != 0) {
-					cGameManager.Instance._RankingData = res.Data;
+					cGameManager.Instance._RankingData = res;
 				}
 			}
 		}
