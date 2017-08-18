@@ -54,21 +54,23 @@ public class ScoreRankingUI : MonoBehaviour {
 
 		_RankingFrame.transform.DetachChildren();
 		RankingItemList.Clear ();
-		// ランキングリスト生成
-		RankingData userRank = cGameManager.Instance._RankingData.UserRank;
-		ScoreRankingUIItem userRankItem = Instantiate (_ScoreRankingItemPrefab);
-		userRankItem.transform.SetParent (_RankingFrame.transform,false);
-		userRankItem.SetRanking (userRank);
-		userRankItem.SetColor (Color.yellow);
-		RankingItemList.Add (userRankItem);
-
-		List<RankingData> rankingData = cGameManager.Instance._RankingData.Data;
-		for(int i=0;i<rankingData.Count;i++) {
-			ScoreRankingUIItem item = Instantiate (_ScoreRankingItemPrefab);
-			item.transform.SetParent (_RankingFrame.transform,false);
-			item.transform.localPosition -= new Vector3(0,item.GetComponent<RectTransform>().sizeDelta.y*(i+1),0);
-			item.SetRanking (rankingData[i]);
-			RankingItemList.Add (item);
+		if (cGameManager.Instance._RankingData.Data.Count != 0) {
+			// ユーザーランク生成
+			RankingData userRank = cGameManager.Instance._RankingData.UserRank;
+			ScoreRankingUIItem userRankItem = Instantiate (_ScoreRankingItemPrefab);
+			userRankItem.transform.SetParent (_RankingFrame.transform, false);
+			userRankItem.SetRanking (userRank);
+			userRankItem.SetColor (Color.yellow);
+			RankingItemList.Add (userRankItem);
+			// ランキングリスト生成
+			List<RankingData> rankingData = cGameManager.Instance._RankingData.Data;
+			for (int i = 0; i < rankingData.Count; i++) {
+				ScoreRankingUIItem item = Instantiate (_ScoreRankingItemPrefab);
+				item.transform.SetParent (_RankingFrame.transform, false);
+				item.transform.localPosition -= new Vector3 (0, item.GetComponent<RectTransform> ().sizeDelta.y * (i + 1), 0);
+				item.SetRanking (rankingData [i]);
+				RankingItemList.Add (item);
+			}
 		}
 	}
 
