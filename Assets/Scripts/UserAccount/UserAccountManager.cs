@@ -108,6 +108,8 @@ public class UserAccountData{
 	public void InheritUserData()
 	{
 		if (InheritResData != null) {
+			string ID = StringEncrypter.EncryptString (InheritResData.id);
+			string PASS = StringEncrypter.EncryptString (InheritResData.pass);
 			UserData userdata = new UserData (InheritResData.id, InheritResData.pass, InheritResData.name, m_Data.num);
 			SaveUserData (userdata);
 		}

@@ -42,8 +42,8 @@ public class UserAccountWebRequest  {
 				}
 
 				// IDとパスを暗号化
-				//string encID = StringEncrypter.EncryptString (_ID);
-				//string encPASS = StringEncrypter.EncryptString (_PASS);
+				string encID = StringEncrypter.EncryptString (_ID);
+				string encPASS = StringEncrypter.EncryptString (_PASS);
 
 				// ローカルへ保存
 				UserAccountData.UserData userdata = new UserAccountData.UserData (_ID,_PASS,_NAME,response.num);
@@ -62,8 +62,11 @@ public class UserAccountWebRequest  {
 	/// <returns>The login request.</returns>
 	/// <param name="ID">ID</param>
 	/// <param name="PASS">PASS</param>
-	public static IEnumerator AutoLoginRequest(string ID,string PASS)
+	public static IEnumerator AutoLoginRequest(string id,string pass)
 	{
+		string ID = StringEncrypter.DecryptString(id);
+		string PASS = StringEncrypter.DecryptString(pass);
+
 		// リクエストURLを生成
 		string url_base = Const.WebRequest.BASE_URL+"Login/";
 		string url_param = "?id="+ID+"&pass="+PASS;
@@ -99,7 +102,7 @@ public class UserAccountWebRequest  {
 				}
 
 				// ローカルに保存する。
-				UserAccountData.UserData userdata = new UserAccountData.UserData (ID,PASS,response.name,response.num);
+				UserAccountData.UserData userdata = new UserAccountData.UserData (id,pass,response.name,response.num);
 				cGameManager.Instance.UserData.SaveUserData (userdata);
 				// ログイン状態にする
 				cGameManager.Instance.UserData.IsLogin = true;
@@ -134,10 +137,13 @@ public class UserAccountWebRequest  {
 	/// <returns>The inherit setting.</returns>
 	/// <param name="_ID">I.</param>
 	/// <param name="_PASS">PAS.</param>
-	public static IEnumerator CheckInheritSetting(string _ID, string _PASS)
+	public static IEnumerator CheckInheritSetting(string id, string pass)
 	{
 		// 仮待ち 1.5s
 		yield return new WaitForSeconds (1.5f);
+
+		string _ID = StringEncrypter.DecryptString(id);
+		string _PASS = StringEncrypter.DecryptString (pass);
 
 		// リクエスト作成
 		string url_base = Const.WebRequest.BASE_URL + "CheckInheritSetting/";
@@ -229,8 +235,10 @@ public class UserAccountWebRequest  {
 	/// <returns>The user account.</returns>
 	/// <param name="_ID">I.</param>
 	/// <param name="_PASS">PAS.</param>
-	public static IEnumerator DeleteUserAccount(string _ID,string _PASS)
+	public static IEnumerator DeleteUserAccount(string id,string pass)
 	{
+		string _ID = StringEncrypter.DecryptString (id);
+		string _PASS = StringEncrypter.DecryptString (pass);
 		// リクエスト作成
 		string url_base = Const.WebRequest.BASE_URL + "Delete/";
 		string url_param = "?id="+_ID+"&pass="+_PASS;
