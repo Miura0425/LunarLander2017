@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿//暗号方式(AES:ラインダール)による文字列の暗号化・複号化
+using UnityEngine;
 using System.Security.Cryptography;
 using System.Text;
 using System.Collections;
 
 public class StringEncrypter {
-	const string SALT_STRING = "abcdefghi";
-	const string PASS_STRING = "012345";
+	const string SALT_STRING = "166285996a0f986efc";
+	const string PASS_STRING = "219705996a1340041a";
 	/// 暗号化
 	/// <param name="sourceString">暗号化する文字列</param>
 	/// <param name="saltString">パスワードに付加する文字</param>
@@ -15,12 +16,14 @@ public class StringEncrypter {
 	{
 		// RijndaelManagedオブジェクトを作成する
 		RijndaelManaged rijndael = new RijndaelManaged();
+		rijndael.Padding = PaddingMode.Zeros;
+		rijndael.Mode = CipherMode.CBC;
+		rijndael.KeySize = 256;
+		rijndael.BlockSize = 256;
 
 		// パスワードから共有キーと初期化ベクタを作成する
 		byte[] key, iv;
-
-		GenerateKeyFromPassword(
-			 rijndael.KeySize, out key, rijndael.BlockSize, out iv);
+		GenerateKeyFromPassword(rijndael.KeySize, out key, rijndael.BlockSize, out iv);
 
 		rijndael.Key = key;
 		rijndael.IV = iv;
@@ -32,14 +35,12 @@ public class StringEncrypter {
 		ICryptoTransform encryptor = rijndael.CreateEncryptor();
 
 		// バイト型配列を暗号化する
-		// 復号化に失敗すると例外CryptographicExceptionが発生する
 		byte[] encBytes = encryptor.TransformFinalBlock(strBytes, 0, strBytes.Length);
 
 		// 閉じる
 		encryptor.Dispose();
 
 		// バイト型配列を文字列に変換して返す
-
 		return System.Convert.ToBase64String(encBytes);
 	}
 
@@ -52,12 +53,14 @@ public class StringEncrypter {
 	{
 		// RijndaelManagedオブジェクトを作成する
 		RijndaelManaged rijndael = new RijndaelManaged();
+		rijndael.Padding = PaddingMode.Zeros;
+		rijndael.Mode = CipherMode.CBC;
+		rijndael.KeySize = 256;
+		rijndael.BlockSize = 256;
 
 		// パスワードから共有キーと初期化ベクタを作成する
 		byte[] key, iv;
-
-		GenerateKeyFromPassword(
-			rijndael.KeySize, out key, rijndael.BlockSize, out iv);
+		GenerateKeyFromPassword(rijndael.KeySize, out key, rijndael.BlockSize, out iv);
 
 		rijndael.Key = key;
 		rijndael.IV = iv;
