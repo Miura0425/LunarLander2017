@@ -8,6 +8,8 @@ public class PlayLogUI : MonoBehaviour {
 	[SerializeField]
 	Text _TitleText =null;
 	[SerializeField]
+	GameObject _ItemTitlte = null;
+	[SerializeField]
 	Image _BackGround = null;
 	[SerializeField]
 	Image _LogFrame = null;
@@ -31,6 +33,7 @@ public class PlayLogUI : MonoBehaviour {
 	{
 		// UIオブジェクトと生成したログリストをアクティブにする。
 		_TitleText.enabled = true;
+		_ItemTitlte.SetActive (true);
 		_BackGround.enabled = true;
 		_LogFrame.enabled = true;
 
@@ -43,6 +46,7 @@ public class PlayLogUI : MonoBehaviour {
 	{
 		// UIオブジェクトを非アクティブにする
 		_TitleText.enabled = false;
+		_ItemTitlte.SetActive (false);
 		_BackGround.enabled = false;
 		_LogFrame.enabled = false;
 
