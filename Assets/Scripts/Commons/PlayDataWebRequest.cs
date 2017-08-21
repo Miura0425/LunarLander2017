@@ -51,7 +51,7 @@ public static class PlayDataWebRequest {
 				PlayLogResponseData res = JsonUtility.FromJson<PlayLogResponseData> (text);
 				cGameManager.Instance._PlayData.PlayLogData = res.LogData;
 				cGameManager.Instance._PlayData.HighScore = res.High_Score;
-				cGameManager.Instance._PlayData.ClearStage = res.High_ClearStage;
+				cGameManager.Instance._PlayData.HighStage = res.High_ClearStage;
 			}
 		}
 	}

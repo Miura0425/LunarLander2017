@@ -348,6 +348,7 @@ public class MainGameManager : MonoBehaviour {
 	private IEnumerator SendPlayData(){
 		// 通信中表示
 
+		cGameManager.Instance._PlayData.Save ((int)fScore, nStage - 1);
 		// 送信リクエスト
 		yield return PlayDataWebRequest.SendPlayDataRequest (cGameManager.Instance._PlayData,cGameManager.Instance.UserData.Data);
 		// 通信中非表示
