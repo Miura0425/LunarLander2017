@@ -368,7 +368,7 @@ public class LanderManager : MonoBehaviour {
 		}
 		// 着陸に成功しているなら着陸地点を保持
 		else {
-			_LandingPoint = point.GetComponent<LandingPoint> ();
+			_LandingPoint = point.transform.parent.GetComponent<LandingPoint> ();
 		}
 	}
 	/*---------------------------------------------------------------------*/
