@@ -40,7 +40,7 @@
 
 	// ウェブリクエスト用定数
 	public static class WebRequest{
-		public const string BASE_URL = "http://localhost/unitywebtest/index.php/Webtest/";
+		public const string BASE_URL = "http://localhost/LunarLanderServer/index.php/LLS/";
 	}
 
 	// ユーザーアカウント用定数
