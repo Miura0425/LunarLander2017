@@ -146,7 +146,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1000010461088158
 GameObject:
   m_ObjectHideFlags: 1
@@ -248,7 +248,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1000010970487124
 GameObject:
   m_ObjectHideFlags: 1
@@ -466,7 +466,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1000011698567938
 GameObject:
   m_ObjectHideFlags: 1
@@ -876,7 +876,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1000013460459690
 GameObject:
   m_ObjectHideFlags: 1
@@ -1689,7 +1689,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Press [ \u2193 ] Key to NEXT"
+  m_Text: "PRESS [ \u2193 ] KEY To NEXT"
 --- !u!114 &114000011291572202
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2179,7 +2179,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Press [ \u2193 ] Key to NEXT"
+  m_Text: "PRESS [ \u2193 ] KEY To NEXT"
 --- !u!114 &114000011802419358
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2684,6 +2684,7 @@ MonoBehaviour:
   - {fileID: 1000010772334330}
   - {fileID: 1000013440503054}
   isFinish: 0
+  isShow: 0
 --- !u!114 &114000013080055756
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2770,7 +2771,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Press [ \u2193 ] Key to GAME START"
+  m_Text: "PRESS [ \u2193 ] KEY To MENU"
 --- !u!114 &114000013350649010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2951,7 +2952,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Press [ \u2193 ] Key to NEXT"
+  m_Text: "PRESS [ \u2193 ] KEY To NEXT"
 --- !u!114 &114000013620462402
 MonoBehaviour:
   m_ObjectHideFlags: 1
