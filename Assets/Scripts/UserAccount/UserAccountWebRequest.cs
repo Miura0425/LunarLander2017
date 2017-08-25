@@ -105,12 +105,12 @@ public class UserAccountWebRequest  {
 		// リクエストURLを生成
 		string url_base = Const.WebRequest.BASE_URL+"Login/";
 		string url_param = "?id="+ID+"&pass="+PASS;
-		UnityWebRequest request = UnityWebRequest.Get(url_base+url_param);
+		UnityWebRequest request = UnityWebRequest.Get (url_base+url_param);
 
 		// ヘッダー情報 クッキーがあれば設定する。
-		if (WebRequestHeader.HeaderEmpty()) {
-			request.SetRequestHeader (Const.WebRequest.HEADER_NAME_COOKIE, WebRequestHeader.header);
-		}
+		//if (WebRequestHeader.HeaderEmpty()) {
+		//	request.SetRequestHeader (Const.WebRequest.HEADER_NAME_COOKIE, WebRequestHeader.header);
+		//}
 
 		// リクエスト送信
 		yield return request.Send();
@@ -180,7 +180,7 @@ public class UserAccountWebRequest  {
 		// リクエスト作成
 		string url_base = Const.WebRequest.BASE_URL + "CheckInheritSetting/";
 		string url_param = "?id="+_ID+"&pass="+_PASS;
-		UnityWebRequest request = UnityWebRequest.Get(url_base+url_param);
+		UnityWebRequest request = UnityWebRequest.Get (url_base);//+url_param);
 
 		// ヘッダー情報 クッキーがあれば設定する。
 		if (WebRequestHeader.HeaderEmpty()) {
@@ -223,7 +223,7 @@ public class UserAccountWebRequest  {
 		string url_base = Const.WebRequest.BASE_URL + "CheckInheriting/";
 		int NUM = cGameManager.Instance.UserData.Data.num;
 		string url_param = "?num="+NUM.ToString();
-		UnityWebRequest request = UnityWebRequest.Get(url_base+url_param);
+		UnityWebRequest request = UnityWebRequest.Get (url_base);//+url_param);
 
 		// ヘッダー情報 クッキーがあれば設定する。
 		if (WebRequestHeader.HeaderEmpty()) {
@@ -249,10 +249,12 @@ public class UserAccountWebRequest  {
 				string title = "Inherit";
 
 				if (result.id != "") {
-					// メッセージダイアログ表示
-					GenericUIManager.Instance.ShowMessageDialog (title, result.message);
+					
 					// 引き継ぎ実行
 					cGameManager.Instance.UserData.InheritUserData ();
+					// メッセージダイアログ表示
+					GenericUIManager.Instance.ShowMessageDialog (title, result.message);
+					// タイトルに戻る 非ログイン状態
 
 				} else {
 					// 引き継ぎキャンセル メッセージダイアログ表示
@@ -274,7 +276,7 @@ public class UserAccountWebRequest  {
 		// リクエスト作成
 		string url_base = Const.WebRequest.BASE_URL + "Delete/";
 		string url_param = "?id="+_ID+"&pass="+_PASS;
-		UnityWebRequest request = UnityWebRequest.Get(url_base+url_param);
+		UnityWebRequest request = UnityWebRequest.Get (url_base);//+url_param);
 
 		// ヘッダー情報 クッキーがあれば設定する。
 		if (WebRequestHeader.HeaderEmpty()) {

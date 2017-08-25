@@ -40,7 +40,7 @@
 
 	// ウェブリクエスト用定数
 	public static class WebRequest{
-		public const string BASE_URL = "http://ec2-54-149-38-119.us-west-2.compute.amazonaws.com/LunarLanderServer/index.php/LLS/";
+		public const string BASE_URL = "http://localhost/LunarLanderServer/index.php/LLs/";//"http://ec2-54-149-38-119.us-west-2.compute.amazonaws.com/LunarLanderServer/index.php/LLS/";
 		public const string HEADER_NAME_COOKIE = "Cookie";
 	}
 

@@ -45,7 +45,7 @@ public static class PlayDataWebRequest {
 		// リクエストURLを生成
 		string url_base = Const.WebRequest.BASE_URL + "PlayLog/";
 		string url_param = "?id="+userdata.id;
-		UnityWebRequest request = UnityWebRequest.Get(url_base+url_param);
+		UnityWebRequest request = UnityWebRequest.Get (url_base);//+url_param);
 
 		if (WebRequestHeader.HeaderEmpty ()) {
 			request.SetRequestHeader (Const.WebRequest.HEADER_NAME_COOKIE, WebRequestHeader.header);
@@ -81,7 +81,7 @@ public static class PlayDataWebRequest {
 		// リクエストURLを生成
 		string url_base = Const.WebRequest.BASE_URL + "ScoreRanking/";
 		string url_param = "?id=" + userdata.id;
-		UnityWebRequest request = UnityWebRequest.Get(url_base+url_param);
+		UnityWebRequest request = UnityWebRequest.Get (url_base);//+url_param);
 
 		if (WebRequestHeader.HeaderEmpty ()) {
 			request.SetRequestHeader (Const.WebRequest.HEADER_NAME_COOKIE, WebRequestHeader.header);
