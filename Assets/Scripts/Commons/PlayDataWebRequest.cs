@@ -16,6 +16,11 @@ public static class PlayDataWebRequest {
 		string url_base = Const.WebRequest.BASE_URL + "SendPlayData/";
 		string url_param = "?id="+userdata.id+"&score="+playdata.Score+"&stage="+playdata.ClearStage;
 		UnityWebRequest request = UnityWebRequest.Get(url_base+url_param);
+
+		if (WebRequestHeader.HeaderEmpty ()) {
+			request.SetRequestHeader (Const.WebRequest.HEADER_NAME_COOKIE, WebRequestHeader.header);
+		}
+
 		// リクエスト送信
 		yield return request.Send();
 
@@ -23,7 +28,11 @@ public static class PlayDataWebRequest {
 		if (request.isError) {
 			Debug.Log (request.error);
 			GenericUIManager.Instance.ShowMessageDialog ("Error", request.error);
-		} 
+		} else {
+			if (request.responseCode == 200) {
+				WebRequestHeader.CookieHeaderSetting (request);
+			}
+		}
 	}
 
 	/// <summary>
@@ -37,6 +46,11 @@ public static class PlayDataWebRequest {
 		string url_base = Const.WebRequest.BASE_URL + "PlayLog/";
 		string url_param = "?id="+userdata.id;
 		UnityWebRequest request = UnityWebRequest.Get(url_base+url_param);
+
+		if (WebRequestHeader.HeaderEmpty ()) {
+			request.SetRequestHeader (Const.WebRequest.HEADER_NAME_COOKIE, WebRequestHeader.header);
+		}
+
 		// リクエスト送信
 		yield return request.Send();
 
@@ -46,6 +60,8 @@ public static class PlayDataWebRequest {
 			GenericUIManager.Instance.ShowMessageDialog ("Error", request.error);
 		} else {
 			if (request.responseCode == 200) {
+				WebRequestHeader.CookieHeaderSetting (request);
+
 				string text = request.downloadHandler.text;
 				// レスポンスデータの変換
 				PlayLogResponseData res = JsonUtility.FromJson<PlayLogResponseData> (text);
@@ -66,6 +82,11 @@ public static class PlayDataWebRequest {
 		string url_base = Const.WebRequest.BASE_URL + "ScoreRanking/";
 		string url_param = "?id=" + userdata.id;
 		UnityWebRequest request = UnityWebRequest.Get(url_base+url_param);
+
+		if (WebRequestHeader.HeaderEmpty ()) {
+			request.SetRequestHeader (Const.WebRequest.HEADER_NAME_COOKIE, WebRequestHeader.header);
+		}
+
 		// リクエスト送信
 		yield return request.Send();
 
@@ -75,6 +96,8 @@ public static class PlayDataWebRequest {
 			GenericUIManager.Instance.ShowMessageDialog ("Error", request.error);
 		} else {
 			if (request.responseCode == 200) {
+				WebRequestHeader.CookieHeaderSetting (request);
+
 				string text = request.downloadHandler.text;
 				// レスポンスデータの変換
 				ScoreRankingResponseData res = JsonUtility.FromJson<ScoreRankingResponseData> (text);

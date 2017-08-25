@@ -6,6 +6,11 @@ public static class WebRequestHeader
 {
 	public static string header = ""; 
 
+	public static bool HeaderEmpty()
+	{
+		return header.Length > 0 ? true:false;
+	}
+
 	/// <summary>
 	/// クッキーをヘッダー情報に設定する。
 	/// </summary>
@@ -103,8 +108,8 @@ public class UserAccountWebRequest  {
 		UnityWebRequest request = UnityWebRequest.Get(url_base+url_param);
 
 		// ヘッダー情報 クッキーがあれば設定する。
-		if (WebRequestHeader.header.Length > 0) {
-			request.SetRequestHeader ("Cookie",WebRequestHeader.header);
+		if (WebRequestHeader.HeaderEmpty()) {
+			request.SetRequestHeader (Const.WebRequest.HEADER_NAME_COOKIE, WebRequestHeader.header);
 		}
 
 		// リクエスト送信
@@ -151,8 +156,8 @@ public class UserAccountWebRequest  {
 		UnityWebRequest request = UnityWebRequest.Get(url_base);
 
 		// ヘッダー情報 クッキーがあれば設定する。
-		if (WebRequestHeader.header.Length > 0) {
-			request.SetRequestHeader ("Cookie",WebRequestHeader.header);
+		if (WebRequestHeader.HeaderEmpty()) {
+			request.SetRequestHeader (Const.WebRequest.HEADER_NAME_COOKIE, WebRequestHeader.header);
 		}
 
 		// リクエスト送信
@@ -178,8 +183,8 @@ public class UserAccountWebRequest  {
 		UnityWebRequest request = UnityWebRequest.Get(url_base+url_param);
 
 		// ヘッダー情報 クッキーがあれば設定する。
-		if (WebRequestHeader.header.Length > 0) {
-			request.SetRequestHeader ("Cookie",WebRequestHeader.header);
+		if (WebRequestHeader.HeaderEmpty()) {
+			request.SetRequestHeader (Const.WebRequest.HEADER_NAME_COOKIE, WebRequestHeader.header);
 		}
 
 		yield return request.Send ();
@@ -190,6 +195,7 @@ public class UserAccountWebRequest  {
 			GenericUIManager.Instance.ShowMessageDialog ("InheritSetting", "Error");
 		}else{
 			if (request.responseCode == 200) {
+				// cookieがあればヘッダーに設定
 				WebRequestHeader.CookieHeaderSetting (request);
 				// レスポンスからJson形式のテキストデータを取得する。
 				string text = request.downloadHandler.text;
@@ -220,8 +226,8 @@ public class UserAccountWebRequest  {
 		UnityWebRequest request = UnityWebRequest.Get(url_base+url_param);
 
 		// ヘッダー情報 クッキーがあれば設定する。
-		if (WebRequestHeader.header.Length > 0) {
-			request.SetRequestHeader ("Cookie",WebRequestHeader.header);
+		if (WebRequestHeader.HeaderEmpty()) {
+			request.SetRequestHeader (Const.WebRequest.HEADER_NAME_COOKIE, WebRequestHeader.header);
 		}
 
 		yield return request.Send ();
@@ -232,6 +238,7 @@ public class UserAccountWebRequest  {
 			GenericUIManager.Instance.ShowMessageDialog ("Inherit", "Error");
 		}else{
 			if (request.responseCode == 200) {
+				// cookieがあればヘッダーに設定
 				WebRequestHeader.CookieHeaderSetting (request);
 				// レスポンスからJson形式のテキストデータを取得する。
 				string text = request.downloadHandler.text;
@@ -270,8 +277,8 @@ public class UserAccountWebRequest  {
 		UnityWebRequest request = UnityWebRequest.Get(url_base+url_param);
 
 		// ヘッダー情報 クッキーがあれば設定する。
-		if (WebRequestHeader.header.Length > 0) {
-			request.SetRequestHeader ("Cookie",WebRequestHeader.header);
+		if (WebRequestHeader.HeaderEmpty()) {
+			request.SetRequestHeader (Const.WebRequest.HEADER_NAME_COOKIE, WebRequestHeader.header);
 		}
 
 		yield return request.Send ();

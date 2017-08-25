@@ -74,7 +74,9 @@ public class ScoreRankingUI : MonoBehaviour {
 			Vector2 frameSize = _RankingPanel.rectTransform.sizeDelta; // 初期サイズ
 			float ItemHeight = _ScoreRankingItemPrefab.GetComponent<RectTransform> ().sizeDelta.y; // データUIの高さ
 			int addDataLen = (_RankingData.Data.Count + 1) - (int)(frameSize.y / ItemHeight);
-			frameSize.y += addDataLen * ItemHeight;
+			if (addDataLen > 0) {
+				frameSize.y += addDataLen * ItemHeight;
+			}
 			_RankingFrame.sizeDelta = frameSize;
 			Vector3 newpos = _RankingFrame.localPosition;
 			newpos -= new Vector3 (0,(addDataLen*ItemHeight)/2,0);
