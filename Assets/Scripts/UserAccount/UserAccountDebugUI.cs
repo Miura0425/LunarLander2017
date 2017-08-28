@@ -12,10 +12,14 @@ public class UserAccountDebugUI : MonoBehaviour {
 		get{ return instance; }
 	}
 
-	public InputField _ID;
-	public InputField _PASS;
-	public Button _InheritSettingButton;
-	public Button _InheritingButton;
+	public Image _BackGround =null;
+	public InputField _ID = null;
+	public InputField _PASS =null;
+	public Button _InheritSettingButton=null;
+	public Button _InheritingButton=null;
+	public Button _DeleteButton=null;
+
+	bool isOpen = false;
 
 	/*---------------------------------------------------------------------*/
 	void Awake()
@@ -23,6 +27,22 @@ public class UserAccountDebugUI : MonoBehaviour {
 		if (instance == null) {
 			instance = this;
 		}
+	}
+	void Update()
+	{
+		if (Input.GetKey (KeyCode.LeftControl) && Input.GetKeyDown (KeyCode.D)) {
+			isOpen = !isOpen;
+			SetActiveUI (isOpen);
+		}
+	}
+	void SetActiveUI(bool value)
+	{
+		_BackGround.enabled = value;
+		_ID.gameObject.SetActive (value);
+		_PASS.gameObject.SetActive(value);
+		_InheritSettingButton.gameObject.SetActive (value);
+		_InheritingButton.gameObject.SetActive (value);
+		_DeleteButton.gameObject.SetActive (value);
 	}
 	/*---------------------------------------------------------------------*/
 	public void SetID(string id){
@@ -46,4 +66,5 @@ public class UserAccountDebugUI : MonoBehaviour {
 	{
 		GenericUIManager.Instance.ShowYesNoDialog ("DELETE", "REALLY DELETE?", cGameManager.Instance.UserData.DeleteYesNo);
 	}
+
 }

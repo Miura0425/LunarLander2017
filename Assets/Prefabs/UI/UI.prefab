@@ -514,7 +514,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1000010704938768
 GameObject:
   m_ObjectHideFlags: 1
@@ -532,7 +532,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1000010718001864
 GameObject:
   m_ObjectHideFlags: 1
@@ -979,7 +979,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1000011613287168
 GameObject:
   m_ObjectHideFlags: 1
@@ -1607,7 +1607,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1000012363176772
 GameObject:
   m_ObjectHideFlags: 1
@@ -1716,7 +1716,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1000012548914920
 GameObject:
   m_ObjectHideFlags: 1
@@ -2601,7 +2601,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1000013681971822
 GameObject:
   m_ObjectHideFlags: 1
@@ -4399,7 +4399,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enter text...
+  m_Text: 
 --- !u!114 &114000010689216466
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5247,10 +5247,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d7cb6b50e015f1479b3dda81132f9e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _BackGround: {fileID: 114000013824597466}
   _ID: {fileID: 114000011537335740}
   _PASS: {fileID: 114000010366399478}
   _InheritSettingButton: {fileID: 114000012873765778}
   _InheritingButton: {fileID: 114000012038769248}
+  _DeleteButton: {fileID: 114000010435757736}
 --- !u!114 &114000011003865720
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -9986,7 +9988,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000011571028704}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 
@@ -10467,7 +10469,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enter text...
+  m_Text: 
 --- !u!114 &114000014165084970
 MonoBehaviour:
   m_ObjectHideFlags: 1

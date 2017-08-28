@@ -66,10 +66,19 @@ public class UserAccountData{
 	/// </summary>
 	public void LoadUserData()
 	{
-		m_Data.id = PlayerPrefs.GetString (Const.UserAccount.USER_ID_KEY);
-		m_Data.pass = PlayerPrefs.GetString (Const.UserAccount.USER_PASS_KEY);
+		string ID = PlayerPrefs.GetString (Const.UserAccount.USER_ID_KEY);
+		string PASS = PlayerPrefs.GetString (Const.UserAccount.USER_PASS_KEY);
+		if (ID != "")
+			ID = StringEncrypter.DecryptString (ID).Substring(0,8);
+		if (PASS != "")
+			PASS = StringEncrypter.DecryptString (PASS).Substring(0,8);
+
+		m_Data.id = ID;
+		m_Data.pass = PASS;
 		m_Data.name = PlayerPrefs.GetString (Const.UserAccount.USER_NAME_KEY);
 		m_Data.num = PlayerPrefs.GetInt (Const.UserAccount.USER_NUM_KEY);
+
+
 
 	}
 
@@ -93,8 +102,8 @@ public class UserAccountData{
 	/// </summary>
 	public void SaveUserData()
 	{
-		PlayerPrefs.SetString (Const.UserAccount.USER_ID_KEY, m_Data.id);
-		PlayerPrefs.SetString (Const.UserAccount.USER_PASS_KEY, m_Data.pass);
+		PlayerPrefs.SetString (Const.UserAccount.USER_ID_KEY, StringEncrypter.EncryptString(m_Data.id));
+		PlayerPrefs.SetString (Const.UserAccount.USER_PASS_KEY, StringEncrypter.EncryptString(m_Data.pass));
 		PlayerPrefs.SetString (Const.UserAccount.USER_NAME_KEY, m_Data.name);
 		PlayerPrefs.SetInt (Const.UserAccount.USER_NUM_KEY, m_Data.num);
 
@@ -265,6 +274,12 @@ public class UserAccountManager   {
 			// 引き継ぎ待ち処理開始
 			yield return InheritingWait ();
 		}
+	}
+	public static void InheritOKFunc()
+	{
+		// タイトルに戻る 非ログイン状態
+		cGameManager.Instance.UserData.IsLogin = false;
+		cGameManager.Instance.ChangeScene (GAME_SCENE.TITLE);
 	}
 
 	/// <summary>
