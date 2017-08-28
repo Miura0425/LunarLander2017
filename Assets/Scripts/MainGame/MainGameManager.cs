@@ -346,14 +346,12 @@ public class MainGameManager : MonoBehaviour {
 	/// </summary>
 	/// <returns>The play data.</returns>
 	private IEnumerator SendPlayData(){
-		// 通信中表示
 
-		cGameManager.Instance._PlayData.Save ((int)fScore, nStage - 1);
-		// 送信リクエスト
-		yield return PlayDataWebRequest.SendPlayDataRequest (cGameManager.Instance._PlayData,cGameManager.Instance.UserData.Data);
-		// 通信中非表示
-
-
+		if (nStage - 1 > 0) {
+			cGameManager.Instance._PlayData.Save ((int)fScore, nStage - 1);
+			// 送信リクエスト
+			yield return PlayDataWebRequest.SendPlayDataRequest (cGameManager.Instance._PlayData, cGameManager.Instance.UserData.Data);
+		}
 		// 終了待ち処理の待ち開始時間の取得
 		fStartTime = Time.timeSinceLevelLoad;
 
