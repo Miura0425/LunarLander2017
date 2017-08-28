@@ -152,7 +152,7 @@ public class UserPage : MonoBehaviour {
 		string _ID = cGameManager.Instance.UserData.Data.id;
 		string _PASS = cGameManager.Instance.UserData.Data.pass;
 		StartCoroutine (UserAccountManager.Inheriting (_ID, _PASS));
-		ClosePage ();
+
 	}
 	/// <summary>
 	/// ユーザー削除処理

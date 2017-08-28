@@ -79,10 +79,6 @@ public class UserAccountWebRequest  {
 					yield break;
 				}
 
-				// IDとパスを暗号化
-				//string encID = StringEncrypter.EncryptString (_ID);
-				//string encPASS = StringEncrypter.EncryptString (_PASS);
-
 				// ローカルへ保存
 				UserAccountData.UserData userdata = new UserAccountData.UserData (_ID,_PASS,_NAME,response.num);
 				cGameManager.Instance.UserData.SaveUserData(userdata);
@@ -253,8 +249,8 @@ public class UserAccountWebRequest  {
 					// 引き継ぎ実行
 					cGameManager.Instance.UserData.InheritUserData ();
 					// メッセージダイアログ表示
-					GenericUIManager.Instance.ShowMessageDialog (title, result.message);
-					// タイトルに戻る 非ログイン状態
+					GenericUIManager.Instance.ShowMessageDialog (title, result.message,UserAccountManager.InheritOKFunc);
+
 
 				} else {
 					// 引き継ぎキャンセル メッセージダイアログ表示
