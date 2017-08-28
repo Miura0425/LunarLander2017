@@ -40,7 +40,7 @@ public class UserPage : MonoBehaviour {
 	private enum eShowInfoType
 	{
 		PlayLog= 0,
-		ScoreRanking,
+		Ranking,
 
 		TYPE_NUM,
 	};
@@ -172,10 +172,12 @@ public class UserPage : MonoBehaviour {
 		case eShowInfoType.PlayLog:
 			_RankingUI.SetActiveUI (false);
 			_PlayLog.SetActiveUI (true);
+			_ChangeButton.GetComponentInChildren<Text> ().text = eShowInfoType.Ranking.ToString();
 			break;
-		case eShowInfoType.ScoreRanking:
+		case eShowInfoType.Ranking:
 			_PlayLog.SetActiveUI (false);
 			_RankingUI.SetActiveUI (true);
+			_ChangeButton.GetComponentInChildren<Text> ().text = eShowInfoType.PlayLog.ToString ();
 			break;
 		default:
 			break;

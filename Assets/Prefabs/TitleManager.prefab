@@ -51,4 +51,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 870d4f2f817837543ba66b6e381c1817, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartKey: 274
+  _Menu: {fileID: 0}
+  _PressMsg: {fileID: 0}
+  isWait: 0

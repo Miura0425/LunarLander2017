@@ -162,7 +162,7 @@ public class UserAccountManager   {
 		yield return UserAccountWebRequest.AutoSignUpRequest(_ID,_PASS,name);
 
 		// 仮待ち処理 2s
-		yield return new WaitForSeconds (2.0f);
+		//yield return new WaitForSeconds (2.0f);
 
 		// 待ち状態終了
 		TitleManger.Instance.isWait = false;
@@ -184,7 +184,7 @@ public class UserAccountManager   {
 		yield return UserAccountWebRequest.AutoLoginRequest(_ID,_PASS);
 
 		// 仮待ち処理 2s
-		yield return new WaitForSeconds (2.0f);
+		//yield return new WaitForSeconds (2.0f);
 
 		// 待ち状態終了
 		TitleManger.Instance.isWait = false;

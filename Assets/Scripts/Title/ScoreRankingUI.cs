@@ -11,7 +11,7 @@ public class ScoreRankingUI : MonoBehaviour {
 	[SerializeField]
 	Image _BackGround = null;
 	[SerializeField]
-	Image _RankingPanel = null;
+	RectTransform _RankingPanel = null;
 	[SerializeField]
 	RectTransform _RankingFrame = null;
 	[SerializeField]
@@ -36,7 +36,6 @@ public class ScoreRankingUI : MonoBehaviour {
 		_TitleText.enabled = true;
 		_ItemTitle.SetActive (true);
 		_BackGround.enabled = true;
-		_RankingPanel.enabled = true;
 		_Scrollbar.gameObject.SetActive (true);
 
 		foreach (var rankingitem in RankingItemList) {
@@ -49,7 +48,6 @@ public class ScoreRankingUI : MonoBehaviour {
 		_TitleText.enabled = false;
 		_ItemTitle.SetActive (false);
 		_BackGround.enabled = false;
-		_RankingPanel.enabled = false;
 		_Scrollbar.gameObject.SetActive (false);
 
 		foreach (var rankingitem in RankingItemList) {
@@ -71,7 +69,7 @@ public class ScoreRankingUI : MonoBehaviour {
 			ScoreRankingResponseData _RankingData = cGameManager.Instance._RankingData;
 
 			// データフレームのサイズ設定
-			Vector2 frameSize = _RankingPanel.rectTransform.sizeDelta; // 初期サイズ
+			Vector2 frameSize = _RankingPanel.sizeDelta; // 初期サイズ
 			float ItemHeight = _ScoreRankingItemPrefab.GetComponent<RectTransform> ().sizeDelta.y; // データUIの高さ
 			int addDataLen = (_RankingData.Data.Count + 1) - (int)(frameSize.y / ItemHeight);
 			if (addDataLen > 0) {

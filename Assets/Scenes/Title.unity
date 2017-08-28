@@ -332,11 +332,6 @@ Prefab:
       propertyPath: _PressMsg
       value: 
       objectReference: {fileID: 1841953131}
-    - target: {fileID: 114000010769092004, guid: 0755955ce56d7184085ae4ceb22b32a3,
-        type: 2}
-      propertyPath: _UserAccountMgr
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0755955ce56d7184085ae4ceb22b32a3, type: 2}
   m_IsPrefabParent: 0

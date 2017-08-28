@@ -12,7 +12,7 @@ public class PlayLogUI : MonoBehaviour {
 	[SerializeField]
 	Image _BackGround = null;
 	[SerializeField]
-	Image _LogFrame = null;
+	Transform _LogFrame = null;
 
 	[SerializeField]
 	PlayLogUIItem _PlayLogItemPrefab=null;
@@ -35,7 +35,6 @@ public class PlayLogUI : MonoBehaviour {
 		_TitleText.enabled = true;
 		_ItemTitlte.SetActive (true);
 		_BackGround.enabled = true;
-		_LogFrame.enabled = true;
 
 		foreach (var logitem in PlayLogList) {
 			logitem.SetActiveUI (true);
@@ -48,7 +47,6 @@ public class PlayLogUI : MonoBehaviour {
 		_TitleText.enabled = false;
 		_ItemTitlte.SetActive (false);
 		_BackGround.enabled = false;
-		_LogFrame.enabled = false;
 
 		foreach (var logitem in PlayLogList) {
 			logitem.SetActiveUI (false);

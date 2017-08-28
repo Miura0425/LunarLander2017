@@ -18,7 +18,9 @@ public class OptionMenu : MonoBehaviour {
 	[SerializeField]
 	private Text _text=null;	// 子のテキスト
 	[SerializeField]
-	private Text _arrow=null; // 子の矢印テキスト
+	private GameObject _arrow=null; // 子の矢印テキスト
+	[SerializeField]
+	private Button _OKButton = null; // OKボタン
 
 	public bool isEnable = false; // 表示中かどうか
 
@@ -48,7 +50,8 @@ public class OptionMenu : MonoBehaviour {
 		isEnable = flag;
 		_image.enabled = isEnable;
 		_text.enabled = isEnable;
-		_arrow.enabled = isEnable;
+		_arrow.SetActive(isEnable);
+		_OKButton.gameObject.SetActive (isEnable);
 	}
 	/*---------------------------------------------------------------------*/
 	/// <summary>
@@ -70,9 +73,8 @@ public class OptionMenu : MonoBehaviour {
 		}
 		// エンターキーが押されたら選択しているモードへ切り替える。
 		if (Input.GetKeyDown (KeyCode.Return)) {
-			ChangeMode ();
 			// 非表示にする。
-			SetEnable (false);
+			CloseOption();
 		}
 	}
 	/*---------------------------------------------------------------------*/
@@ -81,11 +83,17 @@ public class OptionMenu : MonoBehaviour {
 	{
 		_mode = (WINDOW_MODE)(((int)_mode+1)%(int)WINDOW_MODE.MODE_NUM);
 		_text.text = _mode.ToString ();
+		ChangeMode ();
 	}
 	public void BackMode()
 	{
 		_mode = (WINDOW_MODE)(((int)_mode+(int)WINDOW_MODE.MODE_NUM-1)%(int)WINDOW_MODE.MODE_NUM);
 		_text.text = _mode.ToString ();
+		ChangeMode ();
+	}
+	public void CloseOption()
+	{
+		SetEnable (false);
 	}
 	public void ChangeMode()
 	{
