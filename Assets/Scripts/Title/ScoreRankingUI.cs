@@ -23,12 +23,12 @@ public class ScoreRankingUI : MonoBehaviour {
 	private List<ScoreRankingUIItem> RankingItemList = new List<ScoreRankingUIItem>();
 
 
-	public void SetActiveUI(bool value)
+	public void SetActiveUI(bool value,bool DELETE_ITEM=false)
 	{
 		if (value)
 			Open ();
 		else
-			Close ();
+			Close (DELETE_ITEM);
 	}
 	private void Open()
 	{
@@ -42,7 +42,7 @@ public class ScoreRankingUI : MonoBehaviour {
 			rankingitem.SetActiveUI (true);
 		}
 	}
-	private void Close()
+	private void Close(bool DELETE_ITEM = false)
 	{
 		// UIオブジェクトを非アクティブにする
 		_TitleText.enabled = false;
@@ -52,7 +52,11 @@ public class ScoreRankingUI : MonoBehaviour {
 
 		foreach (var rankingitem in RankingItemList) {
 			rankingitem.SetActiveUI (false);
+			if (DELETE_ITEM) Destroy (rankingitem.gameObject);
+			
 		}
+		if (DELETE_ITEM) RankingItemList.Clear ();
+
 	}
 
 	public IEnumerator GetScoreRanking()
@@ -84,6 +88,7 @@ public class ScoreRankingUI : MonoBehaviour {
 			// ユーザーランク生成
 			RankingData userRank = cGameManager.Instance._RankingData.UserRank;
 			ScoreRankingUIItem userRankItem = Instantiate (_ScoreRankingItemPrefab);
+			userRankItem.name = "RankItemUser";
 			userRankItem.transform.SetParent (_RankingFrame.transform, false);
 			userRankItem.transform.localPosition = firstItempos;
 			userRankItem.SetRanking (userRank);
@@ -93,6 +98,7 @@ public class ScoreRankingUI : MonoBehaviour {
 			List<RankingData> rankingData = cGameManager.Instance._RankingData.Data;
 			for (int i = 0; i < rankingData.Count; i++) {
 				ScoreRankingUIItem item = Instantiate (_ScoreRankingItemPrefab);
+				item.name = "RankItem"+i;
 				item.transform.SetParent (_RankingFrame.transform, false);
 				item.transform.localPosition = firstItempos - new Vector3 (0, item.GetComponent<RectTransform> ().sizeDelta.y * (i + 1), 0);
 				item.SetRanking (rankingData [i]);

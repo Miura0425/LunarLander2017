@@ -22,12 +22,12 @@ public class PlayLogUI : MonoBehaviour {
 	public bool isShow = false;
 
 
-	public void SetActiveUI(bool value)
+	public void SetActiveUI(bool value,bool DELETE_ITEM=false)
 	{
 		if (value)
 			Open ();
 		else
-			Close ();
+			Close (DELETE_ITEM);
 	}
 	private void Open()
 	{
@@ -41,7 +41,7 @@ public class PlayLogUI : MonoBehaviour {
 		}
 		isShow = true;
 	}
-	private void Close()
+	private void Close(bool DELETE_ITME = false)
 	{
 		// UIオブジェクトを非アクティブにする
 		_TitleText.enabled = false;
@@ -50,7 +50,9 @@ public class PlayLogUI : MonoBehaviour {
 
 		foreach (var logitem in PlayLogList) {
 			logitem.SetActiveUI (false);
+			if (DELETE_ITME) Destroy (logitem.gameObject);
 		}
+		if (DELETE_ITME) PlayLogList.Clear ();
 
 		isShow = false;
 	}

@@ -111,12 +111,18 @@ public class UserPage : MonoBehaviour {
 		_DeleteButton.gameObject.SetActive (value);
 		_ChangeButton.gameObject.SetActive (value);
 
-		if (_ShowInfoType == eShowInfoType.PlayLog) {
-			// プレイ履歴の表示
-			_PlayLog.SetActiveUI (value);
+		if (value) {
+			if (_ShowInfoType == eShowInfoType.PlayLog) {
+				// プレイ履歴の表示
+				_PlayLog.SetActiveUI (value);
+
+			} else {
+				// ランキングを表示
+				_RankingUI.SetActiveUI (value);
+			}
 		} else {
-			// ランキングを表示
-			_RankingUI.SetActiveUI(value);
+			_PlayLog.SetActiveUI (value, true);
+			_RankingUI.SetActiveUI (value, true);
 		}
 	}
 	/*---------------------------------------------------------------------*/
