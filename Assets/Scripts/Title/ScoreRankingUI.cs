@@ -87,12 +87,13 @@ public class ScoreRankingUI : MonoBehaviour {
 
 			// ユーザーランク生成
 			RankingData userRank = cGameManager.Instance._RankingData.UserRank;
+			userRank.name = cGameManager.Instance.UserData.Data.name;
 			ScoreRankingUIItem userRankItem = Instantiate (_ScoreRankingItemPrefab);
 			userRankItem.name = "RankItemUser";
 			userRankItem.transform.SetParent (_RankingFrame.transform, false);
 			userRankItem.transform.localPosition = firstItempos;
 			userRankItem.SetRanking (userRank);
-			userRankItem.SetColor (Color.yellow);
+			userRankItem.SetColor (Color.blue);
 			RankingItemList.Add (userRankItem);
 			// ランキングリスト生成
 			List<RankingData> rankingData = cGameManager.Instance._RankingData.Data;
