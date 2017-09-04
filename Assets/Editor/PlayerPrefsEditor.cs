@@ -12,7 +12,7 @@ public class PlayerPrefsEditor :EditorWindow{
 		new PrefInfo{Name="ID", Key = Const.UserAccount.USER_ID_KEY,Type="String"},
 		new PrefInfo{Name="PASS", Key = Const.UserAccount.USER_PASS_KEY,Type="String"},
 		new PrefInfo{Name="NAME", Key = Const.UserAccount.USER_NAME_KEY,Type="String"},
-		new PrefInfo{Name="NUM", Key = Const.UserAccount.USER_NUM_KEY,Type="Int"},
+		new PrefInfo{Name="NUM", Key = Const.UserAccount.USER_NUM_KEY,Type="int"},
 	};
 
 	[UnityEditor.MenuItem("Tools/PlayerPrefs/ShowPrefs")]

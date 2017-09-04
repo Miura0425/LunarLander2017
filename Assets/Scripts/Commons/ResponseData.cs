@@ -20,6 +20,7 @@ public class InheritResponseData
 	public string id = "";
 	public string pass = "";
 	public string name = "";
+	public int num = 0;
 }
 
 /// <summary>

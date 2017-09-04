@@ -117,7 +117,7 @@ public class UserAccountData{
 	public void InheritUserData()
 	{
 		if (InheritResData != null) {
-			UserData userdata = new UserData (InheritResData.id, InheritResData.pass, InheritResData.name, m_Data.num);
+			UserData userdata = new UserData (InheritResData.id, InheritResData.pass, InheritResData.name, InheritResData.num);
 			SaveUserData (userdata);
 		}
 	}
